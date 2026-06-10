@@ -4,7 +4,9 @@ namespace App\Models\Product;
 
 use App\Models\Localization\ProductName;
 use App\Models\User\Manufacturer;
+use App\Models\User\SellerProduct;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Localization\UsageInstruction;
 
 class Product extends Model {
     protected $with = [
@@ -24,6 +26,11 @@ class Product extends Model {
 
     public function manufacturer() {
         return $this->belongsTo(Manufacturer::class);
+    }
+
+    public function sellers()
+    {
+        return $this->hasMany(SellerProduct::class);
     }
 
     public function ingredients() {
@@ -57,5 +64,10 @@ class Product extends Model {
 
     public function images() {
         return $this->hasMany(Image::class);
+    }
+
+    public function usageInstructions() {
+        return $this->hasMany(UsageInstruction::class
+        );
     }
 }

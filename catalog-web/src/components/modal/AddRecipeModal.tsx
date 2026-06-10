@@ -73,6 +73,7 @@ export default function AddRecipeModal({
 					loading={loading}
 					submitText="Create"
 					onSubmit={handleSubmit}
+					onCancel={onClose}
 				/>
 
 			</div>

@@ -7,6 +7,12 @@ export async function getRecipes() {
 	return response.data;
 }
 
+export async function getRecipesByIngredient(productId: number){
+	const response = await api.get<Recipe[]>('/recipes/by-ingredients/' + productId);
+
+	return response.data;
+}
+
 export async function createRecipe(recipe: RecipeRequest) {
 	const response = await api.post<Recipe>('/admin/recipes', {
 		names: recipe.names.map((x) => ({

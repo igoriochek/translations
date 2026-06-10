@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">カタログ</string>
+    <string name="landing_paragraph">商品を探し、購入先を見つけ、それらを使ったレシピを確認できます。</string>
+    <string name="login_title">おかえりなさい</string>
+    <string name="login_hint">続行するにはログインしてください</string>
+    <string name="log_in_button">ログイン</string>
+    <string name="register_title">アカウント作成</string>
+    <string name="register_hint">以下に情報を入力してください</string>
+    <string name="register_button">登録</string>
+    <string name="username">ユーザー名</string>
+    <string name="enter_username">ユーザー名を入力</string>
+    <string name="email">メールアドレス</string>
+    <string name="enter_email">メールアドレスを入力</string>
+    <string name="password">パスワード</string>
+    <string name="enter_password">パスワードを入力</string>
+    <string name="repeat_password">パスワード確認</string>
+    <string name="already_have_an_account">すでにアカウントをお持ちですか？ </string>
+    <string name="log_in_here">こちらからログイン</string>
+    <string name="don_t_have_an_account">アカウントをお持ちではありませんか？ </string>
+    <string name="register_here">こちらから登録</string>
+    <string name="content_language">コンテンツ言語</string>
+    <string name="content_language_hint">コンテンツにインターフェース言語がない場合の代替言語を選択します</string>
+    <string name="interface_language">インターフェース言語</string>
+    <string name="interface_language_hint">メニューや画面要素の表示言語を選択します</string>
+    <string name="prefs_title">はじめましょう</string>
+    <string name="prefs_hint">表示言語とコンテンツ言語を設定できます</string>
+    <string name="invalid_email">有効なメールアドレスを入力してください</string>
+    <string name="prefs_confirm">設定を保存</string>
+    <string name="search_products">商品を検索</string>
+    <string name="product_not_found">商品が見つかりません</string>
+    <string name="currently_unavailable">現在利用できません</string>
+    <string name="manufacturer">メーカー</string>
+    <string name="sellers">販売者</string>
+    <string name="stores">店舗</string>
+    <string name="recipes">レシピ</string>
+    <string name="categories">カテゴリー</string>0
+    <string name="settings">設定</string>
+    <string name="log_out">ログアウト</string>
+    <string name="allergens">アレルゲン</string>
+    <string name="ingredients">原材料</string>
+    <string name="nutrition_facts">栄養成分</string>
+    <string name="usage_instructions">使用方法</string>
+    <string name="related_products">関連商品</string>
+    <string name="recommended">おすすめ</string>
+</resources>

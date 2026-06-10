@@ -1,12 +1,6 @@
 import {useEffect, useState} from "react";
 
-import type {
-	Language,
-	ProductListItem,
-	Recipe,
-	RecipeRequest,
-	TranslationInput
-} from "../api/types.ts";
+import type {Language, ProductListItem, Recipe, RecipeRequest, TranslationInput} from "../api/types.ts";
 
 import {getLanguages} from "../api/languages.ts";
 import {getAllProducts} from "../api/products.ts";
@@ -16,17 +10,16 @@ import RecipeIngredientSelector from "./RecipeIngredientSelector.tsx";
 
 interface RecipeFormProps {
 	recipe?: Recipe;
-
 	onSubmit: (request: RecipeRequest) => Promise<void>;
-
+	onCancel?: () => void;
 	submitText: string;
-
 	loading: boolean;
 }
 
 export default function RecipeForm({
 									   recipe,
 									   onSubmit,
+									   onCancel,
 									   submitText,
 									   loading
 								   }: RecipeFormProps) {
@@ -39,14 +32,16 @@ export default function RecipeForm({
 
 	const [search, setSearch] = useState('');
 
-	const [selectedIngredients, setSelectedIngredients] =
-		useState<number[]>([]);
+	const [selectedIngredients, setSelectedIngredients] = useState<number[]>([]);
+
+	const [dataLoading, setDataLoading] = useState(true);
 
 	useEffect(() => {
 
 		async function loadData() {
 
 			try {
+				setDataLoading(true);
 
 				const loadedLanguages =
 					await getLanguages();
@@ -117,6 +112,8 @@ export default function RecipeForm({
 			} catch (err) {
 
 				console.error(err);
+			} finally {
+				setDataLoading(false);
 			}
 		}
 
@@ -150,9 +147,47 @@ export default function RecipeForm({
 		});
 	}
 
+	if (dataLoading) {
+		return (
+			<div className="space-y-6 animate-pulse">
+				<div className="space-y-2">
+					<div className="h-5 w-32 bg-gray-200 rounded"/>
+					<div className="h-10 bg-gray-200 rounded"/>
+					<div className="h-10 bg-gray-200 rounded"/>
+				</div>
+
+				<div className="space-y-2">
+					<div className="h-5 w-40 bg-gray-200 rounded"/>
+					<div className="h-32 bg-gray-200 rounded"/>
+				</div>
+
+				<div className="space-y-2">
+					<div className="h-5 w-36 bg-gray-200 rounded"/>
+					<div className="h-48 bg-gray-200 rounded"/>
+				</div>
+
+				<div className="flex justify-end gap-2">
+					{onCancel && (
+						<button
+							type="button"
+							onClick={onCancel}
+							className="
+							border
+							px-4
+							py-2
+							rounded-lg
+							text-sm
+						">
+							Cancel
+						</button>
+					)}
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<div className="space-y-6">
-
 			<TranslationInputs
 				languages={languages}
 				translations={names}
@@ -182,22 +217,38 @@ export default function RecipeForm({
 				}
 			/>
 
-			<div className="flex justify-end">
+			<div className="flex justify-end gap-2">
+				{onCancel && (
+					<button
+						type="button"
+						onClick={onCancel}
+						disabled={loading}
+						className="
+						border
+						px-4
+						py-2
+						rounded-lg
+						text-sm
+						disabled:opacity-50
+					">
+						Cancel
+					</button>
+				)}
 
 				<button
 					type="button"
 					onClick={handleSubmit}
 					disabled={loading}
 					className="
-						bg-black
-						text-white
-						px-4
-						py-2
-						rounded-lg
-						text-sm
-					"
-				>
-					{submitText}
+					bg-black
+					text-white
+					px-4
+					py-2
+					rounded-lg
+					text-sm
+					disabled:opacity-50
+				">
+					{loading ? "Saving..." : submitText}
 				</button>
 
 			</div>

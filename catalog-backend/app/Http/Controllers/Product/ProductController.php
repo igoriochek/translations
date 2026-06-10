@@ -10,13 +10,16 @@ use Illuminate\Support\Facades\Storage;
 
 const relations = [
     'manufacturer',
+    'sellers.seller',
+    'sellers.recommendations',
     'names',
     'ingredients',
     'nutritionalMeasurements',
     'categories',
     'allergens',
     'images',
-    'relatedProducts'
+    'relatedProducts',
+    'usageInstructions',
 ];
 
 class ProductController extends Controller {
@@ -35,6 +38,15 @@ class ProductController extends Controller {
         ]);
 
         return response()->json(Product::whereId($id)->with(relations)->first());
+    }
+
+    public function findByCode($code, Request $request) {
+        $request->merge(['code' => $code]);
+        $validated = request()->validate([
+            'code' => 'exists:products,product_code'
+        ]);
+
+        return response()->json(Product::where('product_code', $code)->with(relations)->first());
     }
 
     public function list(Request $request) {
@@ -270,6 +282,7 @@ class ProductController extends Controller {
     private function applyFilters($query, Request $request) {
         $this->parseJsonField($request, 'manufacturer_ids');
         $this->parseJsonField($request, 'category_ids');
+        $this->parseJsonField($request, 'allergen_ids');
 
         // Manufacturer filter
         if ($request->filled('manufacturer_ids')) {
@@ -290,8 +303,15 @@ class ProductController extends Controller {
 
         // Category
         if ($request->filled('category_ids')) {
-            $query->whereHas('categories', function ($q) use ($request) {
-                $q->whereIn('categories.id', $request->category_ids);
+            $query->whereDoesntHave('categories', function ($q) use ($request) {
+                $q->whereNotIn('categories.id', $request->category_ids);
+            });
+        }
+
+        // Allergen
+        if ($request->filled('allergen_ids')) {
+            $query->whereDoesntHave('allergens', function ($q) use ($request) {
+                $q->whereNotIn('allergens.id', $request->allergen_ids);
             });
         }
 

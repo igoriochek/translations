@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Каталог</string>
+    <string name="landing_paragraph">Находите товары, узнавайте, где их купить, и изучайте рецепты с их использованием.</string>
+    <string name="login_title">С возвращением</string>
+    <string name="login_hint">Войдите, чтобы продолжить</string>
+    <string name="log_in_button">Войти</string>
+    <string name="register_title">Создать аккаунт</string>
+    <string name="register_hint">Введите свои данные</string>
+    <string name="register_button">Зарегистрироваться</string>
+    <string name="username">Имя пользователя</string>
+    <string name="enter_username">Введите имя пользователя</string>
+    <string name="email">Электронная почта</string>
+    <string name="enter_email">Введите адрес электронной почты</string>
+    <string name="password">Пароль</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="repeat_password">Подтвердите пароль</string>
+    <string name="already_have_an_account">Уже есть аккаунт? </string>
+    <string name="log_in_here">Войти здесь</string>
+    <string name="don_t_have_an_account">Нет аккаунта? </string>
+    <string name="register_here">Зарегистрируйтесь здесь</string>
+    <string name="content_language">Язык контента</string>
+    <string name="content_language_hint">Язык контента используется как резервный, если язык интерфейса не поддерживается</string>
+    <string name="interface_language">Язык интерфейса</string>
+    <string name="interface_language_hint">Язык интерфейса определяет язык отображения элементов меню</string>
+    <string name="prefs_title">Начнём</string>
+    <string name="prefs_hint">Вы можете изменить язык интерфейса и контента</string>
+    <string name="invalid_email">Введите корректный адрес электронной почты</string>
+    <string name="prefs_confirm">Подтвердить настройки</string>
+    <string name="search_products">Поиск товаров</string>
+    <string name="product_not_found">Товар не найден</string>
+    <string name="currently_unavailable">В настоящее время недоступно</string>
+    <string name="manufacturer">Производитель</string>
+    <string name="sellers">Продавцы</string>
+    <string name="stores">магазины</string>
+    <string name="recipes">Рецепты</string>
+    <string name="categories">Категории</string>
+    <string name="settings">Настройки</string>
+    <string name="log_out">Выйти из аккаунта</string>
+    <string name="allergens">Аллергены</string>
+    <string name="ingredients">Ингредиенты</string>
+    <string name="nutrition_facts">Пищевая ценность</string>
+    <string name="usage_instructions">Инструкция по применению</string>
+    <string name="related_products">Связанные товары</string>
+    <string name="recommended">Рекомендуем</string>
+</resources>

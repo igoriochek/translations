@@ -45,6 +45,14 @@ export interface Product {
     related_products: Product[];
     allergens: Allergen[];
     images: Image[];
+    sellers: SellerProduct[];
+    usage_instructions: UsageInstruction[];
+}
+
+export interface UsageInstruction {
+    id: number;
+    content: string;
+    language: Language;
 }
 
 export interface ProductIngredient {
@@ -129,15 +137,13 @@ export interface Seller {
 
     products: SellerProduct[];
     stores: SellerStore[];
-
-    created_at?: string;
-    updated_at?: string;
 }
 
 export interface SellerProduct {
     id: number;
     product: Product;
     recommendations: Product[];
+    seller: Seller;
 }
 
 export interface SellerStore {
@@ -196,4 +202,9 @@ export interface ProductNutritionRequest {
     nutritional_type_id: number;
     unit_type_id: number;
     amount: number;
+}
+
+export interface UsageInstructionRequest {
+    content: string;
+    language_id: number;
 }

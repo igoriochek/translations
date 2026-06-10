@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class SellerProduct extends Model {
     protected $with = [
-        'product',
         'recommendations'
     ];
 

@@ -48,6 +48,15 @@ class UserController extends Controller {
         return response()->json(['message' => 'Deleted']);
     }
 
+    public function getSellerReviews($id, Request $request) {
+        $request->merge(['id' => $id]);
+        $validated = $request->validate([
+            'id' => 'required|exists:sellers,id'
+        ]);
+
+        return response()->json(SellerReview::where(['seller_id' => $id])->get());
+    }
+
     public function createSellerReview($id, Request $request) {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -72,13 +81,56 @@ class UserController extends Controller {
         return response()->json($review, 201);
     }
 
+    public function updateSellerReview($id, Request $request) {
+        $request->merge(['id' => $id]);
+        $validated = $request->validate([
+            'id' => 'exists:seller_reviews,id',
+            'title' => 'required|string|max:255',
+            'content' => 'required|string|max:1000'
+        ]);
+
+        $sellerReview = SellerReview::find($validated['id']);
+
+        if($sellerReview->user() != $request->user())
+            return response()->json(['message' => 'Unauthorized'], 401);
+
+        $sellerReview->title = $validated['title'];
+        $sellerReview->content = $validated['content'];
+        $sellerReview->save();
+
+        return response()->json($sellerReview);
+    }
+
+    public function deleteSellerReview($id, Request $request) {
+        $request->merge(['id' => $id]);
+        $validated = $request->validate([
+            'id' => 'required|exists:seller_reviews,id'
+        ]);
+
+        $sellerReview = SellerReview::find($validated['id']);
+        if($sellerReview->user() != $request->user())
+            return response()->json(['message' => 'Unauthorized'], 401);
+
+        $sellerReview->delete();
+        return response()->json(['message' => 'Deleted']);
+    }
+
+    public function getManufacturerReviews($id, Request $request) {
+        $request->merge(['id' => $id]);
+        $validated = $request->validate([
+            'id' => 'required|exists:manufacturers,id'
+        ]);
+
+        return response()->json(ManufacturerReview::where(['manufacturer_id' => $id])->get());
+    }
+
     public function createManufacturerReview($id, Request $request) {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string|max:1000'
         ]);
 
-        if(!Manufacturer::find($id)->exists())
+        if(Manufacturer::find($id) == null)
             return response()->json(["message" => "Manufacturer not found"], 404);
 
         $user = $request->user();
@@ -94,5 +146,39 @@ class UserController extends Controller {
         ]);
 
         return response()->json($review, 201);
+    }
+
+    public function updateManufacturerReview($id, Request $request) {
+        $request->merge(['id' => $id]);
+        $validated = $request->validate([
+            'id' => 'exists:manufacturer_reviews,id',
+            'title' => 'required|string|max:255',
+            'content' => 'required|string|max:1000'
+        ]);
+
+        $manufacturerReview = ManufacturerReview::find($validated['id']);
+
+        if($manufacturerReview->user() != $request->user())
+            return response()->json(['message' => 'Unauthorized'], 401);
+
+        $manufacturerReview->title = $validated['title'];
+        $manufacturerReview->content = $validated['content'];
+        $manufacturerReview->save();
+
+        return response()->json($manufacturerReview);
+    }
+
+    public function deleteManufacturerReview($id, Request $request) {
+        $request->merge(['id' => $id]);
+        $validated = $request->validate([
+            'id' => 'required|exists:manufacturer_reviews,id'
+        ]);
+
+        $manufacturerReview = ManufacturerReview::find($validated['id']);
+        if($manufacturerReview->user() != $request->user())
+            return response()->json(['message' => 'Unauthorized'], 401);
+
+        $manufacturerReview->delete();
+        return response()->json(['message' => 'Deleted']);
     }
 }

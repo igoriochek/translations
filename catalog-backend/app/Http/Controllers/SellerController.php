@@ -7,7 +7,7 @@ use App\Models\User\SellerStore;
 use Illuminate\Http\Request;
 
 class SellerController extends Controller {
-    const array RELATIONS = ['products' => ['recommendations'], 'stores', 'reviews'];
+    const array RELATIONS = ['products' => ['recommendations', 'product'], 'stores', 'reviews'];
 
     public function index() {
 		return Seller::with(self::RELATIONS)->get();

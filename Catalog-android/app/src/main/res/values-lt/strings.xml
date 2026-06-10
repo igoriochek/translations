@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Katalogas</string>
+    <string name="landing_paragraph">Atraskite produktus, sužinokite, kur juos įsigyti, ir raskite receptus, kuriuose jie naudojami.</string>
+    <string name="login_title">Sveiki sugrįžę</string>
+    <string name="login_hint">Prisijunkite, kad tęstumėte</string>
+    <string name="log_in_button">Prisijungti</string>
+    <string name="register_title">Sukurti paskyrą</string>
+    <string name="register_hint">Įveskite savo duomenis</string>
+    <string name="register_button">Registruotis</string>
+    <string name="username">Vartotojo vardas</string>
+    <string name="enter_username">Įveskite vartotojo vardą</string>
+    <string name="email">El. paštas</string>
+    <string name="enter_email">Įveskite el. pašto adresą</string>
+    <string name="password">Slaptažodis</string>
+    <string name="enter_password">Įveskite slaptažodį</string>
+    <string name="repeat_password">Patvirtinkite slaptažodį</string>
+    <string name="already_have_an_account">Jau turite paskyrą? </string>
+    <string name="log_in_here">Prisijunkite čia</string>
+    <string name="don_t_have_an_account">Neturite paskyros? </string>
+    <string name="register_here">Registruokitės čia</string>
+    <string name="content_language">Turinio kalba</string>
+    <string name="content_language_hint">Turinio kalba naudojama kaip atsarginė kalba, jei sąsajos kalba nepalaikoma</string>
+    <string name="interface_language">Sąsajos kalba</string>
+    <string name="interface_language_hint">Sąsajos kalba nustato meniu elementų rodymo kalbą</string>
+    <string name="prefs_title">Pradėkime</string>
+    <string name="prefs_hint">Galite pakeisti sąsajos ir turinio kalbos nustatymus</string>
+    <string name="invalid_email">Įveskite galiojantį el. pašto adresą</string>
+    <string name="prefs_confirm">Patvirtinti nustatymus</string>
+    <string name="search_products">Ieškoti produktų</string>
+    <string name="product_not_found">Produktas nerastas</string>
+    <string name="currently_unavailable">Šiuo metu neprieinama</string>
+    <string name="manufacturer">Gamintojas</string>
+    <string name="sellers">Pardavėjai</string>
+    <string name="stores">parduotuvės</string>
+    <string name="recipes">Receptai</string>
+    <string name="categories">Kategorijos</string>
+    <string name="settings">Nustatymai</string>
+    <string name="log_out">Atsijungti</string>
+    <string name="allergens">Alergenai</string>
+    <string name="ingredients">Ingredientai</string>
+    <string name="nutrition_facts">Maistinė vertė</string>
+    <string name="usage_instructions">Naudojimo instrukcijos</string>
+    <string name="related_products">Susiję produktai</string>
+    <string name="recommended">Rekomenduojama</string>
+</resources>

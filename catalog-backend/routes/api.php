@@ -10,6 +10,7 @@ use App\Http\Controllers\Product\IngredientController;
 use App\Http\Controllers\Product\NutritionController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\RecipeController;
+use App\Http\Controllers\Product\UsageInstructionController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/products/{id}', [ProductController::class, 'get']);
+    Route::get('/products/code/{code}', [ProductController::class, 'findByCode']);
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/allergens', [AllergenController::class, 'index']);
     Route::get('/manufacturers', [ManufacturerController::class, 'index']);
@@ -38,9 +40,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/recipes/by-ingredients/{ingredientId}', [RecipeController::class, 'getRecipes']);
 
     Route::get('/me', [AuthController::class, 'me']);
-    Route::post('/sellers/{id}/reviews', [UserController::class, 'createSellerReview']);
-    Route::post('/manufacturers/{id}/reviews', [UserController::class, 'createManufacturerReview']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/sellers/{id}/reviews', [UserController::class, 'getSellerReviews']);
+    Route::post('/sellers/{id}/reviews', [UserController::class, 'createSellerReview']);
+    Route::put('/seller-reviews/{id}', [UserController::class, 'updateSellerReview']);
+    Route::delete('/seller-reviews/{id}', [UserController::class, 'deleteSellerReview']);
+
+    Route::get('/manufacturers/{id}/reviews', [UserController::class, 'getManufacturerReviews']);
+    Route::post('/manufacturers/{id}/reviews', [UserController::class, 'createManufacturerReview']);
+    Route::put('/manufacturer-reviews/{id}', [UserController::class, 'updateManufacturerReview']);
+    Route::delete('/manufacturer-reviews/{id}', [UserController::class, 'deleteManufacturerReview']);
 });
 
 /**
@@ -65,6 +75,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     Route::post('/manufacturers', [ManufacturerController::class, 'create']);
     Route::post('/nutrition-types', [NutritionController::class, 'create']);
     Route::post('/recipes', [RecipeController::class, 'create']);
+    Route::post('/products/{id}/usage-instructions', [UsageInstructionController::class, 'create']);
 
     Route::post('/sellers', [SellerController::class, 'create']);
     Route::post('/sellers/{id}/stores', [SellerController::class, 'addStore']);
@@ -84,6 +95,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     Route::put('/ingredients/{id}', [IngredientController::class, 'update']);
     Route::put('/recipes/{id}', [RecipeController::class, 'update']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
+    Route::put('/usage-instructions/{id}', [UsageInstructionController::class, 'update']);
 
     /**
      * Data removal
@@ -96,6 +108,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     Route::delete('/products/{productId}/images/{imageId}', [ProductController::class, 'deleteImage']);
     Route::delete('/recipes/{id}', [RecipeController::class, 'delete']);
     Route::delete('/languages/{id}', [LanguageController::class, 'delete']);
+    Route::delete('/usage-instructions/{id}', [UsageInstructionController::class, 'delete']);
 
     Route::delete('/sellers/{id}', [SellerController::class, 'delete']);
     Route::delete('/stores/{id}', [SellerController::class, 'deleteStore']);

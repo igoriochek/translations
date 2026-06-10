@@ -11,6 +11,8 @@ class UsageInstruction extends Model {
     ];
 
     protected $fillable = [
+        'product_id',
+        'language_id',
         'content'
     ];
 

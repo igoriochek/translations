@@ -47,6 +47,7 @@ export default function EditRecipeModal({
 					loading={loading}
 					submitText="Save"
 					onSubmit={handleSubmit}
+					onCancel={onClose}
 				/>
 			</div>
 		</div>

@@ -23,6 +23,10 @@ import EditProductNutritionModal from "../components/modal/EditProductNutritionM
 import EditProductIngredientsModal from "../components/modal/EditProductIngredientsModal.tsx";
 import EditProductImagesModal from "../components/modal/EditProductImagesModal.tsx";
 import ConfirmModal from "../components/modal/ConfirmModal.tsx";
+import ProductRecipesSection from "../components/product/ProductRecipesSection.tsx";
+import ProductUsageInstructionsSection from "../components/product/ProductUsageInstructionsSection.tsx";
+import ProductSellersSection from "../components/product/ProductSellersSection.tsx";
+import EditProductUsageInstructionsModal from "../components/modal/EditProductUsageInstructionsModal.tsx";
 
 export default function ProductPage() {
 
@@ -39,6 +43,7 @@ export default function ProductPage() {
 	const [showEditIngredientsModal, setShowEditIngredientsModal] = useState(false);
 	const [showEditNutritionModal, setShowEditNutritionModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const [showEditUsageInstructionsModal, setShowEditUsageInstructionsModal] = useState(false);
 
 	async function handleDelete() {
 		if (!product)
@@ -82,19 +87,14 @@ export default function ProductPage() {
 	if (!product)
 		return (
 			<AdminLayout>
-				<p>
-					Product not found.
-				</p>
+				<p>Product not found.</p>
 			</AdminLayout>
 		);
 
 	return (
 		<AdminLayout>
-
 			<div className="space-y-6">
-
 				<div>
-
 					<h1 className="text-3xl font-bold">
 						{product.names[0]?.name ?? "Unnamed"}
 					</h1>
@@ -106,12 +106,15 @@ export default function ProductPage() {
 				</div>
 
 				<ProductImagesSection product={product} onEdit={() => setShowEditImagesModal(true)}/>
-				<ProductNamesSection product={product} onEdit={() => setShowEditNamesModal(true)} />
-				<ProductCategoriesSection product={product} onEdit={() => setShowEditCategoriesModal(true)} />
-				<ProductIngredientsSection product={product} onEdit={() => setShowEditIngredientsModal(true)} />
-				<ProductNutritionSection product={product} onEdit={() => setShowEditNutritionModal(true)} />
-				<ProductAllergensSection product={product} onEdit={() => setShowEditAllergensModal(true)} />
-				<ProductRelatedProductsSection product={product} onEdit={() => setShowEditRelatedProductsModal(true)} />
+				<ProductNamesSection product={product} onEdit={() => setShowEditNamesModal(true)}/>
+				<ProductCategoriesSection product={product} onEdit={() => setShowEditCategoriesModal(true)}/>
+				<ProductRecipesSection product={product}/>
+				<ProductIngredientsSection product={product} onEdit={() => setShowEditIngredientsModal(true)}/>
+				<ProductNutritionSection product={product} onEdit={() => setShowEditNutritionModal(true)}/>
+				<ProductUsageInstructionsSection product={product} onEdit={() => setShowEditUsageInstructionsModal(true)}/>
+				<ProductAllergensSection product={product} onEdit={() => setShowEditAllergensModal(true)}/>
+				<ProductSellersSection product={product}/>
+				<ProductRelatedProductsSection product={product} onEdit={() => setShowEditRelatedProductsModal(true)}/>
 				<ProductDangerZoneSection onDelete={() => setShowDeleteModal(true)}/>
 			</div>
 
@@ -171,12 +174,19 @@ export default function ProductPage() {
 				title="Delete Product"
 				message="Are you sure you want to delete this product?"
 				confirmText="Delete"
-				onClose={() =>
-					setShowDeleteModal(false)
-				}
+				onClose={() => setShowDeleteModal(false)}
 				onConfirm={() => {
-					handleDelete().then(() => {setShowDeleteModal(false);});
+					handleDelete().then(() => {
+						setShowDeleteModal(false)
+					})
 				}}
+			/>
+
+			<EditProductUsageInstructionsModal
+				open={showEditUsageInstructionsModal}
+				product={product}
+				onClose={() => setShowEditUsageInstructionsModal(false)}
+				onUpdated={setProduct}
 			/>
 		</AdminLayout>
 	);

@@ -11,6 +11,10 @@ class Seller extends Model {
         'product_id'
     ];
 
+    protected $withCount = [
+        'stores'
+    ];
+
     public function products(): Seller|HasMany {
         return $this->hasMany(SellerProduct::class);
     }
