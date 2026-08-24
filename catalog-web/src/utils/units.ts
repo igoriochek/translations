@@ -9,6 +9,9 @@ export function formatUnit(unit: string) {
 		case 'count':
 			return 'pcs';
 
+		case 'none':
+			return '';
+
 		default:
 			return unit;
 	}
@@ -68,6 +71,12 @@ export function normalizeMeasurement(
 				amount,
 				unit_type_id: 3
 			};
+
+		case '(none)':
+			return {
+				amount,
+				unit_type_id: 4
+			}
 
 		default:
 			throw new Error(`Unknown unit ${unit}`);

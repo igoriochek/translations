@@ -518,7 +518,7 @@ export default function SellersPage() {
 
 			<ConfirmModal
 				open={showDeleteStoreModal}
-				title="Delete Seller"
+				title="Delete Store"
 				message={
 					`Are you sure you want to delete "${selectedStore?.location}"?`
 				}

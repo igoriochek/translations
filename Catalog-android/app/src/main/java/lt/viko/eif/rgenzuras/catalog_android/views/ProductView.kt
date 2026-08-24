@@ -43,7 +43,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
@@ -82,6 +81,7 @@ import lt.viko.eif.rgenzuras.catalog_android.schema.RelatedProduct
 import lt.viko.eif.rgenzuras.catalog_android.schema.Seller
 import lt.viko.eif.rgenzuras.catalog_android.schema.SellerProduct
 import lt.viko.eif.rgenzuras.catalog_android.schema.UsageInstruction
+import lt.viko.eif.rgenzuras.catalog_android.ui.localization.MeasurementFormatter
 import lt.viko.eif.rgenzuras.catalog_android.ui.localization.localizedString
 import lt.viko.eif.rgenzuras.catalog_android.ui.theme.CatalogAppTheme
 import lt.viko.eif.rgenzuras.catalog_android.userViewModel
@@ -102,7 +102,7 @@ private fun Content(
     onRemove: () -> Unit = {}
 ) {
     val listState = rememberLazyListState()
-    val imageHeight = 300.dp
+    val imageHeight = 225.dp
 
     val density = LocalDensity.current
 
@@ -110,7 +110,13 @@ private fun Content(
 
     val scrollProgress by remember {
         derivedStateOf {
-            (listState.firstVisibleItemScrollOffset / imageHeightPx).coerceIn(.5f, 1f)
+            when {
+                listState.firstVisibleItemIndex > 0 -> 1f
+                else -> {
+                    (listState.firstVisibleItemScrollOffset / imageHeightPx)
+                        .coerceIn(.5f, 1f)
+                }
+            }
         }
     }
 
@@ -142,7 +148,7 @@ private fun Content(
             ) {
                 if (product.images.isNotEmpty()) item {
                     ImageCarousel(
-                        product.images.map { it.imageUrl }, modifier = Modifier.height(imageHeight)
+                        product.images.map { it.imageUrl }, modifier = Modifier.height(imageHeight + 75.dp)
                     )
                 }
                 else item {
@@ -250,11 +256,16 @@ private fun Content(
                 if (ingredients.isNotEmpty()) item {
                     LabeledSection(localizedString(R.string.ingredients), padding) {
                         ingredients.forEach { ingredient ->
+                            val measurement = MeasurementFormatter.format(
+                                ingredient.amount,
+                                ingredient.unitType
+                            )
+
                             val ingredientName =
                                 (ingredient.ingredient.names.firstOrNull { it.language.code == uiLanguage.code }
                                     ?: ingredient.ingredient.names.first { it.language.code == contentLanguage }).name
 
-                            KeyValueDisplay(ingredientName, "${ingredient.amount} g")
+                            KeyValueDisplay(ingredientName, "${measurement.value} ${measurement.unit}")
                         }
                     }
                 }
@@ -262,11 +273,16 @@ private fun Content(
                 if (nutritionalMeasurements.isNotEmpty()) item {
                     LabeledSection(localizedString(R.string.nutrition_facts), padding) {
                         nutritionalMeasurements.forEach { nutritionalMeasurement ->
+                            val measurement = MeasurementFormatter.format(
+                                nutritionalMeasurement.amount,
+                                nutritionalMeasurement.unitType
+                            )
+
                             val label =
                                 (nutritionalMeasurement.type.labels.firstOrNull { it.language.code == uiLanguage.code }
                                     ?: nutritionalMeasurement.type.labels.first { it.language.code == contentLanguage }).label
 
-                            KeyValueDisplay(label, "${nutritionalMeasurement.amount} g")
+                            KeyValueDisplay(label, "${measurement.value} ${measurement.unit}")
                         }
                     }
                 }
@@ -445,7 +461,8 @@ private fun ProductHeader(
 )
 private fun ProductPreview() {
     val language = Language(0, "English", "en")
-    val unitType = MeasurementUnitType(0, "mass")
+    val unitType1 = MeasurementUnitType(0, "mass")
+    val unitType2 = MeasurementUnitType(1, "volume")
     val ingredient1 = Ingredient(0, listOf(IngredientName(0, "Ingredient 1", language)))
     val ingredient2 = Ingredient(0, listOf(IngredientName(0, "Ingredient 2", language)))
     val nutritionalType1 = NutritionalType(0, listOf(NutritionalTypeLabel(0, "Type 1", language)))
@@ -474,11 +491,11 @@ private fun ProductPreview() {
             Category(0, listOf(CategoryName(0, "Category 3", language))),
             Category(0, listOf(CategoryName(0, "Category 4", language)))
         ), listOf(
-            ProductIngredient(0, ingredient1, unitType, 100f),
-            ProductIngredient(0, ingredient2, unitType, 5.2f)
+            ProductIngredient(0, ingredient1, unitType1, 100f),
+            ProductIngredient(0, ingredient2, unitType2, 443.602943f)
         ), listOf(
-            NutritionalMeasurement(0, 50.2f, nutritionalType1, unitType),
-            NutritionalMeasurement(0, 10.47f, nutritionalType2, unitType)
+            NutritionalMeasurement(0, 50.2f, nutritionalType1, unitType1),
+            NutritionalMeasurement(0, 10.47f, nutritionalType2, unitType2)
         ), listOf(recommendedProduct), listOf(
             Allergen(0, listOf(AllergenName(0, "Allergen 1", language))),
             Allergen(0, listOf(AllergenName(0, "Allergen 2", language))),

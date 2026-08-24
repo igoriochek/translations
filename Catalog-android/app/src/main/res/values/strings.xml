@@ -42,4 +42,9 @@
     <string name="usage_instructions">Usage instructions</string>
     <string name="related_products">Related products</string>
     <string name="recommended">Recommended</string>
+    <string name="filters_label">Filters</string>
+    <string name="all_categories">All Categories</string>
+    <string name="all_allergens">All Allergens</string>
+    <string name="apply">Apply</string>
+    <string name="clear">Clear</string>
 </resources>

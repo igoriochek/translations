@@ -13,7 +13,8 @@ class MeasurementUnitTypeSeeder extends Seeder
         $types = [
             'mass',
             'volume',
-            'count'
+            'count',
+            'none'
         ];
 
         foreach ($types as $type) {

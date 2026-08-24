@@ -2,6 +2,7 @@ package lt.viko.eif.rgenzuras.catalog_android
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -137,30 +138,36 @@ fun Navigation() {
 
     LaunchedEffect(Unit) {
         scope.launch {
-            val authenticated = userViewModel.authenticate(context)
-            if (authenticated) {
-                val token = getToken(context)!!
-                productsViewModel = ProductsViewModel(api, token)
-                productsViewModel.applyFilters(
-                    query = "",
-                    categories = api.getCategories("Bearer $token").map { it.id },
-                    allergens = api.getAllergens("Bearer $token").map { it.id }
-                )
-            }
-            val prefs = getPrefs(context)
-            backStack.clear()
-            backStack.add(
-                when {
-                    authenticated && prefs != null -> ProductsScreen
-                    authenticated && prefs == null -> PrefsScreen
-                    else -> LandingScreen
+            try {
+                val authenticated = userViewModel.authenticate(context)
+                if (authenticated) {
+                    val token = getToken(context)!!
+                    productsViewModel = ProductsViewModel(api, token)
+                    productsViewModel.applyFilters(
+                        query = "",
+                        categories = api.getCategories("Bearer $token").map { it.id },
+                        allergens = api.getAllergens("Bearer $token").map { it.id }
+                    )
                 }
-            )
+                val prefs = getPrefs(context)
+                backStack.clear()
+                backStack.add(
+                    when {
+                        authenticated && prefs != null -> ProductsScreen
+                        authenticated && prefs == null -> PrefsScreen
+                        else -> LandingScreen
+                    }
+                )
 
-            if (prefs != null)
-                languageViewModel.loadPrefs(context)
-
-            authenticating = false
+                if (prefs != null)
+                    languageViewModel.loadPrefs(context)
+            } catch (err: Exception) {
+                Log.e("Catalog(Auth)", err.stackTraceToString())
+                backStack.clear()
+                backStack.add(LandingScreen)
+            } finally {
+                authenticating = false
+            }
         }
     }
 

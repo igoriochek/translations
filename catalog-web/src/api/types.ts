@@ -200,7 +200,7 @@ export interface ProductIngredientRequest {
 
 export interface ProductNutritionRequest {
     nutritional_type_id: number;
-    unit_type_id: number;
+    measurement_unit_type_id: number;
     amount: number;
 }
 

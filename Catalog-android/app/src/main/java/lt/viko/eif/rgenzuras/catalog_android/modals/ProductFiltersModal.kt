@@ -26,12 +26,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import lt.viko.eif.rgenzuras.catalog.R
 import lt.viko.eif.rgenzuras.catalog_android.activeModal
 import lt.viko.eif.rgenzuras.catalog_android.allergenViewModel
 import lt.viko.eif.rgenzuras.catalog_android.categoryViewModel
 import lt.viko.eif.rgenzuras.catalog_android.productsViewModel
+import lt.viko.eif.rgenzuras.catalog_android.ui.localization.localizedString
 import lt.viko.eif.rgenzuras.catalog_android.ui.theme.CatalogAppTheme
 import lt.viko.eif.rgenzuras.catalog_android.userViewModel
 import lt.viko.eif.rgenzuras.catalog_android.views.ProductsPreview
@@ -70,11 +73,11 @@ fun ProductFiltersModal() {
     }
 
     AppModal(
-        title = "Filters", onDismiss = {
+        title = localizedString(R.string.filters_label), onDismiss = {
             activeModal.value = null
         }) {
         Text(
-            "Categories", style = MaterialTheme.typography.titleMedium
+            localizedString(R.string.categories), style = MaterialTheme.typography.titleMedium
         )
 
         Row(
@@ -88,11 +91,13 @@ fun ProductFiltersModal() {
                     else emptySet()
                 })
 
-            Text("All Categories")
+            Text(localizedString(R.string.all_categories))
         }
 
         if (!categoriesLoading)
-            LazyColumn(modifier = Modifier.heightIn(max = 400.dp).fillMaxWidth()) {
+            LazyColumn(modifier = Modifier
+                .heightIn(max = 400.dp)
+                .fillMaxWidth()) {
                 items(categories) { category ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically
@@ -120,7 +125,7 @@ fun ProductFiltersModal() {
         HorizontalDivider()
 
         Text(
-            "Allergens", style = MaterialTheme.typography.titleMedium
+            localizedString(R.string.allergens), style = MaterialTheme.typography.titleMedium
         )
 
         Row(
@@ -132,11 +137,13 @@ fun ProductFiltersModal() {
                     else emptySet()
                 })
 
-            Text("All Allergens")
+            Text(localizedString(R.string.all_allergens))
         }
 
         if (!allergensLoading)
-            LazyColumn(modifier = Modifier.heightIn(max = 400.dp).fillMaxWidth()) {
+            LazyColumn(modifier = Modifier
+                .heightIn(max = 400.dp)
+                .fillMaxWidth()) {
                 items(allergens) { allergen ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically
@@ -185,7 +192,7 @@ fun ProductFiltersModal() {
 
                     activeModal.value = null
                 }) {
-                Text("Apply")
+                Text(localizedString(R.string.apply))
             }
 
             OutlinedButton(
@@ -194,7 +201,7 @@ fun ProductFiltersModal() {
 
                     activeModal.value = null
                 }) {
-                Text("Clear")
+                Text(localizedString(R.string.clear))
             }
         }
     }

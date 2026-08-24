@@ -43,4 +43,9 @@
     <string name="usage_instructions">使用方法</string>
     <string name="related_products">関連商品</string>
     <string name="recommended">おすすめ</string>
+    <string name="filters_label">フィルター</string>
+    <string name="all_categories">すべてのカテゴリ</string>
+    <string name="all_allergens">すべてのアレルゲン</string>
+    <string name="apply">適用</string>
+    <string name="clear">クリア</string>
 </resources>

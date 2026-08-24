@@ -13,6 +13,7 @@ interface MeasurementTableProps {
 }
 
 const units = [
+	'(none)',
 	'g',
 	'kg',
 	'oz',

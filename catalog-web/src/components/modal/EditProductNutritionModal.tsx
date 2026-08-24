@@ -5,7 +5,7 @@ import {getNutritionalTypes} from "../../api/nutritionalTypes.ts";
 import {updateProduct} from "../../api/products.ts";
 import EntitySelector from "../product/EntitySelector.tsx";
 import MeasurementTable, {type MeasurementTableRow} from "../product/MeasurementTable.tsx";
-import {normalizeMeasurement} from "../../utils/units.ts";
+import {formatUnit, normalizeMeasurement} from "../../utils/units.ts";
 
 interface Props {
 	open: boolean;
@@ -35,7 +35,7 @@ export default function EditProductNutritionModal({
 						id: x.type.id,
 						label: x.type.labels[0]?.label ?? '',
 						amount: x.amount,
-						unit: 'g'
+						unit: formatUnit(x.unit_type.type)
 					})
 				)
 			);
@@ -94,7 +94,7 @@ export default function EditProductNutritionModal({
 				return {
 					nutritional_type_id: row.id,
 					amount: normalized.amount,
-					unit_type_id: normalized.unit_type_id
+					measurement_unit_type_id: normalized.unit_type_id
 				};
 			});
 

@@ -43,4 +43,9 @@
     <string name="usage_instructions">Naudojimo instrukcijos</string>
     <string name="related_products">Susiję produktai</string>
     <string name="recommended">Rekomenduojama</string>
+    <string name="filters_label">Filtrai</string>
+    <string name="all_categories">Visos kategorijos</string>
+    <string name="all_allergens">Visi alergenai</string>
+    <string name="apply">Taikyti</string>
+    <string name="clear">Išvalyti</string>
 </resources>

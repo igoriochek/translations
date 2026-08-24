@@ -43,4 +43,9 @@
     <string name="usage_instructions">Инструкция по применению</string>
     <string name="related_products">Связанные товары</string>
     <string name="recommended">Рекомендуем</string>
+    <string name="filters_label">Фильтры</string>
+    <string name="all_categories">Все категории</string>
+    <string name="all_allergens">Все аллергены</string>
+    <string name="apply">Применить</string>
+    <string name="clear">Очистить</string>
 </resources>
