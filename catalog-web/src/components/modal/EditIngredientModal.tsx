@@ -3,6 +3,7 @@ import type {Ingredient, Language, TranslationInput} from "../../api/types.ts";
 import {getLanguages} from "../../api/languages.ts";
 import {updateIngredient} from "../../api/ingredients.ts";
 import TranslationInputs from "../TranslationInputs.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface EditIngredientModalProps {
 	open: boolean;
@@ -114,7 +115,7 @@ export default function EditIngredientModal({open, ingredient, onClose, onUpdate
                             font-bold
                         "
 					>
-						Edit Ingredient
+						{strings.ingredients.edit_label}
 					</h2>
 
 					<p
@@ -124,7 +125,7 @@ export default function EditIngredientModal({open, ingredient, onClose, onUpdate
                             mt-1
                         "
 					>
-						Update ingredient translations.
+						{strings.ingredients.edit_hint}
 					</p>
 
 				</div>
@@ -133,8 +134,8 @@ export default function EditIngredientModal({open, ingredient, onClose, onUpdate
 					languages={languages}
 					translations={translations}
 					onChange={setTranslations}
-					label="Ingredient Names"
-					placeholder="Enter ingredient name"
+					label={strings.ingredients.translations_label}
+					placeholder={strings.ingredients.translations_placeholder}
 				/>
 
 				<div
@@ -157,7 +158,7 @@ export default function EditIngredientModal({open, ingredient, onClose, onUpdate
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -174,8 +175,8 @@ export default function EditIngredientModal({open, ingredient, onClose, onUpdate
 					>
 
 						{loading
-							? 'Saving...'
-							: 'Save'}
+							? strings.saving
+							: strings.save_button}
 
 					</button>
 

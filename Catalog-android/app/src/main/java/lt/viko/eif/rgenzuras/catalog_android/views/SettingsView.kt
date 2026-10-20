@@ -4,11 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -19,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import lt.viko.eif.rgenzuras.catalog.R
+import lt.viko.eif.rgenzuras.catalog_android.api.Prefs
+import lt.viko.eif.rgenzuras.catalog_android.backStack
 import lt.viko.eif.rgenzuras.catalog_android.components.DropdownList
 import lt.viko.eif.rgenzuras.catalog_android.components.StyledButton
 import lt.viko.eif.rgenzuras.catalog_android.languageViewModel
@@ -62,11 +70,20 @@ fun SettingsMenu() {
                     Arrangement.spacedBy(15.dp)
             ) {
 
-                Text(
-                    localizedString(R.string.settings),
-                    style =
-                        MaterialTheme.typography.headlineMedium
-                )
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(
+                        onClick = { backStack.remove(SettingsScreen) }
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back"
+                        )
+                    }
+                    Text(
+                        localizedString(R.string.settings),
+                        style =
+                            MaterialTheme.typography.headlineMedium
+                    )
+                }
 
                 Column {
                     DropdownList(
@@ -76,6 +93,7 @@ fun SettingsMenu() {
                             selectedUi = it
                             val language = AppLanguage.entries[selectedUi]
                             languageViewModel.setAppLanguage(language)
+                            languageViewModel.savePrefs(context, Prefs(AppLanguage.entries[selectedUi].code, contentOptions[selectedContent].code))
                         },
                         localizedString(R.string.interface_language)
                     )
@@ -121,6 +139,7 @@ fun SettingsMenu() {
                             {
                                 selectedContent = it
                                 languageViewModel.setContentLanguage(contentOptions[selectedContent].code)
+                                languageViewModel.savePrefs(context, Prefs(AppLanguage.entries[selectedUi].code, contentOptions[selectedContent].code))
                             },
                             localizedString(R.string.content_language)
                         )

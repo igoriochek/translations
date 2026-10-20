@@ -5,7 +5,8 @@ import {getIngredients} from "../../api/ingredients.ts";
 import {updateProduct} from "../../api/products.ts";
 import EntitySelector from "../product/EntitySelector.tsx";
 import MeasurementTable, {type MeasurementTableRow} from "../product/MeasurementTable.tsx";
-import {normalizeMeasurement} from "../../utils/units.ts";
+import {formatUnit, normalizeMeasurement} from "../../utils/units.ts";
+import {strings} from "../../utils/localization.ts";
 
 interface Props {
 	open: boolean;
@@ -37,7 +38,7 @@ export default function EditProductIngredientsModal({
 						id: x.ingredient.id,
 						label: x.ingredient.names[0]?.name ?? '',
 						amount: x.amount,
-						unit: 'g'
+						unit: formatUnit(x.unit_type.type)
 					})
 				)
 			);
@@ -138,10 +139,10 @@ export default function EditProductIngredientsModal({
 	}
 
 	return (
-		<Modal open={open} title="Edit Ingredients" onClose={onClose}>
+		<Modal open={open} title={strings.ingredients_title} onClose={onClose}>
 			<div className="space-y-6">
 				<EntitySelector
-					label="Ingredients"
+					label={strings.ingredients_title}
 					items={ingredients.map((x) => ({
 						id: x.id,
 						label: x.names[0]?.name ?? ''
@@ -162,7 +163,7 @@ export default function EditProductIngredientsModal({
 						onClick={handleSave}
 						className="bg-black text-white px-4 py-2 rounded-xl"
 					>
-						Save
+						{strings.save_button}
 					</button>
 				</div>
 			</div>

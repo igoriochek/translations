@@ -1,5 +1,6 @@
 import type {NutritionalType} from "../../api/types.ts";
 import {Pencil, Trash2} from "lucide-react";
+import {strings} from "../../utils/localization.ts";
 
 interface NutritionalTypeCardProps {
 	nutritionalType: NutritionalType;
@@ -29,7 +30,7 @@ export default function NutritionalTypeCard({nutritionalType, onEdit, onDelete}:
 				<div>
 
 					<h2 className="font-semibold">
-						{primaryName?.label ?? 'Unnamed'}
+						{primaryName?.label ?? strings.missing_field}
 					</h2>
 
 					<p
@@ -39,13 +40,15 @@ export default function NutritionalTypeCard({nutritionalType, onEdit, onDelete}:
                             mt-1
                         "
 					>
-						{nutritionalType.labels.length} translations
+						{nutritionalType.labels.length}
+						{' '}
+						{nutritionalType.labels.length == 1 ?
+							strings.translation.toLowerCase() :
+							strings.translations.toLowerCase()}
 					</p>
-
 				</div>
 
 				<div className="flex items-center gap-3">
-
 					<button
 						onClick={onEdit}
 						className="
@@ -54,9 +57,7 @@ export default function NutritionalTypeCard({nutritionalType, onEdit, onDelete}:
                             transition
                         "
 					>
-
 						<Pencil size={18}/>
-
 					</button>
 
 					<button
@@ -67,9 +68,7 @@ export default function NutritionalTypeCard({nutritionalType, onEdit, onDelete}:
                             transition
                         "
 					>
-
 						<Trash2 size={18}/>
-
 					</button>
 
 				</div>

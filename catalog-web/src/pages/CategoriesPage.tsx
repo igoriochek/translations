@@ -7,6 +7,8 @@ import CategorySkeleton from "../components/skeleton/CategorySkeleton.tsx";
 import AddCategoryModal from "../components/modal/AddCategoryModal.tsx";
 import EditCategoryModal from "../components/modal/EditCategoryModal.tsx";
 import ConfirmModal from "../components/modal/ConfirmModal.tsx";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function CategoriesPage() {
 
@@ -18,6 +20,8 @@ export default function CategoriesPage() {
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 	const [loading, setLoading] = useState(true);
+
+	useLanguage();
 
 	useEffect(() => {
 		async function loadCategories() {
@@ -60,12 +64,11 @@ export default function CategoriesPage() {
 					<div>
 
 						<h1 className="text-2xl font-bold">
-							Categories
+							{strings.categories_title}
 						</h1>
 
 						<p className="text-zinc-600">
-							Manage localized
-							product categories.
+							{strings.categories.hint}
 						</p>
 
 					</div>
@@ -83,7 +86,7 @@ export default function CategoriesPage() {
                             text-sm
                         "
 					>
-						Add Category
+						{strings.categories.add_label}
 					</button>
 
 				</div>
@@ -141,11 +144,9 @@ export default function CategoriesPage() {
 
 			<AddCategoryModal
 				open={showAddModal}
-
 				onClose={() =>
 					setShowAddModal(false)
 				}
-
 				onCreated={(category) => {
 
 					setCategories((prev) => [
@@ -160,16 +161,13 @@ export default function CategoriesPage() {
 
 			<EditCategoryModal
 				open={showEditModal}
-
 				category={selectedCategory}
-
 				onClose={() => {
 
 					setShowEditModal(false);
 
 					setSelectedCategory(null);
 				}}
-
 				onUpdated={(updated) => {
 
 					setCategories((prev) =>
@@ -189,22 +187,13 @@ export default function CategoriesPage() {
 
 			<ConfirmModal
 				open={showDeleteModal}
-
-				title="Delete Category"
-
-				message={
-					`Are you sure you want to delete this category?`
-				}
-
-				confirmText="Delete"
-
+				title={strings.categories.delete_title}
+				message={strings.categories.delete_confirm}
+				confirmText={strings.delete_button}
 				onClose={() => {
-
 					setShowDeleteModal(false);
-
 					setSelectedCategory(null);
 				}}
-
 				onConfirm={() => {
 
 					if (!selectedCategory) {

@@ -1,5 +1,6 @@
-import type { Category } from "../../api/types.ts";
-import { Pencil, Trash2 } from "lucide-react";
+import type {Category} from "../../api/types.ts";
+import {Pencil, Trash2} from "lucide-react";
+import {strings} from "../../utils/localization.ts";
 
 interface CategoryCardProps {
 	category: Category;
@@ -7,7 +8,7 @@ interface CategoryCardProps {
 	onDelete?: () => void;
 }
 
-export default function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps) {
+export default function CategoryCard({category, onEdit, onDelete}: CategoryCardProps) {
 	const primaryName =
 		category.names.find((x) => x.language.code === 'en') ?? category.names[0];
 
@@ -29,7 +30,7 @@ export default function CategoryCard({ category, onEdit, onDelete }: CategoryCar
 
 					<h2 className="font-semibold">
 						{primaryName?.name ??
-							'Unnamed'}
+							strings.missing_field}
 					</h2>
 
 					<p
@@ -41,7 +42,9 @@ export default function CategoryCard({ category, onEdit, onDelete }: CategoryCar
 					>
 						{category.names.length}
 						{' '}
-						translations
+						{category.names.length == 1 ?
+							strings.translation.toLowerCase() :
+							strings.translations.toLowerCase()}
 					</p>
 
 				</div>

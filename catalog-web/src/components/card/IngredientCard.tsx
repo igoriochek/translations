@@ -1,5 +1,6 @@
 import type {Ingredient} from "../../api/types.ts";
 import {Pencil, Trash2} from "lucide-react";
+import {strings} from "../../utils/localization.ts";
 
 interface IngredientCardProps {
 	ingredient: Ingredient;
@@ -28,7 +29,7 @@ export default function IngredientCard({ingredient, onEdit, onDelete}: Ingredien
 				<div>
 
 					<h2 className="font-semibold">
-						{primaryName?.name ?? 'Unnamed'}
+						{primaryName?.name ?? strings.missing_field}
 					</h2>
 
 					<p
@@ -40,7 +41,9 @@ export default function IngredientCard({ingredient, onEdit, onDelete}: Ingredien
 					>
 						{ingredient.names.length}
 						{' '}
-						translations
+						{ingredient.names.length == 1 ?
+							strings.translation.toLowerCase() :
+							strings.translations.toLowerCase()}
 					</p>
 
 				</div>

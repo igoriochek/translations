@@ -10,6 +10,8 @@ import ManufacturerSkeleton from "../components/skeleton/ManufacturerSkeleton.ts
 import AddManufacturerModal from "../components/modal/AddManufacturerModal.tsx";
 import ConfirmModal from "../components/modal/ConfirmModal.tsx";
 import EditManufacturerModal from "../components/modal/EditManufacturerModal.tsx";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function ManufacturersPage() {
     const [manufacturers, setManufacturers] = useState([] as Manufacturer[]);
@@ -18,6 +20,8 @@ export default function ManufacturersPage() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedManufacturer, setSelectedManufacturer] = useState<Manufacturer | null>(null);
+
+    useLanguage();
 
     useEffect(() => {
 
@@ -41,9 +45,7 @@ export default function ManufacturersPage() {
     }, []);
 
     async function handleCreateManufacturer(manufacturer: Manufacturer) {
-
         try {
-
             setManufacturers((prev) => [
                 ...prev,
                 manufacturer
@@ -93,11 +95,11 @@ export default function ManufacturersPage() {
 
                 <div>
                     <h1 className="text-2xl font-bold">
-                        Manufacturers
+                        {strings.manufacturers_title}
                     </h1>
 
                     <p className="text-zinc-600">
-                        Manage manufacturer entries.
+                        {strings.manufacturers.hint}
                     </p>
                 </div>
 
@@ -105,7 +107,7 @@ export default function ManufacturersPage() {
                     className="bg-black text-white px-4 py-2 rounded-lg text-sm"
                     onClick={() => setShowCreateModal(true)}
                 >
-                    Add Manufacturer
+                    {strings.manufacturers.add_label}
                 </button>
 
             </div>
@@ -131,7 +133,7 @@ export default function ManufacturersPage() {
                                     </h2>
 
                                     <p className="text-sm text-zinc-500 mt-1">
-                                        {manufacturer.country || 'No country provided'}
+                                        {manufacturer.country || strings.manufacturers.no_country}
                                     </p>
 
                                 </div>
@@ -190,11 +192,11 @@ export default function ManufacturersPage() {
 
             <ConfirmModal
                 open={showDeleteModal}
-                title="Delete Manufacturer"
+                title={strings.manufacturers.delete_title}
                 message={
-                    `Are you sure you want to delete "${selectedManufacturer?.name}"?`
+                    `${strings.formatString(strings.manufacturers.delete_confirm, selectedManufacturer?.name ?? "")}`
                 }
-                confirmText="Delete"
+                confirmText={strings.delete_button}
                 onClose={() => {
                     setShowDeleteModal(false);
                     setSelectedManufacturer(null);

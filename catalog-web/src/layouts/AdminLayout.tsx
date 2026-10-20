@@ -2,6 +2,7 @@ import {type ReactNode, useEffect, useState} from 'react';
 import Header from '../components/Header';
 import { getCurrentUser } from '../api/auth';
 import type {User} from "../api/types.ts";
+import {useNavigate} from "react-router-dom";
 
 interface AdminLayoutProps {
     children: ReactNode;
@@ -12,6 +13,7 @@ export default function AdminLayout({
                                     }: AdminLayoutProps) {
 
     const [user, setUser] = useState<User | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -25,6 +27,7 @@ export default function AdminLayout({
 
             } catch (err) {
                 console.error(err);
+                navigate("/login");
             }
         }
 

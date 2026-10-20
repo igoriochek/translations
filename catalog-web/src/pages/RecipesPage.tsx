@@ -14,6 +14,8 @@ import RecipeSkeleton from "../components/skeleton/RecipeSkeleton.tsx";
 import AddRecipeModal from "../components/modal/AddRecipeModal.tsx";
 import EditRecipeModal from "../components/modal/EditRecipeModal.tsx";
 import ConfirmModal from "../components/modal/ConfirmModal.tsx";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function RecipesPage() {
 
@@ -25,6 +27,8 @@ export default function RecipesPage() {
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 	const [loading, setLoading] = useState(true);
+
+	useLanguage();
 
 	useEffect(() => {
 		async function loadRecipes() {
@@ -80,11 +84,11 @@ export default function RecipesPage() {
 					<div>
 
 						<h1 className="text-2xl font-bold">
-							Recipes
+							{strings.recipes_title}
 						</h1>
 
 						<p className="text-zinc-600">
-							Manage localized recipes and product associations.
+							{strings.recipes.hint}
 						</p>
 
 					</div>
@@ -93,7 +97,7 @@ export default function RecipesPage() {
 						onClick={() => setShowAddModal(true)}
 						className="bg-black text-white px-4 py-2 rounded-lg text-sm"
 					>
-						Add Recipe
+						{strings.recipes.add_label}
 					</button>
 
 				</div>
@@ -114,12 +118,10 @@ export default function RecipesPage() {
 							<RecipeCard
 								key={recipe.id}
 								recipe={recipe}
-
 								onEdit={() => {
 									setSelectedRecipe(recipe);
 									setShowEditModal(true);
 								}}
-
 								onDelete={() => {
 									setSelectedRecipe(recipe);
 									setShowDeleteModal(true);
@@ -170,9 +172,9 @@ export default function RecipesPage() {
 
 			<ConfirmModal
 				open={showDeleteModal}
-				title="Delete Recipe"
-				message="Are you sure you want to delete this recipe?"
-				confirmText="Delete"
+				title={strings.recipes.delete_title}
+				message={strings.recipes.delete_confirm}
+				confirmText={strings.delete_button}
 
 				onClose={() => {
 					setShowDeleteModal(false);
@@ -180,22 +182,18 @@ export default function RecipesPage() {
 				}}
 
 				onConfirm={() => {
-
 					if (!selectedRecipe)
 						return;
 
 					handleDeleteRecipe(
 						selectedRecipe.id
 					).then(() => {
-
 						setShowDeleteModal(false);
 						setSelectedRecipe(null);
 
 					});
-
 				}}
 			/>
-
 		</AdminLayout>
 	);
 }

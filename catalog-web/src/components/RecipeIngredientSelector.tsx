@@ -1,5 +1,6 @@
 import {useMemo} from "react";
 import type {ProductListItem} from "../api/types.ts";
+import {strings} from "../utils/localization.ts";
 
 interface RecipeIngredientSelectorProps {
 	products: ProductListItem[];
@@ -57,7 +58,7 @@ export default function RecipeIngredientSelector({
 		<div className="space-y-3">
 
 			<h3 className="text-sm font-medium">
-				Products
+				{strings.products_title}
 			</h3>
 
 			<input
@@ -66,7 +67,7 @@ export default function RecipeIngredientSelector({
 				onChange={(e) =>
 					onSearchChange(e.target.value)
 				}
-				placeholder="Search products..."
+				placeholder={strings.recipes.product_search}
 				className="
 					w-full
 					border
@@ -83,7 +84,7 @@ export default function RecipeIngredientSelector({
 
 					const name =
 						product.names[0]?.name ??
-						'Unnamed';
+						strings.missing_field;
 
 					return (
 						<button

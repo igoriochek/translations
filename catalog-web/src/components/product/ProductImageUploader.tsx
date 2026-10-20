@@ -1,3 +1,5 @@
+import {strings} from "../../utils/localization.ts";
+
 interface ProductImageUploaderProps {
 	onAdd: (files: File[]) => void;
 }
@@ -26,7 +28,7 @@ export default function ProductImageUploader({onAdd}: ProductImageUploaderProps)
 				hover:bg-zinc-50"
 		>
 			<input type="file" multiple accept="image/*" className="hidden" onChange={handleChange}/>
-			<span>Upload Images</span>
+			<span>{strings.products.upload_images_button}</span>
 		</label>
 	);
 }

@@ -5,6 +5,7 @@ import Modal from './Modal';
 import { createManufacturer } from '../../api/manufacturers';
 
 import type { Manufacturer } from '../../api/types';
+import {strings} from "../../utils/localization.ts";
 
 interface AddManufacturerModalProps {
     open: boolean;
@@ -62,7 +63,7 @@ export default function AddManufacturerModal({
     return (
         <Modal
             open={open}
-            title="Add Manufacturer"
+            title={strings.manufacturers.add_label}
             onClose={onClose}
         >
 
@@ -74,7 +75,7 @@ export default function AddManufacturerModal({
                 <div>
 
                     <label className="block text-sm font-medium mb-1">
-                        Name
+                        {strings.manufacturers.name_field}
                     </label>
 
                     <input
@@ -90,7 +91,7 @@ export default function AddManufacturerModal({
                             focus:ring-2
                             focus:ring-black
                         "
-                        placeholder="Manufacturer name"
+                        placeholder={strings.manufacturers.name_placeholder}
                     />
 
                 </div>
@@ -98,7 +99,7 @@ export default function AddManufacturerModal({
                 <div>
 
                     <label className="block text-sm font-medium mb-1">
-                        Country
+                        {strings.manufacturers.country_field}
                     </label>
 
                     <input
@@ -114,7 +115,7 @@ export default function AddManufacturerModal({
                             focus:ring-2
                             focus:ring-black
                         "
-                        placeholder="Optional"
+                        placeholder={strings.manufacturers.country_placeholder}
                     />
 
                 </div>
@@ -131,7 +132,7 @@ export default function AddManufacturerModal({
                             hover:bg-zinc-100
                         "
                     >
-                        Cancel
+                        {strings.cancel_button}
                     </button>
 
                     <button
@@ -146,7 +147,7 @@ export default function AddManufacturerModal({
                             disabled:opacity-50
                         "
                     >
-                        {loading ? 'Adding...' : 'Add'}
+                        {loading ? strings.saving : strings.create_button}
                     </button>
 
                 </div>

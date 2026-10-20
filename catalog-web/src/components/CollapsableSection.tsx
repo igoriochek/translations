@@ -1,49 +1,42 @@
 import type {ReactNode} from "react";
 
-import {
-    ChevronDownIcon,
-    ChevronRightIcon,
-    PlusIcon
-} from "lucide-react";
+import {ChevronDownIcon, ChevronRightIcon, PlusIcon} from "lucide-react";
+import {strings} from "../utils/localization.ts";
 
 interface CollapsableSectionProps {
-    title: string;
-
-    expanded: boolean;
-
-    onToggle: () => void;
-
-    onAdd?: () => void;
-
-    children: ReactNode;
+	title: string;
+	addLabel?: string;
+	expanded: boolean;
+	onToggle: () => void;
+	onAdd?: () => void;
+	icon?: ReactNode;
+	children: ReactNode;
 }
 
 export default function CollapsableSection({
-                                               title,
+											   title,
+											   addLabel = strings.add_button,
+											   expanded,
+											   onToggle,
+											   onAdd,
+											   icon = <PlusIcon size={15}/>,
+											   children
+										   }: CollapsableSectionProps) {
 
-                                               expanded,
+	return (
+		<div className="border-2 rounded-lg p-3 border-zinc-100 shadow-sm">
 
-                                               onToggle,
-
-                                               onAdd,
-
-                                               children
-                                           }: CollapsableSectionProps) {
-
-    return (
-        <div className="border-2 rounded-lg p-3 border-zinc-100 shadow-sm">
-
-            <div
-                className="
+			<div
+				className="
                     flex
                     items-center
                     justify-between
                 "
-            >
+			>
 
-                <button
-                    onClick={onToggle}
-                    className="
+				<button
+					onClick={onToggle}
+					className="
                         flex
                         items-center
                         gap-2
@@ -52,25 +45,25 @@ export default function CollapsableSection({
                         text-zinc-900
                         flex-1
                     "
-                >
+				>
 
-                    {expanded ? (
-                        <ChevronDownIcon size={18}/>
-                    ) : (
-                        <ChevronRightIcon size={18}/>
-                    )}
+					{expanded ? (
+						<ChevronDownIcon size={18}/>
+					) : (
+						<ChevronRightIcon size={18}/>
+					)}
 
-                    <span>
+					<span>
                         {title}
                     </span>
 
-                </button>
+				</button>
 
-                {onAdd && (
+				{onAdd && (
 
-                    <button
-                        onClick={onAdd}
-                        className="
+					<button
+						onClick={onAdd}
+						className="
                             flex
                             items-center
                             gap-1
@@ -79,32 +72,32 @@ export default function CollapsableSection({
                             hover:text-zinc-900
                             transition-colors
                         "
-                    >
+					>
 
-                        <PlusIcon size={15}/>
+						{icon}
 
-                        <span>
-                            Add
+						<span>
+                            {addLabel}
                         </span>
 
-                    </button>
-                )}
+					</button>
+				)}
 
-            </div>
+			</div>
 
-            {expanded && (
+			{expanded && (
 
-                <div
-                    className="
+				<div
+					className="
                         pt-2
                         space-y-4
                     "
-                >
-                    {children}
+				>
+					{children}
 
-                </div>
-            )}
+				</div>
+			)}
 
-        </div>
-    );
+		</div>
+	);
 }

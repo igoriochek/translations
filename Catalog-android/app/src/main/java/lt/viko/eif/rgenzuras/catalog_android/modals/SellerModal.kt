@@ -24,13 +24,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.unit.dp
+import lt.viko.eif.rgenzuras.catalog.R
 import lt.viko.eif.rgenzuras.catalog_android.activeModal
 import lt.viko.eif.rgenzuras.catalog_android.components.LabeledSection
 import lt.viko.eif.rgenzuras.catalog_android.components.StyledMultiLineInput
 import lt.viko.eif.rgenzuras.catalog_android.components.StyledSingleLineInput
 import lt.viko.eif.rgenzuras.catalog_android.sellerViewModel
+import lt.viko.eif.rgenzuras.catalog_android.ui.localization.localizedString
 import lt.viko.eif.rgenzuras.catalog_android.userViewModel
+import java.util.Locale
 
 @Composable
 fun SellerModal(
@@ -83,7 +87,11 @@ fun SellerModal(
         }
 
         if (seller!!.stores.isNotEmpty()) {
-            LabeledSection("Stores") {
+            LabeledSection(localizedString(R.string.stores).replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(
+                    Locale.ROOT
+                ) else it.toString()
+            }) {
                 seller!!.stores.forEach { store ->
                     Card {
                         Column(

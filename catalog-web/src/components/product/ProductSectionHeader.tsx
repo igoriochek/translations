@@ -1,3 +1,5 @@
+import {strings} from "../../utils/localization.ts";
+
 interface ProductSectionHeaderProps {
 	title: string;
 	onEdit?: () => void;
@@ -16,7 +18,7 @@ export default function ProductSectionHeader({
 
 			{onEdit && (
 				<button onClick={onEdit} className="text-sm text-zinc-500 hover:text-black">
-					Edit
+					{strings.edit_button}
 				</button>
 			)}
 

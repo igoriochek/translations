@@ -16,7 +16,9 @@ import lt.viko.eif.rgenzuras.catalog_android.api.getToken
 import lt.viko.eif.rgenzuras.catalog_android.api.saveToken
 import lt.viko.eif.rgenzuras.catalog_android.backStack
 import lt.viko.eif.rgenzuras.catalog_android.loadProductsViewModel
+import lt.viko.eif.rgenzuras.catalog_android.schema.ScanHistory
 import lt.viko.eif.rgenzuras.catalog_android.schema.User
+import lt.viko.eif.rgenzuras.catalog_android.views.BarcodeScannerScreen
 import lt.viko.eif.rgenzuras.catalog_android.views.LandingScreen
 import lt.viko.eif.rgenzuras.catalog_android.views.PrefsScreen
 import lt.viko.eif.rgenzuras.catalog_android.views.ProductsScreen
@@ -27,11 +29,17 @@ class UserViewModel(
     private val _user = MutableStateFlow(User(0, "", "", ""))
     val user: StateFlow<User> = _user
 
+    private val _history = MutableStateFlow(emptyList<ScanHistory>())
+    val history = _history.asStateFlow()
+
     private val _token = MutableStateFlow<String?>(null)
     val token = _token.asStateFlow()
 
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
+
+    private val _loadingHistory = MutableStateFlow(false)
+    val loadingHistory: StateFlow<Boolean> = _loadingHistory
 
     suspend fun authenticate(context: Context) : Boolean {
         _loading.value = true
@@ -47,6 +55,14 @@ class UserViewModel(
         _user.value = api.me("Bearer $token")
         _loading.value = false
         return true;
+    }
+
+    fun loadScanHistory() {
+        viewModelScope.launch {
+            _loadingHistory.value = true
+            _history.value = api.getScanHistory("Bearer ${_token.value!!}")
+            _loadingHistory.value = false
+        }
     }
 
     fun register(context: Context, request: RegisterRequest) {
@@ -93,6 +109,6 @@ class UserViewModel(
     private suspend fun loadMenu(context: Context) {
         val prefs = getPrefs(context)
         backStack.clear()
-        backStack.add(if(prefs != null) ProductsScreen else PrefsScreen)
+        backStack.add(if(prefs != null) BarcodeScannerScreen else PrefsScreen)
     }
 }

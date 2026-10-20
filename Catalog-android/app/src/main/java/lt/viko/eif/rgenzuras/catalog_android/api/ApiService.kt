@@ -7,6 +7,7 @@ import lt.viko.eif.rgenzuras.catalog_android.schema.ManufacturerReview
 import lt.viko.eif.rgenzuras.catalog_android.schema.Product
 import lt.viko.eif.rgenzuras.catalog_android.schema.Recipe
 import lt.viko.eif.rgenzuras.catalog_android.schema.RelatedProduct
+import lt.viko.eif.rgenzuras.catalog_android.schema.ScanHistory
 import lt.viko.eif.rgenzuras.catalog_android.schema.Seller
 import lt.viko.eif.rgenzuras.catalog_android.schema.SellerReview
 import lt.viko.eif.rgenzuras.catalog_android.schema.User
@@ -105,4 +106,10 @@ interface ApiService {
     suspend fun getRecipes(
         @Header("Authorization") token: String, @Path("ingredientId") ingredientId: Int
     ): List<Recipe>
+
+    @GET("api/scans")
+    suspend fun getScanHistory(@Header("Authorization") token: String): List<ScanHistory>
+
+    @POST("api/scans/{productId}")
+    suspend fun addScanResult(@Header("Authorization") token: String, @Path("productId") productId: Int): ScanHistory
 }

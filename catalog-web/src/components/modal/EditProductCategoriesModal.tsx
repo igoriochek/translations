@@ -4,6 +4,7 @@ import type {Category, Product} from "../../api/types.ts";
 import {getCategories} from "../../api/categories.ts";
 import {updateProduct} from "../../api/products.ts";
 import EntitySelector, {type EntitySelectorItem} from "../product/EntitySelector.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface EditProductCategoriesModalProps {
 	open: boolean;
@@ -54,14 +55,14 @@ export default function EditProductCategoriesModal({
 
 	const items: EntitySelectorItem[] = categories.map((category) => ({
 		id: category.id,
-		label: category.names[0]?.name ?? `Category ${category.id}`
+		label: category.names[0]?.name ?? `${strings.missing_field} #${category.id}`
 	}));
 
 	return (
 		<Modal open={open} title="Edit Categories" onClose={onClose}>
 			<div className="space-y-6">
 				<EntitySelector
-					label="Categories"
+					label={strings.categories_title}
 					items={items}
 					selectedIds={selectedIds}
 					onChange={setSelectedIds}
@@ -70,7 +71,9 @@ export default function EditProductCategoriesModal({
 				<div className="flex justify-end">
 					<button onClick={handleSave} disabled={loading}
 					        className="bg-black text-white px-4 py-2 rounded-xl">
-						Save
+						{loading ?
+							strings.saving :
+							strings.save_button}
 					</button>
 				</div>
 			</div>

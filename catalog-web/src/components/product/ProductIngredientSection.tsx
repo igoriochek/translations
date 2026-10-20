@@ -1,6 +1,7 @@
 import type {Product} from "../../api/types.ts";
 import ProductSection from "./ProductSection.tsx";
 import {formatUnit} from "../../utils/units.ts";
+import {strings} from "../../utils/localization.ts";
 
 interface ProductIngredientsSectionProps {
 	product: Product;
@@ -9,7 +10,7 @@ interface ProductIngredientsSectionProps {
 
 export default function ProductIngredientsSection({product, onEdit}: ProductIngredientsSectionProps) {
 	return (
-		<ProductSection title="Ingredients" onEdit={onEdit}>
+		<ProductSection title={strings.ingredients_title} onEdit={onEdit}>
 			<div className="space-y-2">
 				{product.ingredients.map((ingredient) => (
 					<div

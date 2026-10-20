@@ -73,6 +73,7 @@ import lt.viko.eif.rgenzuras.catalog_android.schema.NutritionalMeasurement
 import lt.viko.eif.rgenzuras.catalog_android.schema.NutritionalType
 import lt.viko.eif.rgenzuras.catalog_android.schema.NutritionalTypeLabel
 import lt.viko.eif.rgenzuras.catalog_android.schema.Product
+import lt.viko.eif.rgenzuras.catalog_android.schema.ProductDescription
 import lt.viko.eif.rgenzuras.catalog_android.schema.ProductImage
 import lt.viko.eif.rgenzuras.catalog_android.schema.ProductIngredient
 import lt.viko.eif.rgenzuras.catalog_android.schema.ProductName
@@ -86,6 +87,7 @@ import lt.viko.eif.rgenzuras.catalog_android.ui.localization.localizedString
 import lt.viko.eif.rgenzuras.catalog_android.ui.theme.CatalogAppTheme
 import lt.viko.eif.rgenzuras.catalog_android.userViewModel
 import lt.viko.eif.rgenzuras.catalog_android.viewmodels.LanguageViewModel
+import java.util.Locale
 
 @Serializable
 data class ProductScreen(val productId: Int) : NavKey
@@ -122,6 +124,7 @@ private fun Content(
 
     val sellers = product.sellers
     val names = product.names
+    val descriptions = product.descriptions
     val categories = product.categories
     val allergens = product.allergens
     val ingredients = product.ingredients
@@ -129,8 +132,19 @@ private fun Content(
     val relatedProducts = product.relatedProducts
     val recommendations = product.sellers.flatMap { it.recommendations }
 
-    val productName = (names.firstOrNull { it.language.code == uiLanguage.code }
-        ?: names.first { it.language.code == contentLanguage }).name
+    val defaultLanguage = uiLanguage == LanguageViewModel.AppLanguage.SYSTEM
+
+    val productName = ((
+            if (!defaultLanguage) names.firstOrNull { it.language.code == uiLanguage.code }
+            else names.firstOrNull { Locale.getDefault().language == it.language.code })
+        ?: names.firstOrNull { it.language.code == contentLanguage }
+        ?: names.first()).name
+
+    val productDescription = ((
+            if (!defaultLanguage) descriptions.firstOrNull { it.language.code == uiLanguage.code }
+            else descriptions.firstOrNull { Locale.getDefault().language == it.language.code })
+        ?: descriptions.firstOrNull { it.language.code == contentLanguage }
+        ?: descriptions.first()).description
 
     val padding = Modifier.padding(horizontal = 15.dp)
 
@@ -148,11 +162,18 @@ private fun Content(
             ) {
                 if (product.images.isNotEmpty()) item {
                     ImageCarousel(
-                        product.images.map { it.imageUrl }, modifier = Modifier.height(imageHeight + 75.dp)
+                        product.images.map { it.imageUrl },
+                        modifier = Modifier.height(imageHeight + 75.dp)
                     )
                 }
                 else item {
                     Spacer(Modifier.height(40.dp))
+                }
+
+                if (descriptions.isNotEmpty()) item {
+                    LabeledSection(localizedString(R.string.description), padding) {
+                        Text(productDescription)
+                    }
                 }
 
                 item {
@@ -200,12 +221,18 @@ private fun Content(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             items(recipes) { recipe ->
+                                val recipeName = ((
+                                        if (!defaultLanguage) recipe.names.firstOrNull { it.language.code == uiLanguage.code }
+                                        else recipe.names.firstOrNull { Locale.getDefault().language == it.language.code })
+                                    ?: recipe.names.firstOrNull { it.language.code == contentLanguage }
+                                    ?: recipe.names.first()).name
+
                                 SuggestionChip(onClick = {
                                     activeModal.value =
                                         RecipeModalProps(recipe, uiLanguage, contentLanguage)
                                 }, label = {
                                     Text(
-                                        recipe.names.first().name
+                                        recipeName
                                     )
                                 })
                             }
@@ -217,9 +244,11 @@ private fun Content(
                     LabeledSection(localizedString(R.string.categories), padding) {
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             items(categories) { category ->
-                                val categoryName =
-                                    (category.names.firstOrNull { it.language.code == uiLanguage.code }
-                                        ?: category.names.first { it.language.code == contentLanguage }).name
+                                val categoryName = ((
+                                        if (!defaultLanguage) category.names.firstOrNull { it.language.code == uiLanguage.code }
+                                        else category.names.firstOrNull { Locale.getDefault().language == it.language.code })
+                                    ?: category.names.firstOrNull { it.language.code == contentLanguage }
+                                    ?: category.names.first()).name
 
                                 OutlinedCard(shape = RoundedCornerShape(5.dp)) {
                                     Text(
@@ -237,9 +266,11 @@ private fun Content(
                     LabeledSection(localizedString(R.string.allergens), padding) {
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             items(allergens) { allergen ->
-                                val allergenName =
-                                    (allergen.names.firstOrNull { it.language.code == uiLanguage.code }
-                                        ?: allergen.names.first { it.language.code == contentLanguage }).name
+                                val allergenName = ((
+                                        if (!defaultLanguage) allergen.names.firstOrNull { it.language.code == uiLanguage.code }
+                                        else allergen.names.firstOrNull { Locale.getDefault().language == it.language.code })
+                                    ?: allergen.names.firstOrNull { it.language.code == contentLanguage }
+                                    ?: allergen.names.first()).name
 
                                 OutlinedCard(shape = RoundedCornerShape(5.dp)) {
                                     Text(
@@ -261,11 +292,16 @@ private fun Content(
                                 ingredient.unitType
                             )
 
-                            val ingredientName =
-                                (ingredient.ingredient.names.firstOrNull { it.language.code == uiLanguage.code }
-                                    ?: ingredient.ingredient.names.first { it.language.code == contentLanguage }).name
+                            val ingredientName = ((
+                                    if (!defaultLanguage) ingredient.ingredient.names.firstOrNull { it.language.code == uiLanguage.code }
+                                    else ingredient.ingredient.names.firstOrNull { Locale.getDefault().language == it.language.code })
+                                ?: ingredient.ingredient.names.firstOrNull { it.language.code == contentLanguage }
+                                ?: ingredient.ingredient.names.first()).name
 
-                            KeyValueDisplay(ingredientName, "${measurement.value} ${measurement.unit}")
+                            KeyValueDisplay(
+                                ingredientName,
+                                "${measurement.value} ${measurement.unit}"
+                            )
                         }
                     }
                 }
@@ -278,9 +314,11 @@ private fun Content(
                                 nutritionalMeasurement.unitType
                             )
 
-                            val label =
-                                (nutritionalMeasurement.type.labels.firstOrNull { it.language.code == uiLanguage.code }
-                                    ?: nutritionalMeasurement.type.labels.first { it.language.code == contentLanguage }).label
+                            val label = ((
+                                    if (!defaultLanguage) nutritionalMeasurement.type.labels.firstOrNull { it.language.code == uiLanguage.code }
+                                    else nutritionalMeasurement.type.labels.firstOrNull { Locale.getDefault().language == it.language.code })
+                                ?: nutritionalMeasurement.type.labels.firstOrNull { it.language.code == contentLanguage }
+                                ?: nutritionalMeasurement.type.labels.first()).label
 
                             KeyValueDisplay(label, "${measurement.value} ${measurement.unit}")
                         }
@@ -289,11 +327,12 @@ private fun Content(
 
                 if (product.usageInstructions.isNotEmpty()) item {
                     LabeledSection(localizedString(R.string.usage_instructions), padding) {
-                        val instruction = product.usageInstructions.firstOrNull {
-                            it.language.code == uiLanguage.code
-                        } ?: product.usageInstructions.firstOrNull {
-                            it.language.code == contentLanguage
-                        } ?: product.usageInstructions.first()
+                        val instruction = (
+                                if (!defaultLanguage) product.usageInstructions.firstOrNull { it.language.code == uiLanguage.code }
+                                else product.usageInstructions.firstOrNull { Locale.getDefault().language == it.language.code })
+                            ?: product.usageInstructions.firstOrNull {
+                                it.language.code == contentLanguage
+                            } ?: product.usageInstructions.first()
 
                         Text(instruction.content)
                     }
@@ -304,18 +343,29 @@ private fun Content(
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             items(relatedProducts) { relatedProduct ->
                                 val name =
-                                    (relatedProduct.names.firstOrNull { it.language.code == uiLanguage.code }
-                                        ?: relatedProduct.names.first { it.language.code == contentLanguage }).name
+                                    ((
+                                            if (!defaultLanguage) relatedProduct.names.firstOrNull { it.language.code == uiLanguage.code }
+                                            else relatedProduct.names.firstOrNull { Locale.getDefault().language == it.language.code })
+                                        ?: relatedProduct.names.firstOrNull { it.language.code == contentLanguage }
+                                        ?: relatedProduct.names.first()).name
                                 val categoryNames = relatedProduct.categories.map { name ->
-                                    (name.names.firstOrNull { it.language.code == uiLanguage.code }
-                                        ?: name.names.first { it.language.code == contentLanguage }).name
+                                    ((
+                                            if (!defaultLanguage) name.names.firstOrNull { it.language.code == uiLanguage.code }
+                                            else name.names.firstOrNull { Locale.getDefault().language == it.language.code })
+                                        ?: name.names.firstOrNull { it.language.code == contentLanguage }
+                                        ?: name.names.first()).name
                                 }
                                 val imageUrl = relatedProduct.images.firstOrNull()?.imageUrl
 
                                 RelatedProductCard(
-                                    name, categoryNames, imageUrl, {
+                                    name,
+                                    categories = categoryNames,
+                                    imageUrl = imageUrl,
+                                    onClick = {
                                         backStack.add(ProductScreen(relatedProduct.id))
-                                    })
+                                    },
+                                    modifier = Modifier.width(270.dp)
+                                )
                             }
                         }
                     }
@@ -325,19 +375,29 @@ private fun Content(
                     LabeledSection(localizedString(R.string.recommended), padding) {
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             items(recommendations) { recommendation ->
-                                val name =
-                                    (recommendation.names.firstOrNull { it.language.code == uiLanguage.code }
-                                        ?: recommendation.names.first { it.language.code == contentLanguage }).name
+                                val name = ((
+                                        if (!defaultLanguage) recommendation.names.firstOrNull { it.language.code == uiLanguage.code }
+                                        else recommendation.names.firstOrNull { Locale.getDefault().language == it.language.code })
+                                    ?: recommendation.names.firstOrNull { it.language.code == contentLanguage }
+                                    ?: recommendation.names.first()).name
                                 val categoryNames = recommendation.categories.map { name ->
-                                    (name.names.firstOrNull { it.language.code == uiLanguage.code }
-                                        ?: name.names.first { it.language.code == contentLanguage }).name
+                                    ((
+                                            if (!defaultLanguage) name.names.firstOrNull { it.language.code == uiLanguage.code }
+                                            else name.names.firstOrNull { Locale.getDefault().language == it.language.code })
+                                        ?: name.names.firstOrNull { it.language.code == contentLanguage }
+                                        ?: name.names.first()).name
                                 }
                                 val imageUrl = recommendation.images.firstOrNull()?.imageUrl
 
                                 RelatedProductCard(
-                                    name, categoryNames, imageUrl, {
+                                    name,
+                                    categories = categoryNames,
+                                    imageUrl = imageUrl,
+                                    onClick = {
                                         backStack.add(ProductScreen(recommendation.id))
-                                    })
+                                    },
+                                    modifier = Modifier.width(270.dp)
+                                )
                             }
                         }
                     }
@@ -486,6 +546,9 @@ private fun ProductPreview() {
         ), "PROD_QASLGJEO", listOf(
             ProductName(0, "Product", language)
         ), listOf(
+            ProductDescription(0, "Description", language)
+        ),
+        listOf(
             Category(0, listOf(CategoryName(0, "Category 1", language))),
             Category(0, listOf(CategoryName(0, "Category 2", language))),
             Category(0, listOf(CategoryName(0, "Category 3", language))),

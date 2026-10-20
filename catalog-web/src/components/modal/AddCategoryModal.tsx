@@ -1,19 +1,13 @@
 import {useEffect, useState} from "react";
 
-import type {
-	Category,
-	Language,
-	TranslationInput
-} from "../../api/types.ts";
+import type {Category, Language, TranslationInput} from "../../api/types.ts";
 
-import {getLanguages}
-	from "../../api/languages.ts";
+import {getLanguages} from "../../api/languages.ts";
 
-import {createCategory}
-	from "../../api/categories.ts";
+import {createCategory} from "../../api/categories.ts";
 
-import TranslationInputs
-	from "../TranslationInputs.tsx";
+import TranslationInputs from "../TranslationInputs.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface AddCategoryModalProps {
 	open: boolean;
@@ -25,7 +19,7 @@ interface AddCategoryModalProps {
 	) => void;
 }
 
-export default function AddCategoryModal({ open, onClose, onCreated }: AddCategoryModalProps) {
+export default function AddCategoryModal({open, onClose, onCreated}: AddCategoryModalProps) {
 	const [languages, setLanguages] = useState<Language[]>([]);
 	const [translations, setTranslations] = useState<TranslationInput[]>([]);
 
@@ -129,7 +123,7 @@ export default function AddCategoryModal({ open, onClose, onCreated }: AddCatego
                             font-bold
                         "
 					>
-						Add Category
+						{strings.categories.add_label}
 					</h2>
 
 					<p
@@ -139,22 +133,17 @@ export default function AddCategoryModal({ open, onClose, onCreated }: AddCatego
                             mt-1
                         "
 					>
-						Create localized category
-						translations.
+						{strings.categories.add_hint}
 					</p>
 
 				</div>
 
 				<TranslationInputs
 					languages={languages}
-
 					translations={translations}
-
 					onChange={setTranslations}
-
-					label="Category Names"
-
-					placeholder="Enter category name"
+					label={strings.categories.translations_label}
+					placeholder={strings.categories.translations_placeholder}
 				/>
 
 				<div
@@ -167,9 +156,7 @@ export default function AddCategoryModal({ open, onClose, onCreated }: AddCatego
 
 					<button
 						onClick={onClose}
-
 						disabled={loading}
-
 						className="
                             px-4
                             py-2
@@ -179,7 +166,7 @@ export default function AddCategoryModal({ open, onClose, onCreated }: AddCatego
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -198,8 +185,8 @@ export default function AddCategoryModal({ open, onClose, onCreated }: AddCatego
 					>
 
 						{loading
-							? 'Creating...'
-							: 'Create'}
+							? strings.saving
+							: strings.create_button}
 
 					</button>
 

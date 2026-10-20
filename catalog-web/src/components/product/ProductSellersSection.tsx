@@ -1,4 +1,5 @@
 import type {Product} from "../../api/types.ts";
+import {strings} from "../../utils/localization.ts";
 
 interface ProductSellersSectionProps {
 	product: Product;
@@ -8,12 +9,12 @@ export default function ProductSellersSection({product}: ProductSellersSectionPr
 
 	return (<section className="bg-white rounded-2xl shadow-sm p-6">
 			<h2 className="text-xl font-semibold mb-4">
-				Sellers
+				{strings.sellers_title}
 			</h2>
 
 			{product.sellers.length === 0 ? (
 				<p className="text-zinc-500">
-					No sellers.
+					{strings.products.no_sellers}
 				</p>
 			) : (
 				<div className="flex flex-wrap gap-2">

@@ -34,7 +34,7 @@ export default function Modal({
                     rounded-xl
                     shadow-xl
                     w-full
-                    max-w-md
+                    max-w-2xl
                     p-6
                 "
             >
@@ -58,8 +58,9 @@ export default function Modal({
 
                 </div>
 
-                {children}
-
+                <div className="overflow-y-auto" style={{ maxHeight: "50em" }}>
+                    {children}
+                </div>
             </div>
 
         </div>

@@ -5,24 +5,19 @@ import Modal from "./Modal";
 import type {SellerStore} from "../../api/types.ts";
 
 import {createStore} from "../../api/sellers.ts";
+import {strings} from "../../utils/localization.ts";
 
 interface AddStoreModalProps {
 	open: boolean;
-
 	sellerId: number;
-
 	onClose: () => void;
-
 	onCreated: (store: SellerStore) => void;
 }
 
 export default function AddStoreModal({
 										  open,
-
 										  sellerId,
-
 										  onClose,
-
 										  onCreated
 									  }: AddStoreModalProps) {
 
@@ -39,26 +34,19 @@ export default function AddStoreModal({
 		}
 
 		try {
-
 			setLoading(true);
 
 			const store = await createStore(
 				sellerId,
 				location
 			);
-
 			onCreated(store);
 
 			setLocation('');
-
 			onClose();
-
 		} catch (err) {
-
 			console.error(err);
-
 		} finally {
-
 			setLoading(false);
 		}
 	}
@@ -66,7 +54,7 @@ export default function AddStoreModal({
 	return (
 		<Modal
 			open={open}
-			title="Add Store"
+			title={strings.sellers.add_store_label}
 			onClose={onClose}
 		>
 
@@ -82,22 +70,17 @@ export default function AddStoreModal({
                             font-medium
                         "
 					>
-						Location
+						{strings.sellers.location_field}
 					</label>
 
 					<input
 						autoFocus
-
 						type="text"
-
 						value={location}
-
 						onChange={(e) =>
 							setLocation(e.target.value)
 						}
-
-						placeholder="Store location"
-
+						placeholder={strings.sellers.location_placeholder}
 						className="
                             w-full
                             border
@@ -120,9 +103,7 @@ export default function AddStoreModal({
 
 					<button
 						onClick={onClose}
-
 						disabled={loading}
-
 						className="
                             px-4
                             py-2
@@ -132,14 +113,12 @@ export default function AddStoreModal({
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
 						onClick={handleSubmit}
-
 						disabled={loading}
-
 						className="
                             bg-black
                             text-white
@@ -152,8 +131,8 @@ export default function AddStoreModal({
 					>
 
 						{loading
-							? 'Adding...'
-							: 'Add Store'}
+							? strings.saving
+							: strings.add_button}
 
 					</button>
 

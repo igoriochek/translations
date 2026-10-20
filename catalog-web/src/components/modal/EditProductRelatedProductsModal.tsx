@@ -3,6 +3,7 @@ import Modal from "./Modal.tsx";
 import type {Product, ProductListItem} from "../../api/types.ts";
 import {getAllProducts, updateProduct} from "../../api/products.ts";
 import EntitySelector, {type EntitySelectorItem} from "../product/EntitySelector.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface EditProductRelatedProductsModalProps {
 	open: boolean;
@@ -56,14 +57,14 @@ export default function EditProductRelatedProductsModal({
 		products.filter((x) => x.id !== product?.id)
 			.map((product) => ({
 				id: product.id,
-				label: product.names[0]?.name ?? `Product ${product.id}`
+				label: product.names[0]?.name ?? `${strings.missing_field} #${product.id}`
 			}));
 
 	return (
-		<Modal open={open} title="Edit Related Products" onClose={onClose}>
+		<Modal open={open} title={strings.products.edit_related_products_button} onClose={onClose}>
 			<div className="space-y-6">
 				<EntitySelector
-					label="Related Products"
+					label={strings.products.related_products}
 					items={items}
 					selectedIds={selectedIds}
 					onChange={setSelectedIds}
@@ -71,7 +72,7 @@ export default function EditProductRelatedProductsModal({
 
 				<div className="flex justify-end">
 					<button onClick={handleSave} disabled={loading} className="bg-black text-white px-4 py-2 rounded-xl">
-						Save
+						{strings.save_button}
 					</button>
 				</div>
 			</div>

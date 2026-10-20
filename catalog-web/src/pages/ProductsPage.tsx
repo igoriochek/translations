@@ -8,6 +8,8 @@ import AddProductModal from "../components/modal/AddProductModal.tsx";
 import {getManufacturers} from "../api/manufacturers.ts";
 import {getCategories} from "../api/categories.ts";
 import ProductFilters from "../components/ProductFilters.tsx";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function ProductsPage() {
     const [products, setProducts] = useState<ProductListItem[]>([]);
@@ -25,6 +27,8 @@ export default function ProductsPage() {
 
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
+
+    useLanguage();
 
     useEffect(() => {
         async function loadFilters() {
@@ -90,11 +94,11 @@ export default function ProductsPage() {
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-bold">
-                            Products
+                            {strings.products_title}
                         </h1>
 
                         <p className="text-zinc-600">
-                            Manage product entries.
+                            {strings.products.hint}
                         </p>
                     </div>
 
@@ -102,7 +106,7 @@ export default function ProductsPage() {
                         className="bg-black text-white px-4 py-2 rounded-lg text-sm"
                         onClick={() => setShowAddProductModal(true)}
                     >
-                        Add Product
+                        {strings.products.add_button}
                     </button>
                 </div>
 
@@ -111,7 +115,7 @@ export default function ProductsPage() {
                         type="text"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search products..."
+                        placeholder={strings.sellers.search_products}
                         className="flex-1 border border-zinc-200 rounded-xl px-4 py-3 bg-white shadow-sm"
                     />
 
@@ -144,7 +148,7 @@ export default function ProductsPage() {
                             disabled={loadingMore}
                             className="px-5 py-3 rounded-xl bg-white border border-zinc-200 shadow-sm text-sm"
                         >
-                            {loadingMore ? 'Loading...' : 'Load More'}
+                            {loadingMore ? strings.loading : strings.load_more}
                         </button>
                     </div>
                 )}

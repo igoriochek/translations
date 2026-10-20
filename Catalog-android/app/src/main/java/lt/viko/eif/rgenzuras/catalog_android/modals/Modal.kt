@@ -7,6 +7,7 @@ import lt.viko.eif.rgenzuras.catalog_android.viewmodels.LanguageViewModel
 sealed interface Modal
 
 data object ProductFiltersModalProps : Modal
+data object ScanHistoryModalProps : Modal
 
 data class ManufacturerModalProps(
     val manufacturer: Manufacturer

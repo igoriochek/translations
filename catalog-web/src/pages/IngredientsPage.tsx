@@ -7,6 +7,8 @@ import IngredientSkeleton from "../components/skeleton/IngredientSkeleton.tsx";
 import AddIngredientModal from "../components/modal/AddIngredientModal.tsx";
 import EditIngredientModal from "../components/modal/EditIngredientModal.tsx";
 import ConfirmModal from "../components/modal/ConfirmModal.tsx";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function IngredientsPage() {
 	const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -17,6 +19,8 @@ export default function IngredientsPage() {
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 	const [loading, setLoading] = useState(true);
+
+	useLanguage();
 
 	useEffect(() => {
 		async function loadIngredients() {
@@ -58,12 +62,11 @@ export default function IngredientsPage() {
 					<div>
 
 						<h1 className="text-2xl font-bold">
-							Ingredients
+							{strings.ingredients_title}
 						</h1>
 
 						<p className="text-zinc-600">
-							Manage localized
-							product ingredients.
+							{strings.ingredients.hint}
 						</p>
 
 					</div>
@@ -81,7 +84,7 @@ export default function IngredientsPage() {
                             text-sm
                         "
 					>
-						Add Ingredient
+						{strings.ingredients.add_label}
 					</button>
 
 				</div>
@@ -105,24 +108,18 @@ export default function IngredientsPage() {
 							<IngredientCard
 								key={ingredient.id}
 								ingredient={ingredient}
-
 								onEdit={() => {
-
 									setSelectedIngredient(
 										ingredient
 									);
-
 									setShowEditModal(
 										true
 									);
 								}}
-
 								onDelete={() => {
-
 									setSelectedIngredient(
 										ingredient
 									);
-
 									setShowDeleteModal(
 										true
 									);
@@ -139,11 +136,9 @@ export default function IngredientsPage() {
 
 			<AddIngredientModal
 				open={showAddModal}
-
 				onClose={() =>
 					setShowAddModal(false)
 				}
-
 				onCreated={(ingredient) => {
 
 					setIngredients((prev) => [
@@ -158,16 +153,11 @@ export default function IngredientsPage() {
 
 			<EditIngredientModal
 				open={showEditModal}
-
 				ingredient={selectedIngredient}
-
 				onClose={() => {
-
 					setShowEditModal(false);
-
 					setSelectedIngredient(null);
 				}}
-
 				onUpdated={(updated) => {
 
 					setIngredients((prev) =>
@@ -187,22 +177,13 @@ export default function IngredientsPage() {
 
 			<ConfirmModal
 				open={showDeleteModal}
-
-				title="Delete Ingredient"
-
-				message={
-					`Are you sure you want to delete this ingredient?`
-				}
-
-				confirmText="Delete"
-
+				title={strings.ingredients.delete_title}
+				message={strings.ingredients.delete_confirm}
+				confirmText={strings.delete_button}
 				onClose={() => {
-
 					setShowDeleteModal(false);
-
 					setSelectedIngredient(null);
 				}}
-
 				onConfirm={() => {
 
 					if (!selectedIngredient) {

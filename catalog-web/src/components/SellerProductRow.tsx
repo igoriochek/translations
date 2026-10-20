@@ -1,5 +1,6 @@
 import type {SellerProduct} from "../api/types.ts";
 import {ChevronRight, Trash2} from "lucide-react";
+import {strings} from "../utils/localization.ts";
 
 interface SellerProductRowProps {
 	product: SellerProduct;
@@ -46,7 +47,9 @@ export default function SellerProductRow({
 				<p className="text-xs text-zinc-500">
 					{product.recommendations.length}
 					{" "}
-					recommendations
+					{product.recommendations.length == 1 ?
+						strings.recommendation.toLowerCase() :
+						strings.recommendations.toLowerCase()}
 				</p>
 			</div>
 

@@ -50,6 +50,8 @@ import lt.viko.eif.rgenzuras.catalog_android.modals.ProductFiltersModal
 import lt.viko.eif.rgenzuras.catalog_android.modals.ProductFiltersModalProps
 import lt.viko.eif.rgenzuras.catalog_android.modals.RecipeModal
 import lt.viko.eif.rgenzuras.catalog_android.modals.RecipeModalProps
+import lt.viko.eif.rgenzuras.catalog_android.modals.ScanHistoryModal
+import lt.viko.eif.rgenzuras.catalog_android.modals.ScanHistoryModalProps
 import lt.viko.eif.rgenzuras.catalog_android.modals.SellerModal
 import lt.viko.eif.rgenzuras.catalog_android.modals.SellerModalProps
 import lt.viko.eif.rgenzuras.catalog_android.ui.localization.LocalAppLanguage
@@ -153,7 +155,7 @@ fun Navigation() {
                 backStack.clear()
                 backStack.add(
                     when {
-                        authenticated && prefs != null -> ProductsScreen
+                        authenticated && prefs != null -> BarcodeScannerScreen
                         authenticated && prefs == null -> PrefsScreen
                         else -> LandingScreen
                     }
@@ -290,6 +292,10 @@ fun ModalManager() {
             val props = activeModal.value as RecipeModalProps
 
             RecipeModal(props.recipe, props.uiLanguage, props.contentLanguage)
+        }
+
+        ScanHistoryModalProps -> {
+            ScanHistoryModal()
         }
 
         else -> {}

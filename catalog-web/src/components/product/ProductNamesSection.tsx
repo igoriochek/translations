@@ -1,5 +1,6 @@
 import type {Product} from "../../api/types.ts";
 import ProductSection from "./ProductSection.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface ProductNamesSectionProps {
 	product: Product;
@@ -8,7 +9,7 @@ interface ProductNamesSectionProps {
 
 export default function ProductNamesSection({product, onEdit}: ProductNamesSectionProps) {
 	return (
-		<ProductSection title="Names" onEdit={onEdit}>
+		<ProductSection title={strings.products.names_field} onEdit={onEdit}>
 			<div className="space-y-2">
 				{product.names.map((name) => (
 					<div

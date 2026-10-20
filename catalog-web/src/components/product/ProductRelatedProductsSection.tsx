@@ -2,6 +2,7 @@ import {Link} from "react-router-dom";
 
 import type {Product} from "../../api/types.ts";
 import ProductSection from "./ProductSection.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface ProductRelatedProductsSectionProps {
 	product: Product;
@@ -10,7 +11,7 @@ interface ProductRelatedProductsSectionProps {
 
 export default function ProductRelatedProductsSection({product, onEdit}: ProductRelatedProductsSectionProps) {
 	return (
-		<ProductSection title="Related Products" onEdit={onEdit}>
+		<ProductSection title={strings.products.related_products} onEdit={onEdit}>
 			<div className="space-y-2">
 				{product.related_products.map((related) => (
 					<Link

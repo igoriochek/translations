@@ -1,5 +1,6 @@
 import type { Allergen } from "../../api/types.ts";
 import { Pencil, Trash2 } from "lucide-react";
+import {strings} from "../../utils/localization.ts";
 
 interface AllergenCardProps {
 	allergen: Allergen;
@@ -30,7 +31,7 @@ export default function AllergenCard({ allergen, onEdit, onDelete }: AllergenCar
 
 					<h2 className="font-semibold">
 						{primaryName?.name ??
-							'Unnamed'}
+							strings.missing_field}
 					</h2>
 
 					<p
@@ -42,7 +43,9 @@ export default function AllergenCard({ allergen, onEdit, onDelete }: AllergenCar
 					>
 						{allergen.names.length}
 						{' '}
-						translations
+						{allergen.names.length == 1 ?
+							strings.translation.toLowerCase() :
+							strings.translations.toLowerCase()}
 					</p>
 
 				</div>

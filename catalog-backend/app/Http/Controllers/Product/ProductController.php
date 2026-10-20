@@ -88,6 +88,10 @@ class ProductController extends Controller {
             'names.*.language_id' => 'required|exists:languages,id',
             'names.*.name' => 'required|string',
 
+            'descriptions' => 'sometimes|array',
+            'descriptions.*.language_id' => 'required|exists:languages,id',
+            'descriptions.*.description' => 'required|string',
+
             'categories' => 'sometimes|array',
             'categories.*' => 'exists:categories,id',
 
@@ -122,6 +126,12 @@ class ProductController extends Controller {
             if (!empty($validated['names'])) {
                 foreach ($validated['names'] as $name) {
                     $product->names()->create($name);
+                }
+            }
+
+            if (!empty($validated['descriptions'])) {
+                foreach ($validated['descriptions'] as $description) {
+                    $product->descriptions()->create($description);
                 }
             }
 
@@ -178,6 +188,10 @@ class ProductController extends Controller {
             'names.*.language_id' => 'required|exists:languages,id',
             'names.*.name' => 'required|string',
 
+            'descriptions' => 'sometimes|array',
+            'descriptions.*.language_id' => 'required|exists:languages,id',
+            'descriptions.*.description' => 'required|string',
+
             'categories' => 'sometimes|array',
             'categories.*' => 'exists:categories,id',
 
@@ -201,6 +215,11 @@ class ProductController extends Controller {
         if (isset($validated['names'])) {
             $product->names()->delete();
             $product->names()->createMany($validated['names']);
+        }
+
+        if(isset($validated['descriptions'])) {
+            $product->categories()->delete();
+            $product->categories()->createMany($validated['descriptions']);
         }
 
         if (isset($validated['categories']))

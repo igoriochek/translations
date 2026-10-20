@@ -3,6 +3,7 @@ import type {NutritionalType, Language, TranslationInput} from "../../api/types.
 import {getLanguages} from "../../api/languages.ts";
 import {updateNutritionalType} from "../../api/nutritionalTypes.ts";
 import TranslationInputs from "../TranslationInputs.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface EditNutritionalTypeModalProps {
 	open: boolean;
@@ -114,7 +115,7 @@ export default function EditNutritionalTypeModal({open, nutritionalType, onClose
                             font-bold
                         "
 					>
-						Edit Nutritional Types
+						{strings.nutritional_types.edit_label}
 					</h2>
 
 					<p
@@ -124,7 +125,7 @@ export default function EditNutritionalTypeModal({open, nutritionalType, onClose
                             mt-1
                         "
 					>
-						Update nutritional type translations.
+						{strings.nutritional_types.edit_hint}
 					</p>
 
 				</div>
@@ -133,8 +134,8 @@ export default function EditNutritionalTypeModal({open, nutritionalType, onClose
 					languages={languages}
 					translations={translations}
 					onChange={setTranslations}
-					label="Nutritional Type Names"
-					placeholder="Enter nutritional type name"
+					label={strings.nutritional_types.translations_label}
+					placeholder={strings.nutritional_types.translations_placeholder}
 				/>
 
 				<div
@@ -157,7 +158,7 @@ export default function EditNutritionalTypeModal({open, nutritionalType, onClose
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -174,8 +175,8 @@ export default function EditNutritionalTypeModal({open, nutritionalType, onClose
 					>
 
 						{loading
-							? 'Saving...'
-							: 'Save'}
+							? strings.saving
+							: strings.save_button}
 
 					</button>
 

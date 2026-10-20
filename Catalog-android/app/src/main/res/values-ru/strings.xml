@@ -48,4 +48,7 @@
     <string name="all_allergens">Все аллергены</string>
     <string name="apply">Применить</string>
     <string name="clear">Очистить</string>
+    <string name="history">История</string>
+    <string name="loading_history">Загрузка истории…</string>
+    <string name="no_history_found">История не найдена</string>
 </resources>

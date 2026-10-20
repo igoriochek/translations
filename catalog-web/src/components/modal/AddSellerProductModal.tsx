@@ -9,6 +9,7 @@ import {getAllProducts} from "../../api/products.ts";
 import {addSellerProduct} from "../../api/sellers.ts";
 
 import ProductSelector from "../ProductSelector.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface AddSellerProductModalProps {
 	open: boolean;
@@ -73,11 +74,11 @@ export default function AddSellerProductModal({
 			<div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-2xl space-y-6">
 				<div>
 					<h2 className="text-xl font-bold">
-						Add Product
+						{strings.sellers.add_product_label}
 					</h2>
 
 					<p className="text-sm text-zinc-500 mt-1">
-						Add a product to this seller.
+						{strings.sellers.add_product_hint}
 					</p>
 				</div>
 
@@ -87,7 +88,7 @@ export default function AddSellerProductModal({
 					onSearchChange={setSearch}
 					selectedProducts={selectedProducts}
 					onProductsChange={(products) => setSelectedProducts(products.slice(-1))}
-					label="Product"
+					label={strings.products.product}
 				/>
 
 				<div className="flex justify-end gap-3">
@@ -96,7 +97,7 @@ export default function AddSellerProductModal({
 						disabled={loading}
 						className="px-4 py-2 rounded-xl border border-zinc-200"
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -104,7 +105,7 @@ export default function AddSellerProductModal({
 						disabled={loading}
 						className="bg-black text-white px-4 py-2 rounded-xl"
 					>
-						{loading ? "Adding..." : "Add"}
+						{loading ? strings.saving : strings.add_button}
 					</button>
 				</div>
 			</div>

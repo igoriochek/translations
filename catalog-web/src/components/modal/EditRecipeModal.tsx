@@ -2,6 +2,7 @@ import {useState} from "react";
 import type {Recipe, RecipeRequest} from "../../api/types.ts";
 import {updateRecipe} from "../../api/recipes.ts";
 import RecipeForm from "../RecipeForm.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface EditRecipeModalProps {
 	open: boolean;
@@ -39,13 +40,13 @@ export default function EditRecipeModal({
 		<div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
 			<div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-4xl">
 				<h2 className="text-xl font-bold mb-6">
-					Edit Recipe
+					{strings.recipes.edit_label}
 				</h2>
 
 				<RecipeForm
 					recipe={recipe}
 					loading={loading}
-					submitText="Save"
+					submitText={strings.save_button}
 					onSubmit={handleSubmit}
 					onCancel={onClose}
 				/>

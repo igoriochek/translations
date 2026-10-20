@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {createUsageInstruction, deleteUsageInstruction, updateUsageInstruction} from "../../api/usageInstructions";
 import {getLanguages} from "../../api/languages";
 import type {Language, Product} from "../../api/types";
+import {strings} from "../../utils/localization.ts";
 
 interface Props {
 	open: boolean;
@@ -132,7 +133,7 @@ export default function EditProductUsageInstructionsModal({
 			">
 				<div className="flex justify-between items-center mb-6">
 					<h2 className="text-xl font-bold">
-						Usage Instructions
+						{strings.products.usage_instructions_field}
 					</h2>
 
 					<button onClick={onClose} className="text-zinc-500 text-2xl">
@@ -176,7 +177,7 @@ export default function EditProductUsageInstructionsModal({
 												onClick={() => handleDelete(existing.id)}
 												className="text-red-600 text-sm"
 											>
-												Delete
+												{strings.delete_button}
 											</button>
 										</div>
 									)}
@@ -191,7 +192,7 @@ export default function EditProductUsageInstructionsModal({
 						onClick={onClose}
 						disabled={loading}
 						className="bg-black text-white px-4 py-2 rounded-lg">
-						Close
+						{strings.save_button}
 					</button>
 				</div>
 			</div>

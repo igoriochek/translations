@@ -1,5 +1,6 @@
 import {useMemo} from "react";
 import type {ProductListItem} from "../api/types.ts";
+import {strings} from "../utils/localization.ts";
 
 interface ProductSelectorProps {
 	products: ProductListItem[];
@@ -19,7 +20,7 @@ export default function ProductSelector({
 											onSearchChange,
 											selectedProducts,
 											onProductsChange,
-											label = "Products"
+											label = strings.products.products
 										}: ProductSelectorProps) {
 
 	const filteredProducts = useMemo(() => {
@@ -63,7 +64,7 @@ export default function ProductSelector({
 				onChange={(e) =>
 					onSearchChange(e.target.value)
 				}
-				placeholder="Search products..."
+				placeholder={strings.sellers.search_products}
 				className="w-full border border-zinc-200 rounded-xl px-4 py-3"
 			/>
 

@@ -27,6 +27,11 @@ import ProductRecipesSection from "../components/product/ProductRecipesSection.t
 import ProductUsageInstructionsSection from "../components/product/ProductUsageInstructionsSection.tsx";
 import ProductSellersSection from "../components/product/ProductSellersSection.tsx";
 import EditProductUsageInstructionsModal from "../components/modal/EditProductUsageInstructionsModal.tsx";
+import EditProductDescriptionsModal from "../components/modal/EditProductDescriptionsModal.tsx";
+import ProductDescriptionsSection from "../components/product/ProductDescriptionsSection.tsx";
+import Barcode from "react-barcode";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function ProductPage() {
 
@@ -35,8 +40,11 @@ export default function ProductPage() {
 	const [product, setProduct] = useState<Product | null>(null);
 	const [loading, setLoading] = useState(true);
 
+	useLanguage();
+
 	const [showEditImagesModal, setShowEditImagesModal] = useState(false);
 	const [showEditNamesModal, setShowEditNamesModal] = useState(false);
+	const [showEditDescriptionsModal, setShowEditDescriptionsModal] = useState(false);
 	const [showEditCategoriesModal, setShowEditCategoriesModal] = useState(false);
 	const [showEditAllergensModal, setShowEditAllergensModal] = useState(false);
 	const [showEditRelatedProductsModal, setShowEditRelatedProductsModal] = useState(false);
@@ -87,26 +95,30 @@ export default function ProductPage() {
 	if (!product)
 		return (
 			<AdminLayout>
-				<p>Product not found.</p>
+				<p>{strings.products.not_found}</p>
 			</AdminLayout>
 		);
 
 	return (
 		<AdminLayout>
 			<div className="space-y-6">
-				<div>
-					<h1 className="text-3xl font-bold">
-						{product.names[0]?.name ?? "Unnamed"}
-					</h1>
+				<div className="flex justify-between items-center">
+					<div>
+						<h1 className="text-3xl font-bold">
+							{product.names[0]?.name ?? strings.missing_field}
+						</h1>
 
-					<p className="text-zinc-600 mt-1">
-						{product.manufacturer.name}
-					</p>
+						<p className="text-zinc-600 mt-1">
+							{product.manufacturer.name}
+						</p>
+					</div>
 
+					<Barcode value={product.product_code} background="#f4f4f5" height={40} fontSize={16}/>
 				</div>
 
 				<ProductImagesSection product={product} onEdit={() => setShowEditImagesModal(true)}/>
 				<ProductNamesSection product={product} onEdit={() => setShowEditNamesModal(true)}/>
+				<ProductDescriptionsSection product={product} onEdit={() => setShowEditDescriptionsModal(true)}/>
 				<ProductCategoriesSection product={product} onEdit={() => setShowEditCategoriesModal(true)}/>
 				<ProductRecipesSection product={product}/>
 				<ProductIngredientsSection product={product} onEdit={() => setShowEditIngredientsModal(true)}/>
@@ -131,6 +143,13 @@ export default function ProductPage() {
 				open={showEditNamesModal}
 				product={product}
 				onClose={() => setShowEditNamesModal(false)}
+				onUpdated={setProduct}
+			/>
+
+			<EditProductDescriptionsModal
+				open={showEditDescriptionsModal}
+				product={product}
+				onClose={() => setShowEditDescriptionsModal(false)}
 				onUpdated={setProduct}
 			/>
 
@@ -171,9 +190,9 @@ export default function ProductPage() {
 
 			<ConfirmModal
 				open={showDeleteModal}
-				title="Delete Product"
-				message="Are you sure you want to delete this product?"
-				confirmText="Delete"
+				title={strings.products.delete_button}
+				message={strings.products.delete_confirm}
+				confirmText={strings.delete_button}
 				onClose={() => setShowDeleteModal(false)}
 				onConfirm={() => {
 					handleDelete().then(() => {

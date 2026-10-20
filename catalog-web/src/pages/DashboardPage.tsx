@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import {getDashboardStats} from "../api/dashboard.ts";
 import {useNavigate} from "react-router-dom";
 import {ExternalLinkIcon} from "lucide-react";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function DashboardPage() {
     const [stats, setStats] = useState({
@@ -13,6 +15,7 @@ export default function DashboardPage() {
         users: 0
     });
     const [loading, setLoading] = useState(false);
+    useLanguage();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -69,26 +72,25 @@ export default function DashboardPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6">
 
-                {DashboardButton("Products", stats.products, '/products')}
+                {DashboardButton(strings.products_title, stats.products, '/products')}
 
-                {DashboardButton("Recipes", stats.recipes, '/recipes')}
+                {DashboardButton(strings.recipes_title, stats.recipes, '/recipes')}
 
-                {DashboardButton("Sellers", stats.sellers, '/sellers')}
+                {DashboardButton(strings.sellers_title, stats.sellers, '/sellers')}
 
-                {DashboardButton("Manufacturers", stats.manufacturers, '/manufacturers')}
+                {DashboardButton(strings.manufacturers_title, stats.manufacturers, '/manufacturers')}
 
-                {DashboardButton("Admins", stats.users, '/admins')}
+                {DashboardButton(strings.admins_title, stats.users, '/admins')}
             </div>
 
             <div className="mt-8 bg-white rounded-xl shadow-sm border border-zinc-200 p-6">
 
                 <h2 className="text-xl font-semibold mb-4">
-                    Welcome
+                    {strings.dashboard.welcome}
                 </h2>
 
                 <p className="text-zinc-600 leading-relaxed">
-                    Use the navigation bar above to manage products, recipes,
-                    sellers, manufacturers, admins and product metadata.
+                    {strings.dashboard.hint}
                 </p>
 
             </div>

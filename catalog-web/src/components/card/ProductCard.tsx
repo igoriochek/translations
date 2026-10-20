@@ -1,6 +1,7 @@
 import type {ProductListItem} from "../../api/types.ts";
 
 import {useNavigate} from "react-router-dom";
+import {strings} from "../../utils/localization.ts";
 
 interface ProductCardProps {
 	product: ProductListItem;
@@ -53,7 +54,7 @@ export default function ProductCard({product}: ProductCardProps) {
 					/>
 				) : (
 					<div className="text-sm text-zinc-400">
-						No Image
+						{strings.products.no_images}
 					</div>
 				)}
 			</div>
@@ -61,11 +62,11 @@ export default function ProductCard({product}: ProductCardProps) {
 			<div className="p-5 space-y-4">
 				<div>
 					<h2 className="font-semibold text-lg line-clamp-2">
-						{primaryName?.name ?? 'Unnamed Product'}
+						{primaryName?.name ?? strings.missing_field}
 					</h2>
 
 					<p className="text-sm text-zinc-500 mt-1">
-						{product.manufacturer?.name ?? 'No manufacturer'}
+						{product.manufacturer?.name ?? strings.missing_field}
 					</p>
 				</div>
 
@@ -94,7 +95,7 @@ export default function ProductCard({product}: ProductCardProps) {
 										font-medium
 									"
 								>
-									{categoryName?.name ?? 'Unnamed'}
+									{categoryName?.name ?? strings.missing_field}
 								</div>
 							);
 						})}

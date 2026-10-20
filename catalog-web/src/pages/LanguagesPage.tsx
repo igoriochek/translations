@@ -7,6 +7,8 @@ import LanguageSkeleton from "../components/skeleton/LanguageSkeleton.tsx";
 import AddLanguageModal from "../components/modal/AddLanguageModal.tsx";
 import ConfirmModal from "../components/modal/ConfirmModal.tsx";
 import EditLanguageModal from "../components/modal/EditLanguageModal.tsx";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function LanguagesPage() {
 	const [languages, setLanguages] = useState<Language[]>([]);
@@ -17,6 +19,8 @@ export default function LanguagesPage() {
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 	const [loading, setLoading] = useState(true);
+
+	useLanguage();
 
 	useEffect(() => {
 		async function loadLanguages() {
@@ -54,11 +58,11 @@ export default function LanguagesPage() {
 					<div>
 
 						<h1 className="text-2xl font-bold">
-							Languages
+							{strings.languages_title}
 						</h1>
 
 						<p className="text-zinc-600">
-							Manage supported languages.
+							{strings.languages.hint}
 						</p>
 
 					</div>
@@ -74,7 +78,7 @@ export default function LanguagesPage() {
                             text-sm
                         "
 					>
-						Add Language
+						{strings.languages.add_label}
 					</button>
 
 				</div>
@@ -137,11 +141,11 @@ export default function LanguagesPage() {
 
 			<ConfirmModal
 				open={showDeleteModal}
-				title="Delete Language"
+				title={strings.languages.delete_title}
 				message={
-					`Are you sure you want to delete "${selectedLanguage?.name}"?`
+					`${strings.formatString(strings.languages.delete_confirm, selectedLanguage?.name ?? '')}`
 				}
-				confirmText="Delete"
+				confirmText={strings.delete_button}
 				onClose={() => {
 					setShowDeleteModal(false);
 					setSelectedLanguage(null);

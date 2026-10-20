@@ -3,6 +3,7 @@ import type { NutritionalType, Language, TranslationInput } from "../../api/type
 import { getLanguages } from "../../api/languages.ts";
 import { createNutritionalType } from "../../api/nutritionalTypes.ts";
 import TranslationInputs from "../TranslationInputs.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface AddNutritionalTypeModalProps {
 	open: boolean;
@@ -122,7 +123,7 @@ export default function AddNutritionalTypeModal({ open, onClose, onCreated }: Ad
                             font-bold
                         "
 					>
-						Add Nutritional Type
+						{strings.nutritional_types.add_label}
 					</h2>
 
 					<p
@@ -132,8 +133,7 @@ export default function AddNutritionalTypeModal({ open, onClose, onCreated }: Ad
                             mt-1
                         "
 					>
-						Create localized
-						nutritional type translations.
+						{strings.nutritional_types.add_hint}
 					</p>
 
 				</div>
@@ -142,8 +142,8 @@ export default function AddNutritionalTypeModal({ open, onClose, onCreated }: Ad
 					languages={languages}
 					translations={translations}
 					onChange={setTranslations}
-					label="Nutritional Type Names"
-					placeholder="Enter nutritional type name"
+					label={strings.nutritional_types.translations_label}
+					placeholder={strings.nutritional_types.translations_placeholder}
 				/>
 
 				<div
@@ -166,7 +166,7 @@ export default function AddNutritionalTypeModal({ open, onClose, onCreated }: Ad
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -183,8 +183,8 @@ export default function AddNutritionalTypeModal({ open, onClose, onCreated }: Ad
 					>
 
 						{loading
-							? 'Creating...'
-							: 'Create'}
+							? strings.saving
+							: strings.create_button}
 
 					</button>
 

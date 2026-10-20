@@ -72,6 +72,7 @@ export function normalizeMeasurement(
 				unit_type_id: 3
 			};
 
+		case '':
 		case '(none)':
 			return {
 				amount,

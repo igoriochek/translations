@@ -3,6 +3,7 @@ import type { Allergen, Language, TranslationInput } from "../../api/types.ts";
 import { getLanguages } from "../../api/languages.ts";
 import { createAllergen } from "../../api/allergens.ts";
 import TranslationInputs from "../TranslationInputs.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface AddAllergenModalProps {
 	open: boolean;
@@ -122,7 +123,7 @@ export default function AddAllergenModal({ open, onClose, onCreated }: AddAllerg
                             font-bold
                         "
 					>
-						Add Allergen
+						{strings.allergens.add_label}
 					</h2>
 
 					<p
@@ -132,8 +133,7 @@ export default function AddAllergenModal({ open, onClose, onCreated }: AddAllerg
                             mt-1
                         "
 					>
-						Create localized
-						allergen translations.
+						{strings.allergens.add_hint}
 					</p>
 
 				</div>
@@ -142,8 +142,8 @@ export default function AddAllergenModal({ open, onClose, onCreated }: AddAllerg
 					languages={languages}
 					translations={translations}
 					onChange={setTranslations}
-					label="Allergen Names"
-					placeholder="Enter allergen name"
+					label={strings.allergens.translations_label}
+					placeholder={strings.allergens.translations_placeholder}
 				/>
 
 				<div
@@ -166,7 +166,7 @@ export default function AddAllergenModal({ open, onClose, onCreated }: AddAllerg
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -183,8 +183,8 @@ export default function AddAllergenModal({ open, onClose, onCreated }: AddAllerg
 					>
 
 						{loading
-							? 'Creating...'
-							: 'Create'}
+							? strings.saving
+							: strings.create_button}
 
 					</button>
 

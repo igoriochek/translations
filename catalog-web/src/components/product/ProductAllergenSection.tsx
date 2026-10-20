@@ -1,5 +1,6 @@
 import type {Product} from "../../api/types.ts";
 import ProductSection from "./ProductSection.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface ProductAllergensSectionProps {
 	product: Product;
@@ -8,7 +9,7 @@ interface ProductAllergensSectionProps {
 
 export default function ProductAllergensSection({product, onEdit}: ProductAllergensSectionProps) {
 	return (
-		<ProductSection title="Allergens" onEdit={onEdit}>
+		<ProductSection title={strings.allergens_title} onEdit={onEdit}>
 			<div className="flex flex-wrap gap-2">
 				{product.allergens.map((allergen) => (
 					<div key={allergen.id} className="bg-zinc-100 px-3 py-1 rounded-full text-sm">

@@ -4,6 +4,7 @@ import type {Language} from "../../api/types.ts";
 
 import {updateLanguage}
 	from "../../api/languages.ts";
+import {strings} from "../../utils/localization.ts";
 
 interface EditLanguageModalProps {
 	open: boolean;
@@ -125,7 +126,7 @@ export default function EditLanguageModal({
                             font-bold
                         "
 					>
-						Edit Language
+						{strings.languages.edit_label}
 					</h2>
 
 					<p
@@ -135,7 +136,7 @@ export default function EditLanguageModal({
                             mt-1
                         "
 					>
-						Modify language information.
+						{strings.languages.edit_hint}
 					</p>
 
 				</div>
@@ -150,7 +151,7 @@ export default function EditLanguageModal({
                                 font-medium
                             "
 						>
-							Name
+							{strings.languages.name_field}
 						</label>
 
 						<input
@@ -187,7 +188,7 @@ export default function EditLanguageModal({
                                 font-medium
                             "
 						>
-							Language Code
+							{strings.languages.code_field}
 						</label>
 
 						<input
@@ -241,7 +242,7 @@ export default function EditLanguageModal({
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -260,8 +261,8 @@ export default function EditLanguageModal({
 					>
 
 						{loading
-							? 'Saving...'
-							: 'Save'}
+							? strings.saving
+							: strings.save_button}
 
 					</button>
 

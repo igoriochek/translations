@@ -4,6 +4,7 @@ import type {
 	Manufacturer
 } from "../api/types.ts";
 import FilterGroup from "./FilterGroup.tsx";
+import {strings} from "../utils/localization.ts";
 
 interface ProductFiltersProps {
 	manufacturers: Manufacturer[];
@@ -39,7 +40,7 @@ export default function ProductFilters({
 					text-sm
 				"
 			>
-				Filters
+				{strings.products.filters_button}
 			</button>
 
 			{open && (
@@ -61,7 +62,7 @@ export default function ProductFilters({
 					"
 				>
 					<FilterGroup
-						title="Manufacturers"
+						title={strings.manufacturers_title}
 						options={manufacturers.map((x) => ({
 							id: x.id,
 							label: x.name
@@ -71,10 +72,10 @@ export default function ProductFilters({
 					/>
 
 					<FilterGroup
-						title="Categories"
+						title={strings.categories_title}
 						options={categories.map((x) => ({
 							id: x.id,
-							label: x.names[0]?.name ?? `Category #${x.id}`
+							label: x.names[0]?.name ?? `${strings.missing_field} #${x.id}`
 						}))}
 						selectedIds={selectedCategoryIds}
 						onChange={onCategoryChange}

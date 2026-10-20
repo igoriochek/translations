@@ -1,5 +1,6 @@
 import type {Recipe} from "../../api/types.ts";
 import {Pencil, Trash2} from "lucide-react";
+import {strings} from "../../utils/localization.ts";
 
 interface RecipeCardProps {
 	recipe: Recipe;
@@ -20,15 +21,23 @@ export default function RecipeCard({recipe, onEdit, onDelete}: RecipeCardProps) 
 
 				<div>
 					<h2 className="font-semibold">
-						{primaryName?.name ?? 'Unnamed'}
+						{primaryName?.name ?? strings.missing_field}
 					</h2>
 
 					<p className="text-sm text-zinc-500 mt-1">
-						{recipe.contents.length} translations
+						{recipe.contents.length}
+						{' '}
+						{recipe.contents.length == 1 ?
+							strings.translation.toLowerCase() :
+							strings.translations.toLowerCase()}
 					</p>
 
 					<p className="text-sm text-zinc-500">
-						{recipe.ingredients.length} ingredients
+						{recipe.ingredients.length}
+						{' '}
+						{recipe.ingredients.length == 1 ?
+							strings.recipes.ingredient.toLowerCase() :
+							strings.recipes.ingredients.toLowerCase()}
 					</p>
 				</div>
 

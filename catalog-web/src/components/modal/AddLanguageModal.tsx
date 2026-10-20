@@ -4,6 +4,7 @@ import type {Language} from "../../api/types.ts";
 
 import {createLanguage}
 	from "../../api/languages.ts";
+import {strings} from "../../utils/localization.ts";
 
 interface AddLanguageModalProps {
 	open: boolean;
@@ -103,7 +104,7 @@ export default function AddLanguageModal({
                             font-bold
                         "
 					>
-						Add Language
+						{strings.languages.add_label}
 					</h2>
 
 					<p
@@ -113,7 +114,7 @@ export default function AddLanguageModal({
                             mt-1
                         "
 					>
-						Create a supported language.
+						{strings.languages.add_hint}
 					</p>
 
 				</div>
@@ -128,22 +129,18 @@ export default function AddLanguageModal({
                                 font-medium
                             "
 						>
-							Name
+							{strings.languages.name_field}
 						</label>
 
 						<input
 							type="text"
-
 							value={name}
-
 							onChange={(e) =>
 								setName(
 									e.target.value
 								)
 							}
-
 							placeholder="English"
-
 							className="
                                 w-full
                                 border
@@ -167,7 +164,7 @@ export default function AddLanguageModal({
                                 font-medium
                             "
 						>
-							Language Code
+							{strings.languages.code_field}
 						</label>
 
 						<input
@@ -223,7 +220,7 @@ export default function AddLanguageModal({
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -242,8 +239,8 @@ export default function AddLanguageModal({
 					>
 
 						{loading
-							? 'Creating...'
-							: 'Create'}
+							? strings.saving
+							: strings.create_button}
 
 					</button>
 

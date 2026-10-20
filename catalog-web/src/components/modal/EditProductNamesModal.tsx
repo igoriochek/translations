@@ -4,6 +4,7 @@ import type {Language, Product, TranslationInput} from "../../api/types.ts";
 import {getLanguages} from "../../api/languages.ts";
 import {updateProduct} from "../../api/products.ts";
 import TranslationInputs from "../TranslationInputs.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface EditProductNamesModalProps {
 	open: boolean;
@@ -68,13 +69,13 @@ export default function EditProductNamesModal({
 	}
 
 	return (
-		<Modal open={open} title="Edit Names" onClose={onClose}>
+		<Modal open={open} title={strings.products.edit_names_button} onClose={onClose}>
 			<div className="space-y-6">
 				<TranslationInputs
 					languages={languages}
 					translations={translations}
 					onChange={setTranslations}
-					label="Names"
+					label={strings.products.names_field}
 				/>
 
 				<div className="flex justify-end">
@@ -83,7 +84,9 @@ export default function EditProductNamesModal({
 						disabled={loading}
 						className="bg-black text-white px-4 py-2 rounded-xl"
 					>
-						Save
+						{loading ?
+							strings.saving :
+							strings.save_button}
 					</button>
 				</div>
 			</div>

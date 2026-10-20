@@ -4,6 +4,7 @@ import type {Allergen, Product} from "../../api/types.ts";
 import {getAllergens} from "../../api/allergens.ts";
 import {updateProduct} from "../../api/products.ts";
 import EntitySelector, {type EntitySelectorItem} from "../product/EntitySelector.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface EditProductAllergensModalProps {
 	open: boolean;
@@ -54,14 +55,14 @@ export default function EditProductAllergensModal({
 
 	const items: EntitySelectorItem[] = allergens.map((allergen) => ({
 		id: allergen.id,
-		label: allergen.names[0]?.name ?? `Allergen ${allergen.id}`
+		label: allergen.names[0]?.name ?? `${strings.missing_field} #${allergen.id}`
 	}));
 
 	return (
-		<Modal open={open} title="Edit Allergens" onClose={onClose}>
+		<Modal open={open} title={strings.products.edit_allergens_button} onClose={onClose}>
 			<div className="space-y-6">
 				<EntitySelector
-					label="Allergens"
+					label={strings.allergens_title}
 					items={items}
 					selectedIds={selectedIds}
 					onChange={setSelectedIds}
@@ -70,7 +71,7 @@ export default function EditProductAllergensModal({
 				<div className="flex justify-end">
 					<button onClick={handleSave} disabled={loading}
 					        className="bg-black text-white px-4 py-2 rounded-xl">
-						Save
+						{strings.save_button}
 					</button>
 				</div>
 			</div>

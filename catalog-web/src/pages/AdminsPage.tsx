@@ -11,6 +11,8 @@ import AdminCard from "../components/card/AdminCard.tsx";
 
 import AddAdminModal from "../components/modal/AddAdminModal.tsx";
 import ConfirmModal from "../components/modal/ConfirmModal.tsx";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function UsersPage() {
 
@@ -28,6 +30,8 @@ export default function UsersPage() {
 
     const [showDeleteModal, setShowDeleteModal] =
         useState(false);
+
+    useLanguage();
 
     useEffect(() => {
 
@@ -83,11 +87,11 @@ export default function UsersPage() {
                     <div>
 
                         <h1 className="text-2xl font-bold">
-                            Administrators
+                            {strings.admins_title}
                         </h1>
 
                         <p className="text-zinc-600">
-                            Manage administrator accounts.
+                            {strings.admins.hint}
                         </p>
 
                     </div>
@@ -105,7 +109,7 @@ export default function UsersPage() {
                             setShowAddModal(true)
                         }
                     >
-                        Add Administrator
+                        {strings.admins.add_label}
                     </button>
 
                 </div>
@@ -132,10 +136,7 @@ export default function UsersPage() {
                         >
 
                             <p className="text-zinc-400">
-
-                                No additional administrators
-                                have been added yet.
-
+                                {strings.admins.no_admins}
                             </p>
 
                         </div>
@@ -178,11 +179,11 @@ export default function UsersPage() {
 
             <ConfirmModal
                 open={showDeleteModal}
-                title="Delete Administrator"
+                title={strings.admins.delete_title}
                 message={
-                    `Are you sure you want to delete "${selectedAdmin?.name}"?`
+                    `${strings.formatString(strings.admins.delete_prompt, selectedAdmin?.name ?? "")}`
                 }
-                confirmText="Delete"
+                confirmText={strings.delete_button}
                 onClose={() => {
 
                     setShowDeleteModal(false);

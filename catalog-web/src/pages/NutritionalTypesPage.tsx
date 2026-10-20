@@ -7,6 +7,8 @@ import NutritionalTypeSkeleton from "../components/skeleton/NutritionalTypeSkele
 import AddNutritionalTypeModal from "../components/modal/AddNutritionalTypeModal.tsx";
 import EditNutritionalTypeModal from "../components/modal/EditNutritionalTypeModal.tsx";
 import ConfirmModal from "../components/modal/ConfirmModal.tsx";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function NutritionalTypesPage() {
 
@@ -18,6 +20,8 @@ export default function NutritionalTypesPage() {
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 	const [loading, setLoading] = useState(true);
+
+	useLanguage();
 
 	useEffect(() => {
 		async function loadNutritionalTypes() {
@@ -64,12 +68,11 @@ export default function NutritionalTypesPage() {
 					<div>
 
 						<h1 className="text-2xl font-bold">
-							Nutritional types
+							{strings.nutritional_types_title}
 						</h1>
 
 						<p className="text-zinc-600">
-							Manage localized
-							product nutritional types.
+							{strings.nutritional_types.hint}
 						</p>
 
 					</div>
@@ -87,7 +90,7 @@ export default function NutritionalTypesPage() {
                             text-sm
                         "
 					>
-						Add Nutritional Type
+						{strings.nutritional_types.add_label}
 					</button>
 
 				</div>
@@ -111,24 +114,18 @@ export default function NutritionalTypesPage() {
 							<NutritionalTypeCard
 								key={nutritionalType.id}
 								nutritionalType={nutritionalType}
-
 								onEdit={() => {
-
 									setSelectedNutritionalType(
 										nutritionalType
 									);
-
 									setShowEditModal(
 										true
 									);
 								}}
-
 								onDelete={() => {
-
 									setSelectedNutritionalType(
 										nutritionalType
 									);
-
 									setShowDeleteModal(
 										true
 									);
@@ -145,43 +142,29 @@ export default function NutritionalTypesPage() {
 
 			<AddNutritionalTypeModal
 				open={showAddModal}
-
 				onClose={() =>
 					setShowAddModal(false)
 				}
-
 				onCreated={(nutritionalType) => {
-
 					setNutritionalTypes((prev) => [
-
 						nutritionalType,
-
 						...prev
-
 					]);
 				}}
 			/>
 
 			<EditNutritionalTypeModal
 				open={showEditModal}
-
 				nutritionalType={selectedNutritionalType}
-
 				onClose={() => {
-
 					setShowEditModal(false);
-
 					setSelectedNutritionalType(null);
 				}}
-
 				onUpdated={(updated) => {
 
 					setNutritionalTypes((prev) =>
 						prev.map((x) => {
-
-							if (
-								x.id !== updated.id
-							) {
+							if (x.id !== updated.id) {
 								return x;
 							}
 
@@ -193,24 +176,14 @@ export default function NutritionalTypesPage() {
 
 			<ConfirmModal
 				open={showDeleteModal}
-
-				title="Delete Nutritional Type"
-
-				message={
-					`Are you sure you want to delete this nutritional type?`
-				}
-
-				confirmText="Delete"
-
+				title={strings.nutritional_types.delete_title}
+				message={strings.nutritional_types.delete_confirm}
+				confirmText={strings.delete_button}
 				onClose={() => {
-
 					setShowDeleteModal(false);
-
 					setSelectedNutritionalType(null);
 				}}
-
 				onConfirm={() => {
-
 					if (!selectedNutritionalType) {
 						return;
 					}
@@ -218,9 +191,7 @@ export default function NutritionalTypesPage() {
 					handleDeleteNutritionalType(
 						selectedNutritionalType.id
 					).then(() => {
-
 						setShowDeleteModal(false);
-
 						setSelectedNutritionalType(null);
 					});
 				}}

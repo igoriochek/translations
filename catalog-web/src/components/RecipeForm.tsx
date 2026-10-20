@@ -7,6 +7,7 @@ import {getAllProducts} from "../api/products.ts";
 
 import TranslationInputs from "./TranslationInputs.tsx";
 import RecipeIngredientSelector from "./RecipeIngredientSelector.tsx";
+import {strings} from "../utils/localization.ts";
 
 interface RecipeFormProps {
 	recipe?: Recipe;
@@ -178,7 +179,7 @@ export default function RecipeForm({
 							rounded-lg
 							text-sm
 						">
-							Cancel
+							{strings.cancel_button}
 						</button>
 					)}
 				</div>
@@ -192,16 +193,16 @@ export default function RecipeForm({
 				languages={languages}
 				translations={names}
 				onChange={setNames}
-				label="Recipe Names"
-				placeholder="Enter recipe name"
+				label={strings.recipes.name_translations_label}
+				placeholder={strings.recipes.name_translations_placeholder}
 			/>
 
 			<TranslationInputs
 				languages={languages}
 				translations={contents}
 				onChange={setContents}
-				label="Recipe Contents"
-				placeholder="Enter recipe content"
+				label={strings.recipes.contents_translations_label}
+				placeholder={strings.recipes.contents_translations_placeholder}
 				multiline
 			/>
 
@@ -231,7 +232,7 @@ export default function RecipeForm({
 						text-sm
 						disabled:opacity-50
 					">
-						Cancel
+						{strings.cancel_button}
 					</button>
 				)}
 
@@ -248,7 +249,7 @@ export default function RecipeForm({
 					text-sm
 					disabled:opacity-50
 				">
-					{loading ? "Saving..." : submitText}
+					{loading ? strings.saving : submitText}
 				</button>
 
 			</div>

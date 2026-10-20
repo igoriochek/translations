@@ -10,6 +10,7 @@ import {getLanguages} from "../../api/languages.ts";
 import {updateCategory} from "../../api/categories.ts";
 
 import TranslationInputs from "../TranslationInputs.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface EditCategoryModalProps {
 	open: boolean;
@@ -155,7 +156,7 @@ export default function EditCategoryModal({
                             font-bold
                         "
 					>
-						Edit Category
+						{strings.categories.edit_label}
 					</h2>
 
 					<p
@@ -165,7 +166,7 @@ export default function EditCategoryModal({
                             mt-1
                         "
 					>
-						Update category translations.
+						{strings.categories.edit_hint}
 					</p>
 
 				</div>
@@ -174,8 +175,8 @@ export default function EditCategoryModal({
 					languages={languages}
 					translations={translations}
 					onChange={setTranslations}
-					label="Category Names"
-					placeholder="Enter category name"
+					label={strings.categories.translations_label}
+					placeholder={strings.categories.translations_placeholder}
 				/>
 
 				<div
@@ -198,7 +199,7 @@ export default function EditCategoryModal({
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -215,8 +216,8 @@ export default function EditCategoryModal({
 					>
 
 						{loading
-							? 'Saving...'
-							: 'Save'}
+							? strings.saving
+							: strings.save_button}
 
 					</button>
 

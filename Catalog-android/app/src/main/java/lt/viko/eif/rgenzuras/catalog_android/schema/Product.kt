@@ -8,6 +8,7 @@ data class Product(
     val sellers: List<SellerProduct>,
     @SerializedName("product_code") val productCode: String,
     val names: List<ProductName>,
+    val descriptions: List<ProductDescription>,
     val categories: List<Category>,
     val ingredients: List<ProductIngredient>,
     @SerializedName("nutritional_measurements") val nutritionalMeasurements: List<NutritionalMeasurement>,

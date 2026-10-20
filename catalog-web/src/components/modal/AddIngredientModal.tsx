@@ -3,6 +3,7 @@ import type { Ingredient, Language, TranslationInput } from "../../api/types.ts"
 import { getLanguages } from "../../api/languages.ts";
 import { createIngredient } from "../../api/ingredients.ts";
 import TranslationInputs from "../TranslationInputs.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface AddIngredientModalProps {
 	open: boolean;
@@ -122,7 +123,7 @@ export default function AddIngredientModal({ open, onClose, onCreated }: AddIngr
                             font-bold
                         "
 					>
-						Add Ingredient
+						{strings.ingredients.add_label}
 					</h2>
 
 					<p
@@ -132,8 +133,7 @@ export default function AddIngredientModal({ open, onClose, onCreated }: AddIngr
                             mt-1
                         "
 					>
-						Create localized
-						ingredient translations.
+						{strings.ingredients.add_hint}
 					</p>
 
 				</div>
@@ -142,8 +142,8 @@ export default function AddIngredientModal({ open, onClose, onCreated }: AddIngr
 					languages={languages}
 					translations={translations}
 					onChange={setTranslations}
-					label="Ingredient Names"
-					placeholder="Enter ingredient name"
+					label={strings.ingredients.translations_label}
+					placeholder={strings.ingredients.translations_placeholder}
 				/>
 
 				<div
@@ -166,7 +166,7 @@ export default function AddIngredientModal({ open, onClose, onCreated }: AddIngr
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -183,8 +183,8 @@ export default function AddIngredientModal({ open, onClose, onCreated }: AddIngr
 					>
 
 						{loading
-							? 'Creating...'
-							: 'Create'}
+							? strings.saving
+							: strings.create_button}
 
 					</button>
 

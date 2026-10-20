@@ -51,6 +51,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/manufacturers/{id}/reviews', [UserController::class, 'createManufacturerReview']);
     Route::put('/manufacturer-reviews/{id}', [UserController::class, 'updateManufacturerReview']);
     Route::delete('/manufacturer-reviews/{id}', [UserController::class, 'deleteManufacturerReview']);
+
+    Route::get('/scans', [UserController::class, 'getScanHistory']);
+    Route::post('/scans/{productId}', [UserController::class, 'addSearchResult']);
 });
 
 /**

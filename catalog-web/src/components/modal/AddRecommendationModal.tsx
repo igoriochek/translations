@@ -3,6 +3,7 @@ import type {ProductListItem, Seller, SellerProduct} from "../../api/types.ts";
 import {getAllProducts} from "../../api/products.ts";
 import {addRecommendations} from "../../api/sellers.ts";
 import ProductSelector from "../ProductSelector.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface AddRecommendationModalProps {
 	open: boolean;
@@ -68,12 +69,11 @@ export default function AddRecommendationModal({
 			<div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-2xl space-y-6">
 				<div>
 					<h2 className="text-xl font-bold">
-						Edit Recommendations
+						{strings.sellers.edit_recommendation_label}
 					</h2>
 
 					<p className="text-sm text-zinc-500 mt-1">
-						Manage recommendations for{" "}
-						{product.product.names[0]?.name}
+						{strings.formatString(strings.sellers.edit_recommendation_hint, product.product.names[0]?.name)}
 					</p>
 				</div>
 
@@ -83,7 +83,7 @@ export default function AddRecommendationModal({
 					onSearchChange={setSearch}
 					selectedProducts={selectedProducts}
 					onProductsChange={setSelectedProducts}
-					label="Recommendations"
+					label={strings.products.recommendations}
 				/>
 
 				<div className="flex justify-end gap-3">
@@ -92,7 +92,7 @@ export default function AddRecommendationModal({
 						disabled={loading}
 						className="px-4 py-2 rounded-xl border border-zinc-200"
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -100,7 +100,7 @@ export default function AddRecommendationModal({
 						disabled={loading}
 						className="bg-black text-white px-4 py-2 rounded-xl"
 					>
-						{loading ? "Saving..." : "Save"}
+						{loading ? strings.saving : strings.save_button}
 					</button>
 				</div>
 			</div>

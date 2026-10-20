@@ -2,7 +2,6 @@ package lt.viko.eif.rgenzuras.catalog_android.views
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,11 +12,22 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,7 +48,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import lt.viko.eif.rgenzuras.catalog.R
+import lt.viko.eif.rgenzuras.catalog_android.activeModal
 import lt.viko.eif.rgenzuras.catalog_android.backStack
+import lt.viko.eif.rgenzuras.catalog_android.modals.ScanHistoryModalProps
 import lt.viko.eif.rgenzuras.catalog_android.productsViewModel
 import lt.viko.eif.rgenzuras.catalog_android.scope
 import lt.viko.eif.rgenzuras.catalog_android.ui.localization.localizedString
@@ -132,7 +144,7 @@ fun BarcodeScannerMenu() {
                             ContextCompat.getMainExecutor(ctx)
                         ) { imageProxy ->
 
-                            if (scanned) {
+                            if (scanned || activeModal.value == ScanHistoryModalProps) {
                                 imageProxy.close()
                                 return@setAnalyzer
                             }
@@ -161,8 +173,8 @@ fun BarcodeScannerMenu() {
                                                 try {
                                                     val product =
                                                         productsViewModel.getProductByCode(code)
+                                                    productsViewModel.addSearchResult(product.id)
 
-                                                    backStack.remove(BarcodeScannerScreen)
                                                     backStack.add(ProductScreen(product.id))
 
                                                 } catch (e: Exception) {
@@ -215,6 +227,36 @@ fun BarcodeScannerMenu() {
                         MaterialTheme.colorScheme.primary
                     )
             )
+
+            Surface(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(30.dp)
+                    .navigationBarsPadding(),
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.primary,
+                shadowElevation = 2.dp
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.padding(horizontal = 11.dp, vertical = 7.dp)
+                ) {
+                    IconButton(
+                        {
+                            activeModal.value = ScanHistoryModalProps
+                        }
+                    ) {
+                        Icon(Icons.Default.History, "History")
+                    }
+                    IconButton(
+                        {
+                            backStack.add(SettingsScreen)
+                        }
+                    ) {
+                        Icon(Icons.Default.Settings, "Settings")
+                    }
+                }
+            }
         }
     else
         LoadingMenu()

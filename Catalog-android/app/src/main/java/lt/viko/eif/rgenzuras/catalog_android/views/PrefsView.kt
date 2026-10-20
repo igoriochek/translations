@@ -165,7 +165,7 @@ fun PrefsMenu() {
                             )
 
                             backStack.clear()
-                            backStack.add(ProductsScreen)
+                            backStack.add(BarcodeScannerScreen)
                         },
                         enabled = true,
                         loading = false

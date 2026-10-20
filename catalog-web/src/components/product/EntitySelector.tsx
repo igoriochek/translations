@@ -1,4 +1,5 @@
 import {useMemo, useState} from "react";
+import {strings} from "../../utils/localization.ts";
 
 export interface EntitySelectorItem {
 	id: number;
@@ -18,7 +19,7 @@ export default function EntitySelector({
 										   items,
 										   selectedIds,
 										   onChange,
-										   searchPlaceholder = "Search..."
+										   searchPlaceholder = strings.search_placeholder
 									   }: EntitySelectorProps) {
 	const [search, setSearch] = useState("");
 

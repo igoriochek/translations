@@ -6,6 +6,7 @@ import type {Product} from "../../api/types.ts";
 import {deleteProductImage, uploadProductImages} from "../../api/products.ts";
 import ProductImageGrid from "../product/ProductImageGrid.tsx";
 import ProductImageUploader from "../product/ProductImageUploader.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface EditProductImagesModalProps {
 	open: boolean;
@@ -58,7 +59,7 @@ export default function EditProductImagesModal({
 	}
 
 	return (
-		<Modal open={open} title="Edit Images" onClose={onClose}>
+		<Modal open={open} title={strings.products.edit_images_button} onClose={onClose}>
 			<div className="space-y-6">
 				<ProductImageGrid images={product.images} onDelete={handleDelete}/>
 				<ProductImageUploader onAdd={addImages}/>
@@ -74,7 +75,9 @@ export default function EditProductImagesModal({
 						disabled={loading}
 						className="bg-black text-white px-4 py-2 rounded-xl"
 					>
-						Save
+						{loading ?
+							strings.saving :
+							strings.save_button}
 					</button>
 				</div>
 			</div>

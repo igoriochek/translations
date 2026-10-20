@@ -7,6 +7,8 @@ import AllergenSkeleton from "../components/skeleton/AllergenSkeleton.tsx";
 import AddAllergenModal from "../components/modal/AddAllergenModal.tsx";
 import EditAllergenModal from "../components/modal/EditAllergenModal.tsx";
 import ConfirmModal from "../components/modal/ConfirmModal.tsx";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function AllergensPage() {
 	const [allergens, setAllergens] = useState<Allergen[]>([]);
@@ -17,6 +19,8 @@ export default function AllergensPage() {
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 	const [loading, setLoading] = useState(true);
+
+	useLanguage();
 
 	useEffect(() => {
 		async function loadAllergens() {
@@ -52,12 +56,11 @@ export default function AllergensPage() {
 				<div className="flex items-center justify-between">
 					<div>
 						<h1 className="text-2xl font-bold">
-							Allergens
+							{strings.allergens_title}
 						</h1>
 
 						<p className="text-zinc-600">
-							Manage localized
-							product allergens.
+							{strings.allergens.hint}
 						</p>
 					</div>
 
@@ -65,7 +68,7 @@ export default function AllergensPage() {
 						onClick={() => setShowAddModal(true)}
 						className="bg-black text-white px-4 py-2 rounded-lg text-sm"
 					>
-						Add Allergen
+						{strings.allergens.add_label}
 					</button>
 
 				</div>
@@ -127,9 +130,9 @@ export default function AllergensPage() {
 
 			<ConfirmModal
 				open={showDeleteModal}
-				title="Delete Allergen"
-				message={`Are you sure you want to delete this allergen?`}
-				confirmText="Delete"
+				title={strings.allergens.delete_title}
+				message={strings.allergens.delete_confirm}
+				confirmText={strings.delete_button}
 				onClose={() => {
 					setShowDeleteModal(false);
 					setSelectedAllergen(null);

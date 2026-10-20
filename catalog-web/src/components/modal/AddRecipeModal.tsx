@@ -10,6 +10,7 @@ import {createRecipe}
 
 import RecipeForm
 	from "../RecipeForm.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface AddRecipeModalProps {
 	open: boolean;
@@ -66,12 +67,12 @@ export default function AddRecipeModal({
 			<div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-4xl">
 
 				<h2 className="text-xl font-bold mb-6">
-					Add Recipe
+					{strings.recipes.add_label}
 				</h2>
 
 				<RecipeForm
 					loading={loading}
-					submitText="Create"
+					submitText={strings.create_button}
 					onSubmit={handleSubmit}
 					onCancel={onClose}
 				/>

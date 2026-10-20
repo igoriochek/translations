@@ -6,6 +6,7 @@ import {updateProduct} from "../../api/products.ts";
 import EntitySelector from "../product/EntitySelector.tsx";
 import MeasurementTable, {type MeasurementTableRow} from "../product/MeasurementTable.tsx";
 import {formatUnit, normalizeMeasurement} from "../../utils/units.ts";
+import {strings} from "../../utils/localization.ts";
 
 interface Props {
 	open: boolean;
@@ -104,10 +105,10 @@ export default function EditProductNutritionModal({
 	}
 
 	return (
-		<Modal open={open} title="Edit Nutrition" onClose={onClose}>
+		<Modal open={open} title={strings.products.edit_nutrition_button} onClose={onClose}>
 			<div className="space-y-6">
 				<EntitySelector
-					label="Nutrition Types"
+					label={strings.products.nutritional_types}
 					items={types.map((x) => ({
 						id: x.id,
 						label: x.labels[0]?.label ?? ''
@@ -125,7 +126,7 @@ export default function EditProductNutritionModal({
 
 				<div className="flex justify-end">
 					<button onClick={handleSave} className="bg-black text-white px-4 py-2 rounded-xl">
-						Save
+						{strings.save_button}
 					</button>
 				</div>
 			</div>

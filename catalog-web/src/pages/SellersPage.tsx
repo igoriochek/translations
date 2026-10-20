@@ -11,13 +11,15 @@ import SellerCard from "../components/card/SellerCard.tsx";
 
 import AddSellerModal from "../components/modal/AddSellerModal.tsx";
 
-import {Trash2, XIcon} from "lucide-react";
+import {Pencil, Trash2, XIcon} from "lucide-react";
 import CollapsableSection from "../components/CollapsableSection.tsx";
 import AddStoreModal from "../components/modal/AddStoreModal.tsx";
 import ConfirmModal from "../components/modal/ConfirmModal.tsx";
 import SellerProductRow from "../components/SellerProductRow.tsx";
 import AddSellerProductModal from "../components/modal/AddSellerProductModal.tsx";
 import AddRecommendationModal from "../components/modal/AddRecommendationModal.tsx";
+import {strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 export default function SellersPage() {
 
@@ -44,6 +46,8 @@ export default function SellersPage() {
 
 	const [storesFilter, setStoresFilter] = useState("");
 	const [productsFilter, setProductsFilter] = useState("");
+
+	useLanguage();
 
 	useEffect(() => {
 		async function loadSellers() {
@@ -176,11 +180,11 @@ export default function SellersPage() {
 				<div className="flex items-center justify-between">
 					<div>
 						<h1 className="text-2xl font-bold">
-							Sellers
+							{strings.sellers_title}
 						</h1>
 
 						<p className="text-zinc-600">
-							Manage seller entries.
+							{strings.sellers.hint}
 						</p>
 					</div>
 
@@ -195,7 +199,7 @@ export default function SellersPage() {
                         "
 						onClick={() => setShowAddModal(true)}
 					>
-						Add Seller
+						{strings.sellers.add_label}
 					</button>
 				</div>
 
@@ -279,7 +283,7 @@ export default function SellersPage() {
 								<div className="space-y-4">
 									<div className="flex-col space-y-3">
 										<CollapsableSection
-											title="Stores"
+											title={strings.sellers.stores}
 											expanded={storesExpanded}
 											onToggle={() =>
 												setStoresExpanded((v) => !v)
@@ -293,11 +297,11 @@ export default function SellersPage() {
 											>
 												{selectedSeller.stores.length == 0 ? (
 													<p className="text-zinc-400 font-light text-sm text-center py-2">
-														There are no stores added yet
+														{strings.sellers.no_stores}
 													</p>
 												) : filterStores(selectedSeller.stores).length == 0 ? (
 													<p className="text-zinc-400 font-light text-sm text-center py-2">
-														No locations match provided filter
+														{strings.sellers.no_stores_found}
 													</p>
 												) : (
 													<div className="flex-col space-y-2">
@@ -324,14 +328,14 @@ export default function SellersPage() {
 													type="text"
 													value={storesFilter}
 													onChange={(e) => setStoresFilter(e.target.value)}
-													placeholder="Search stores..."
+													placeholder={strings.sellers.search_stores}
 													className="w-full border border-zinc-300 text-sm rounded-lg px-3 py-2"
 												/>
 											)}
 										</CollapsableSection>
 
 										<CollapsableSection
-											title="Products"
+											title={strings.products.products}
 											expanded={productsExpanded}
 											onToggle={() => setProductsExpanded((v) => !v)}
 											onAdd={() => setShowAddProductModal(true)}
@@ -341,11 +345,11 @@ export default function SellersPage() {
 											>
 												{selectedSeller.products.length == 0 ? (
 													<p className="text-zinc-400 font-light text-sm text-center py-2">
-														There are no products listed yet
+														{strings.sellers.no_products}
 													</p>
 												) : filterProducts(selectedSeller.products).length == 0 ? (
 													<p className="text-zinc-400 font-light text-sm text-center py-2">
-														No products match provided filter
+														{strings.sellers.no_products_found}
 													</p>
 												) : (
 													<div className="flex flex-col space-y-2">
@@ -372,7 +376,7 @@ export default function SellersPage() {
 													type="text"
 													value={productsFilter}
 													onChange={(e) => setProductsFilter(e.target.value)}
-													placeholder="Search products..."
+													placeholder={strings.sellers.search_products}
 													className="w-full border border-zinc-300 text-sm rounded-lg px-3 py-2"
 												/>
 											)}
@@ -380,16 +384,18 @@ export default function SellersPage() {
 
 										{selectedProduct && (
 											<CollapsableSection
-												title="Recommendations"
+												title={strings.recommendations}
+												addLabel={strings.manage_button}
 												expanded={true}
 												onToggle={() => {
 												}}
 												onAdd={() => setShowAddRecommendationModal(true)}
+												icon={(<Pencil size={15}/>)}
 											>
 												<div className="space-y-2">
 													{selectedProduct.recommendations.length === 0 ? (
 														<p className="text-zinc-400 text-sm text-center py-2">
-															No recommendations added yet
+															{strings.sellers.no_recommendations}
 														</p>
 													) : (
 														selectedProduct.recommendations.map((recommendation) => (
@@ -502,11 +508,9 @@ export default function SellersPage() {
 
 			<ConfirmModal
 				open={showDeleteModal}
-				title="Delete Seller"
-				message={
-					`Are you sure you want to delete "${selectedSeller?.name}"?`
-				}
-				confirmText="Delete"
+				title={strings.sellers.delete_label}
+				message={`${strings.formatString(strings.sellers.delete_confirm, selectedSeller?.name ?? '')}`}
+				confirmText={strings.delete_button}
 				onClose={() => {
 					setShowDeleteModal(false);
 				}}
@@ -518,11 +522,9 @@ export default function SellersPage() {
 
 			<ConfirmModal
 				open={showDeleteStoreModal}
-				title="Delete Store"
-				message={
-					`Are you sure you want to delete "${selectedStore?.location}"?`
-				}
-				confirmText="Delete"
+				title={strings.sellers.delete_store_label}
+				message={`${strings.formatString(strings.sellers.delete_confirm, selectedStore?.location ?? '')}`}
+				confirmText={strings.delete_button}
 				onClose={() => {
 					setShowDeleteStoreModal(false);
 				}}
@@ -534,11 +536,9 @@ export default function SellersPage() {
 
 			<ConfirmModal
 				open={showDeleteProductModal}
-				title="Delete Product"
-				message={
-					`Are you sure you want to remove "${selectedProduct?.product.names[0]?.name}"?`
-				}
-				confirmText="Delete"
+				title={strings.sellers.delete_product_label}
+				message={`${strings.formatString(strings.sellers.delete_confirm, selectedProduct?.product.names[0].name ?? '')}`}
+				confirmText={strings.delete_button}
 				onClose={() => {
 					setShowDeleteProductModal(false);
 				}}
@@ -549,11 +549,9 @@ export default function SellersPage() {
 
 			<ConfirmModal
 				open={showDeleteRecommendationModal}
-				title="Delete Recommendation"
-				message={
-					`Are you sure you want to remove "${selectedRecommendation?.names[0]?.name}"?`
-				}
-				confirmText="Delete"
+				title={strings.sellers.delete_recommendation_label}
+				message={`${strings.formatString(strings.sellers.delete_confirm, selectedRecommendation?.names[0].name ?? '')}`}
+				confirmText={strings.delete_button}
 				onClose={() => {
 					setShowDeleteRecommendationModal(false);
 				}}

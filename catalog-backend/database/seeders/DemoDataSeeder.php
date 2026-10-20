@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\Models\Localization\Language;
 use App\Models\Product\Category;
@@ -12,37 +13,40 @@ use App\Models\Product\Recipe;
 use App\Models\User\Manufacturer;
 use App\Models\User\Seller;
 
-class DemoDataSeeder extends Seeder {
+class DemoDataSeeder extends Seeder
+{
+    public function run(): void
+    {
+        Language::firstOrCreate(
+            ['code' => 'en'],
+            ['name' => 'English']
+        );
 
-    public function run(): void {
-        Language::firstOrCreate(['code' => 'en'], ['name' => 'English']);
+        Language::firstOrCreate(
+            ['code' => 'lt'],
+            ['name' => 'Lietuvių']
+        );
 
         $languages = Language::all();
 
-        $manufacturers =
-            $this->createManufacturers();
+        $manufacturers = $this->createManufacturers();
 
-        $categories =
-            $this->createCategories($languages);
+        $categories = $this->createCategories($languages);
 
-        $ingredients =
-            $this->createIngredients($languages);
+        $ingredients = $this->createIngredients($languages);
 
-        $allergens =
-            $this->createAllergens($languages);
+        $allergens = $this->createAllergens($languages);
 
-        $nutritionTypes =
-            $this->createNutritionTypes($languages);
+        $nutritionTypes = $this->createNutritionTypes($languages);
 
-        $products =
-            $this->createProducts(
-                $languages,
-                $manufacturers,
-                $categories,
-                $ingredients,
-                $allergens,
-                $nutritionTypes
-            );
+        $products = $this->createProducts(
+            $languages,
+            $manufacturers,
+            $categories,
+            $ingredients,
+            $allergens,
+            $nutritionTypes
+        );
 
         $this->createRecipes(
             $languages,
@@ -54,8 +58,8 @@ class DemoDataSeeder extends Seeder {
         );
     }
 
-    private function createManufacturers() {
-
+    private function createManufacturers()
+    {
         $names = [
             'North Valley Foods',
             'Fresh Horizon',
@@ -77,27 +81,31 @@ class DemoDataSeeder extends Seeder {
             );
     }
 
-    private function createCategories($languages) {
-
+    private function createCategories($languages)
+    {
         $names = [
-            'Dairy',
-            'Bakery',
-            'Frozen',
-            'Beverages',
-            'Snacks',
-            'Produce',
-            'Seafood',
-            'Meat',
-            'Condiments',
-            'Canned Goods'
+            'Dairy' => 'Pieno produktai',
+            'Bakery' => 'Kepiniai',
+            'Frozen' => 'Šaldyti produktai',
+            'Beverages' => 'Gėrimai',
+            'Snacks' => 'Užkandžiai',
+            'Produce' => 'Vaisiai ir daržovės',
+            'Seafood' => 'Jūros gėrybės',
+            'Meat' => 'Mėsa',
+            'Condiments' => 'Pagardai',
+            'Canned Goods' => 'Konservuoti produktai'
         ];
 
         return collect($names)
-            ->map(function ($name) use ($languages) {
+            ->map(function ($ltName, $enName) use ($languages) {
 
                 $category = Category::create();
 
                 foreach ($languages as $language) {
+                    $name = match ($language->code) {
+                        'lt' => $ltName,
+                        default => $enName
+                    };
 
                     $category->names()->create([
                         'language_id' => $language->id,
@@ -109,32 +117,36 @@ class DemoDataSeeder extends Seeder {
             });
     }
 
-    private function createIngredients($languages) {
-
+    private function createIngredients($languages)
+    {
         $names = [
-            'Milk',
-            'Flour',
-            'Sugar',
-            'Salt',
-            'Butter',
-            'Chicken',
-            'Beef',
-            'Tomato',
-            'Rice',
-            'Cheese',
-            'Garlic',
-            'Onion',
-            'Egg',
-            'Potato',
-            'Pepper'
+            'Milk' => 'Pienas',
+            'Flour' => 'Miltai',
+            'Sugar' => 'Cukrus',
+            'Salt' => 'Druska',
+            'Butter' => 'Sviestas',
+            'Chicken' => 'Vištiena',
+            'Beef' => 'Jautiena',
+            'Tomato' => 'Pomidoras',
+            'Rice' => 'Ryžiai',
+            'Cheese' => 'Sūris',
+            'Garlic' => 'Česnakas',
+            'Onion' => 'Svogūnas',
+            'Egg' => 'Kiaušinis',
+            'Potato' => 'Bulvė',
+            'Pepper' => 'Pipirai'
         ];
 
         return collect($names)
-            ->map(function ($name) use ($languages) {
+            ->map(function ($ltName, $enName) use ($languages) {
 
                 $ingredient = Ingredient::create();
 
                 foreach ($languages as $language) {
+                    $name = match ($language->code) {
+                        'lt' => $ltName,
+                        default => $enName
+                    };
 
                     $ingredient->names()->create([
                         'language_id' => $language->id,
@@ -146,22 +158,26 @@ class DemoDataSeeder extends Seeder {
             });
     }
 
-    private function createAllergens($languages) {
-
+    private function createAllergens($languages)
+    {
         $names = [
-            'Milk',
-            'Egg',
-            'Peanuts',
-            'Soy',
-            'Gluten'
+            'Milk' => 'Pienas',
+            'Egg' => 'Kiaušiniai',
+            'Peanuts' => 'Žemės riešutai',
+            'Soy' => 'Sojos',
+            'Gluten' => 'Glitimas'
         ];
 
         return collect($names)
-            ->map(function ($name) use ($languages) {
+            ->map(function ($ltName, $enName) use ($languages) {
 
                 $allergen = Allergen::create();
 
                 foreach ($languages as $language) {
+                    $name = match ($language->code) {
+                        'lt' => $ltName,
+                        default => $enName
+                    };
 
                     $allergen->names()->create([
                         'language_id' => $language->id,
@@ -173,27 +189,31 @@ class DemoDataSeeder extends Seeder {
             });
     }
 
-    private function createNutritionTypes($languages) {
-
+    private function createNutritionTypes($languages)
+    {
         $names = [
-            'Calories',
-            'Protein',
-            'Fat',
-            'Carbohydrates',
-            'Sugar',
-            'Sodium'
+            'Calories' => 'Kalorijos',
+            'Protein' => 'Baltymai',
+            'Fat' => 'Riebalai',
+            'Carbohydrates' => 'Angliavandeniai',
+            'Sugar' => 'Cukrus',
+            'Sodium' => 'Natris'
         ];
 
         return collect($names)
-            ->map(function ($name) use ($languages) {
+            ->map(function ($ltName, $enName) use ($languages) {
 
                 $type = NutritionalType::create();
 
                 foreach ($languages as $language) {
+                    $label = match ($language->code) {
+                        'lt' => $ltName,
+                        default => $enName
+                    };
 
                     $type->labels()->create([
                         'language_id' => $language->id,
-                        'label' => $name
+                        'label' => $label
                     ]);
                 }
 
@@ -209,29 +229,63 @@ class DemoDataSeeder extends Seeder {
         $allergens,
         $nutritionTypes
     ) {
-
         $adjectives = [
-            'Fresh',
-            'Organic',
-            'Premium',
-            'Golden',
-            'Classic',
-            'Creamy',
-            'Smoked',
-            'Roasted'
+            'Fresh' => 'Šviežias',
+            'Organic' => 'Ekologiškas',
+            'Premium' => 'Aukščiausios kokybės',
+            'Golden' => 'Auksinis',
+            'Classic' => 'Klasikinis',
+            'Creamy' => 'Kreminis',
+            'Smoked' => 'Rūkytas',
+            'Roasted' => 'Skrudintas'
         ];
 
         $foods = [
-            'Cheddar',
-            'Yogurt',
-            'Bread',
-            'Soup',
-            'Chicken Breast',
-            'Salmon',
-            'Crackers',
-            'Pasta',
-            'Ice Cream',
-            'Apple Juice'
+            'Cheddar' => 'Čederis',
+            'Yogurt' => 'Jogurtas',
+            'Bread' => 'Duona',
+            'Soup' => 'Sriuba',
+            'Chicken Breast' => 'Vištienos krūtinėlė',
+            'Salmon' => 'Lašiša',
+            'Crackers' => 'Krekeriai',
+            'Pasta' => 'Makaronai',
+            'Ice Cream' => 'Ledai',
+            'Apple Juice' => 'Obuolių sultys'
+        ];
+
+        $descriptions = [
+            'Fresh' => [
+                'en' => 'A fresh and carefully selected product suitable for everyday use.',
+                'lt' => 'Šviežias ir kruopščiai atrinktas produktas, tinkamas kasdieniam vartojimui.'
+            ],
+            'Organic' => [
+                'en' => 'An organic product made from carefully selected ingredients.',
+                'lt' => 'Ekologiškas produktas, pagamintas iš kruopščiai atrinktų ingredientų.'
+            ],
+            'Premium' => [
+                'en' => 'A premium product made with selected ingredients and attention to quality.',
+                'lt' => 'Aukščiausios kokybės produktas, pagamintas iš atrinktų ingredientų, daug dėmesio skiriant kokybei.'
+            ],
+            'Golden' => [
+                'en' => 'A carefully prepared product with a rich flavour and pleasant texture.',
+                'lt' => 'Kruopščiai paruoštas produktas, pasižymintis sodriu skoniu ir malonia tekstūra.'
+            ],
+            'Classic' => [
+                'en' => 'A classic product suitable for a variety of everyday meals.',
+                'lt' => 'Klasikinis produktas, tinkamas įvairiems kasdieniams patiekalams.'
+            ],
+            'Creamy' => [
+                'en' => 'A smooth and creamy product with a rich and pleasant taste.',
+                'lt' => 'Švelnios ir kreminės tekstūros produktas, pasižymintis sodriu ir maloniu skoniu.'
+            ],
+            'Smoked' => [
+                'en' => 'A smoked product with a distinctive flavour and aroma.',
+                'lt' => 'Rūkytas produktas, pasižymintis išskirtiniu skoniu ir aromatu.'
+            ],
+            'Roasted' => [
+                'en' => 'A roasted product prepared to provide a rich and satisfying flavour.',
+                'lt' => 'Skrudintas produktas, paruoštas taip, kad pasižymėtų sodriu ir maloniu skoniu.'
+            ]
         ];
 
         $products = collect();
@@ -246,16 +300,38 @@ class DemoDataSeeder extends Seeder {
                     'DEMO-' . str_pad($i, 5, '0', STR_PAD_LEFT)
             ]);
 
-            $name =
-                $adjectives[array_rand($adjectives)]
+            $adjective = array_rand($adjectives);
+            $food = array_rand($foods);
+
+            $englishName =
+                $adjective
                 . ' '
-                . $foods[array_rand($foods)];
+                . $food;
+
+            $lithuanianName =
+                $adjectives[$adjective]
+                . ' '
+                . $foods[$food];
 
             foreach ($languages as $language) {
+
+                $name = match ($language->code) {
+                    'lt' => $lithuanianName,
+                    default => $englishName
+                };
 
                 $product->names()->create([
                     'language_id' => $language->id,
                     'name' => $name
+                ]);
+
+                $description = $descriptions[$adjective][
+                $language->code
+                ] ?? $descriptions[$adjective]['en'];
+
+                $product->descriptions()->create([
+                    'language_id' => $language->id,
+                    'description' => $description
                 ]);
             }
 
@@ -288,7 +364,7 @@ class DemoDataSeeder extends Seeder {
                 $product->nutritionalMeasurements()->create([
                     'nutritional_type_id' => $type->id,
                     'amount' => rand(1, 100),
-                    'measurement_unit_type_id' => 1
+                    'measurement_unit_type_id' => $type->id == 1 ? 4 : 1
                 ]);
             }
 
@@ -298,23 +374,32 @@ class DemoDataSeeder extends Seeder {
         return $products;
     }
 
-    private function createRecipes($languages, $ingredients) {
-
+    private function createRecipes($languages, $ingredients)
+    {
         for ($i = 0; $i < 200; $i++) {
 
             $recipe = Recipe::create();
 
             foreach ($languages as $language) {
 
+                $name = match ($language->code) {
+                    'lt' => 'Receptas ' . ($i + 1),
+                    default => 'Recipe ' . ($i + 1)
+                };
+
+                $content = match ($language->code) {
+                    'lt' => "1 žingsnis\n2 žingsnis\n3 žingsnis",
+                    default => "Step 1\nStep 2\nStep 3"
+                };
+
                 $recipe->names()->create([
                     'language_id' => $language->id,
-                    'name' => 'Recipe ' . ($i + 1)
+                    'name' => $name
                 ]);
 
                 $recipe->contents()->create([
                     'language_id' => $language->id,
-                    'content' =>
-                        "Step 1\nStep 2\nStep 3"
+                    'content' => $content
                 ]);
             }
 
@@ -326,8 +411,8 @@ class DemoDataSeeder extends Seeder {
         }
     }
 
-    private function createSellers($products) {
-
+    private function createSellers($products)
+    {
         for ($i = 1; $i <= 50; $i++) {
 
             $seller = Seller::create([

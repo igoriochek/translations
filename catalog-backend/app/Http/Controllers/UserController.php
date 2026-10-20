@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product\Product;
 use App\Models\User\Manufacturer;
 use App\Models\User\ManufacturerReview;
+use App\Models\User\ScanHistory;
 use App\Models\User\Seller;
 use App\Models\User\SellerReview;
 use App\Models\User\User;
@@ -180,5 +182,23 @@ class UserController extends Controller {
 
         $manufacturerReview->delete();
         return response()->json(['message' => 'Deleted']);
+    }
+
+    public function addSearchResult($productId, Request $request) {
+        $request->merge(['id' => $productId]);
+        $validated = $request->validate([
+            'id' => 'required|exists:products,id'
+        ]);
+
+        $product = Product::find($validated['id']);
+        $scan = ScanHistory::create(['user_id' => $request->user()->id, 'product_id' => $product->id]);
+
+        return response()->json($scan, 201);
+    }
+
+    public function getScanHistory(Request $request) {
+        $user = $request->user();
+        $list = ScanHistory::where(['user_id' => $user->id])->orderByDesc('created_at')->get();
+        return response()->json($list);
     }
 }

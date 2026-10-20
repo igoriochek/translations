@@ -26,6 +26,7 @@ import EntitySelector from "./EntitySelector.tsx";
 import MeasurementTable, {type MeasurementTableRow} from "./MeasurementTable.tsx";
 import ProductImageUploader from "./ProductImageUploader.tsx";
 import {normalizeMeasurement} from "../../utils/units.ts";
+import {strings} from "../../utils/localization.ts";
 
 interface ProductFormProps {
 	onCreated: (product: Product) => void;
@@ -202,7 +203,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 				return {
 					nutritional_type_id: row.id,
 					amount: normalized.amount,
-					unit_type_id: normalized.unit_type_id
+					measurement_unit_type_id: normalized.unit_type_id
 				};
 			});
 
@@ -233,7 +234,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 		<div className="space-y-6 max-h-96 overflow-y-auto">
 			<div>
 				<label className="block text-sm font-medium mb-2">
-					Manufacturer
+					{strings.products.manufacturer_field}
 				</label>
 
 				<select
@@ -244,7 +245,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 					className="w-full border border-zinc-200 rounded-xl px-4 py-3"
 				>
 					<option value={0}>
-						Select Manufacturer
+						{strings.products.manufacturer_prompt}
 					</option>
 
 					{manufacturers.map((manufacturer) => (
@@ -256,7 +257,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 
 				<div>
 					<label className="block text-sm font-medium mb-2">
-						Product Code
+						{strings.products.code_field}
 					</label>
 
 					<input
@@ -264,7 +265,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 						value={code}
 						onChange={(e) => setCode(e.target.value)}
 						className="w-full border border-zinc-200 rounded-xl px-4 py-3"
-						placeholder="Enter product code"
+						placeholder={strings.products.code_placeholder}
 					/>
 				</div>
 			</div>
@@ -273,11 +274,11 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 				languages={languages}
 				translations={names}
 				onChange={setNames}
-				label="Names"
+				label={strings.products.names_field}
 			/>
 
 			<EntitySelector
-				label="Categories"
+				label={strings.categories_title}
 				items={categories.map((x) => ({
 					id: x.id,
 					label: x.names[0]?.name ?? ''
@@ -287,7 +288,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 			/>
 
 			<EntitySelector
-				label="Allergens"
+				label={strings.allergens_title}
 				items={allergens.map((x) => ({
 					id: x.id,
 					label: x.names[0]?.name ?? ''
@@ -297,7 +298,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 			/>
 
 			<EntitySelector
-				label="Ingredients"
+				label={strings.ingredients_title}
 				items={ingredients.map((x) => ({
 					id: x.id,
 					label: x.names[0]?.name ?? ''
@@ -314,7 +315,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 			/>
 
 			<EntitySelector
-				label="Nutrition Types"
+				label={strings.nutritional_types_title}
 				items={nutritionTypes.map((x) => ({
 					id: x.id,
 					label: x.labels[0]?.label ?? ''
@@ -335,7 +336,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 			/>
 
 			<EntitySelector
-				label="Related Products"
+				label={strings.products.related_products}
 				items={products.map((x) => ({
 					id: x.id,
 					label: x.names[0]?.name ?? ''
@@ -355,7 +356,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 
 			<div className="flex justify-end">
 				<button onClick={handleSubmit} className="bg-black text-white px-4 py-2 rounded-xl">
-					Create Product
+					{strings.create_button}
 				</button>
 			</div>
 		</div>

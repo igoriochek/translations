@@ -3,6 +3,7 @@ import {useState} from "react";
 import {Link} from "react-router-dom";
 
 import {ChevronDown} from "lucide-react";
+import {strings} from "../utils/localization.ts";
 
 export default function MetadataDropdown() {
 
@@ -26,8 +27,7 @@ export default function MetadataDropdown() {
                     transition
                 "
 			>
-
-				Metadata
+				{strings.metadata_title}
 
 				<ChevronDown size={16}/>
 
@@ -68,7 +68,7 @@ export default function MetadataDropdown() {
 								setOpen(false)
 							}
 						>
-							Categories
+							{strings.categories_title}
 						</Link>
 
 						<Link
@@ -85,7 +85,7 @@ export default function MetadataDropdown() {
 								setOpen(false)
 							}
 						>
-							Allergens
+							{strings.allergens_title}
 						</Link>
 
 						<Link
@@ -102,7 +102,7 @@ export default function MetadataDropdown() {
 								setOpen(false)
 							}
 						>
-							Nutritional Types
+							{strings.nutritional_types_title}
 						</Link>
 
 						<Link
@@ -119,7 +119,7 @@ export default function MetadataDropdown() {
 								setOpen(false)
 							}
 						>
-							Languages
+							{strings.languages_title}
 						</Link>
 						
 						<Link
@@ -136,7 +136,7 @@ export default function MetadataDropdown() {
 								setOpen(false)
 							}
 						>
-							Ingredients
+							{strings.ingredients_title}
 						</Link>
 					</div>
 

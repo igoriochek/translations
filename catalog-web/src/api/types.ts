@@ -37,8 +37,10 @@ export interface RecipeContent {
 
 export interface Product {
     id: number;
+    product_code: string;
     manufacturer: Manufacturer;
     names: ProductName[];
+    descriptions: ProductDescription[];
     categories: Category[];
     ingredients: ProductIngredient[];
     nutritional_measurements: NutritionalMeasurement[];
@@ -110,6 +112,12 @@ export interface AllergenName {
 export interface ProductName {
     id: number;
     name: string;
+    language: Language;
+}
+
+export interface ProductDescription {
+    id: number;
+    description: string;
     language: Language;
 }
 

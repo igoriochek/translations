@@ -5,6 +5,7 @@ import Modal from "./Modal";
 import type {User} from "../../api/types.ts";
 
 import {createAdmin} from "../../api/users.ts";
+import {strings} from "../../utils/localization.ts";
 
 interface AddAdminModalProps {
 	open: boolean;
@@ -84,7 +85,7 @@ export default function AddAdminModal({
 	return (
 		<Modal
 			open={open}
-			title="Add Administrator"
+			title={strings.admins.add_label}
 			onClose={onClose}
 		>
 
@@ -100,7 +101,7 @@ export default function AddAdminModal({
                             font-medium
                         "
 					>
-						Name
+						{strings.admins.name_field}
 					</label>
 
 					<input
@@ -136,7 +137,7 @@ export default function AddAdminModal({
                             font-medium
                         "
 					>
-						Email
+						{strings.admins.email_field}
 					</label>
 
 					<input
@@ -170,7 +171,7 @@ export default function AddAdminModal({
                             font-medium
                         "
 					>
-						Password
+						{strings.admins.password_field}
 					</label>
 
 					<input
@@ -204,7 +205,7 @@ export default function AddAdminModal({
                             font-medium
                         "
 					>
-						Confirm Password
+						{strings.admins.confirm_field}
 					</label>
 
 					<input
@@ -239,7 +240,7 @@ export default function AddAdminModal({
                             text-red-500
                         "
 						>
-							Passwords do not match.
+							{strings.admins.passwords_different}
 						</p>
 					)}
 
@@ -265,7 +266,7 @@ export default function AddAdminModal({
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -288,8 +289,8 @@ export default function AddAdminModal({
 					>
 
 						{loading
-							? 'Creating...'
-							: 'Create'}
+							? strings.saving
+							: strings.save_button}
 
 					</button>
 

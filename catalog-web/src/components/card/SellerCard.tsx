@@ -1,5 +1,6 @@
 import type {SellerListItem} from "../../api/types.ts";
 import {Pencil, Trash2} from "lucide-react";
+import {strings} from "../../utils/localization.ts";
 
 interface SellerCardProps {
     seller: SellerListItem;
@@ -47,11 +48,19 @@ export default function SellerCard({
                     <div className="mt-2 space-y-1">
 
                         <p className="text-sm text-zinc-500">
-                            {seller.stores_count} store{seller.stores_count == 1 ? "" : "s"}
+                            {seller.stores_count}
+                            {' '}
+                            {seller.stores_count == 1 ?
+                                strings.sellers.store.toLowerCase() :
+                                strings.sellers.stores.toLowerCase()}
                         </p>
 
                         <p className="text-sm text-zinc-500">
-                            {seller.products_count} product{seller.products_count == 1 ? "" : "s"}
+                            {seller.products_count}
+                            {' '}
+                            {seller.products_count == 1 ?
+                                strings.products.product.toLowerCase() :
+                                strings.products.products.toLowerCase()}
                         </p>
 
                     </div>

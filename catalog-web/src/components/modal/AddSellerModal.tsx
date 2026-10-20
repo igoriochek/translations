@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Modal from './Modal';
 import type {SellerListItem} from "../../api/types.ts";
 import { createSeller } from '../../api/sellers.ts'
+import {strings} from "../../utils/localization.ts";
 
 interface AddSellerModalProps {
     open: boolean;
@@ -21,29 +22,21 @@ export default function AddSellerModal({
     const [loading, setLoading] = useState(false);
 
     async function handleSubmit() {
-
         if (!name.trim()) {
             return;
         }
 
         try {
-
             setLoading(true);
 
             const seller = await createSeller(name);
-
             onCreated(seller);
 
             setName('');
-
             onClose();
-
         } catch (err) {
-
             console.error(err);
-
         } finally {
-
             setLoading(false);
         }
     }
@@ -51,16 +44,15 @@ export default function AddSellerModal({
     return (
         <Modal
             open={open}
-            title="Add Seller"
+            title={strings.sellers.add_label}
             onClose={onClose}
         >
-
             <div className="space-y-4">
 
                 <div>
 
                     <label className="block mb-1 text-sm font-medium">
-                        Name
+                        {strings.sellers.name_field}
                     </label>
 
                     <input
@@ -91,7 +83,7 @@ export default function AddSellerModal({
                             border-zinc-300
                         "
                     >
-                        Cancel
+                        {strings.cancel_button}
                     </button>
 
                     <button
@@ -105,8 +97,8 @@ export default function AddSellerModal({
                         "
                     >
                         {loading
-                            ? 'Creating...'
-                            : 'Create'}
+                            ? strings.saving
+                            : strings.create_button}
                     </button>
 
                 </div>

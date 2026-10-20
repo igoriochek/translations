@@ -51,6 +51,7 @@ export async function updateProduct(
 	id: number,
 	data: Partial<{
 		names: { language_id: number; name: string; }[];
+		descriptions: { language_id: number; description: string; }[];
 		categories: number[];
 		allergens: number[];
 		related_products: number[];

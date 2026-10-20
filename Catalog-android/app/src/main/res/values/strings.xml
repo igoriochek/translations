@@ -47,4 +47,8 @@
     <string name="all_allergens">All Allergens</string>
     <string name="apply">Apply</string>
     <string name="clear">Clear</string>
+    <string name="history">History</string>
+    <string name="loading_history">Loading history…</string>
+    <string name="no_history_found">No history found</string>
+    <string name="description">Description</string>
 </resources>

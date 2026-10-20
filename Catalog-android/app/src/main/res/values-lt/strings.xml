@@ -48,4 +48,7 @@
     <string name="all_allergens">Visi alergenai</string>
     <string name="apply">Taikyti</string>
     <string name="clear">Išvalyti</string>
+    <string name="history">Istorija</string>
+    <string name="loading_history">Įkeliama istorija…</string>
+    <string name="no_history_found">Istorijos nėra</string>
 </resources>

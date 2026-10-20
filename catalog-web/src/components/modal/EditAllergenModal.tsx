@@ -3,6 +3,7 @@ import type {Allergen, Language, TranslationInput} from "../../api/types.ts";
 import {getLanguages} from "../../api/languages.ts";
 import {updateAllergen} from "../../api/allergens.ts";
 import TranslationInputs from "../TranslationInputs.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface EditAllergenModalProps {
 	open: boolean;
@@ -114,7 +115,7 @@ export default function EditAllergenModal({open, allergen, onClose, onUpdated}: 
                             font-bold
                         "
 					>
-						Edit Allergen
+						{strings.allergens.edit_label}
 					</h2>
 
 					<p
@@ -124,7 +125,7 @@ export default function EditAllergenModal({open, allergen, onClose, onUpdated}: 
                             mt-1
                         "
 					>
-						Update allergen translations.
+						{strings.allergens.edit_hint}
 					</p>
 
 				</div>
@@ -133,8 +134,8 @@ export default function EditAllergenModal({open, allergen, onClose, onUpdated}: 
 					languages={languages}
 					translations={translations}
 					onChange={setTranslations}
-					label="Allergen Names"
-					placeholder="Enter allergen name"
+					label={strings.allergens.translations_label}
+					placeholder={strings.allergens.translations_placeholder}
 				/>
 
 				<div
@@ -157,7 +158,7 @@ export default function EditAllergenModal({open, allergen, onClose, onUpdated}: 
                             text-sm
                         "
 					>
-						Cancel
+						{strings.cancel_button}
 					</button>
 
 					<button
@@ -174,8 +175,8 @@ export default function EditAllergenModal({open, allergen, onClose, onUpdated}: 
 					>
 
 						{loading
-							? 'Saving...'
-							: 'Save'}
+							? strings.saving
+							: strings.save_button}
 
 					</button>
 

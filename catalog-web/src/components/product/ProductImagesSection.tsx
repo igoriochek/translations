@@ -1,5 +1,6 @@
 import type {Product} from "../../api/types.ts";
 import ProductSection from "./ProductSection.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface ProductImagesSectionProps {
 	product: Product;
@@ -8,7 +9,7 @@ interface ProductImagesSectionProps {
 
 export default function ProductImagesSection({product, onEdit}: ProductImagesSectionProps) {
 	return (
-		<ProductSection title="Images" onEdit={onEdit}>
+		<ProductSection title={strings.products.images_field} onEdit={onEdit}>
 			<div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
 				{product.images.map((image) => (
 					<img

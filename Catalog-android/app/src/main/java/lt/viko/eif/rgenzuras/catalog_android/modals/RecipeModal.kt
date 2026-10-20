@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import lt.viko.eif.rgenzuras.catalog_android.activeModal
 import lt.viko.eif.rgenzuras.catalog_android.schema.Recipe
 import lt.viko.eif.rgenzuras.catalog_android.viewmodels.LanguageViewModel
+import java.util.Locale
 
 @Composable
 fun RecipeModal(
@@ -12,13 +13,19 @@ fun RecipeModal(
     uiLanguage: LanguageViewModel.AppLanguage,
     contentLanguage: String
 ) {
-    val recipeName = recipe.names.firstOrNull({ it.language.code == uiLanguage.code })?.name
-        ?: recipe.names.firstOrNull({ it.language.code == contentLanguage })?.name
-        ?: recipe.names.first().name
+    val defaultLanguage = uiLanguage == LanguageViewModel.AppLanguage.SYSTEM
 
-    val recipeContent = recipe.contents.firstOrNull({ it.language.code == uiLanguage.code })?.content
-        ?: recipe.contents.firstOrNull({ it.language.code == contentLanguage })?.content
-        ?: recipe.contents.first().content
+    val recipeName = ((
+            if (!defaultLanguage) recipe.names.firstOrNull { it.language.code == uiLanguage.code }
+            else recipe.names.firstOrNull { Locale.getDefault().language == it.language.code })
+        ?: recipe.names.firstOrNull({ it.language.code == contentLanguage })
+        ?: recipe.names.first()).name
+
+    val recipeContent = ((
+            if (!defaultLanguage) recipe.contents.firstOrNull { it.language.code == uiLanguage.code }
+            else recipe.contents.firstOrNull { Locale.getDefault().language == it.language.code })
+        ?: recipe.contents.firstOrNull({ it.language.code == contentLanguage })
+        ?: recipe.contents.first()).content
 
     AppModal(
         title = recipeName,

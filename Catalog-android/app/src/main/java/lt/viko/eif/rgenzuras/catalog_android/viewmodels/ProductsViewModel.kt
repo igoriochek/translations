@@ -70,4 +70,8 @@ class ProductsViewModel(
     suspend fun getProductByCode(code: String): Product {
         return api.getProductByCode("Bearer $token", code)
     }
+
+    suspend fun addSearchResult(productId: Int) : Unit {
+        api.addScanResult("Bearer $token", productId)
+    }
 }

@@ -2,12 +2,17 @@ package lt.viko.eif.rgenzuras.catalog_android.api
 
 import android.content.Context
 import android.net.Uri
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
+import com.google.gson.stream.JsonWriter
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileOutputStream
+import java.time.Instant
 
 fun String.toTextBody() =
     toRequestBody("text/plain".toMediaType())
@@ -41,4 +46,24 @@ fun uriToTempFile(
     }
 
     return tempFile
+}
+
+class InstantTypeAdapter : TypeAdapter<Instant>() {
+
+    override fun write(out: JsonWriter, value: Instant?) {
+        if (value == null) {
+            out.nullValue()
+        } else {
+            out.value(value.toString())
+        }
+    }
+
+    override fun read(reader: JsonReader): Instant? {
+        if (reader.peek() == JsonToken.NULL) {
+            reader.nextNull()
+            return null
+        }
+
+        return Instant.parse(reader.nextString())
+    }
 }

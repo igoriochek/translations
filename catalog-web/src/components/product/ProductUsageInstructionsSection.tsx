@@ -1,4 +1,6 @@
 import type {Product} from "../../api/types";
+import ProductSection from "./ProductSection.tsx";
+import {strings} from "../../utils/localization.ts";
 
 interface ProductUsageInstructionsSectionProps {
 	product: Product;
@@ -10,23 +12,10 @@ export default function ProductUsageInstructionsSection({
 															onEdit
 														}: ProductUsageInstructionsSectionProps) {
 	return (
-		<section className="bg-white rounded-2xl shadow-sm p-6">
-			<div className="flex items-center justify-between mb-4">
-				<h2 className="text-xl font-semibold">
-					Usage Instructions
-				</h2>
-
-				<button
-					onClick={onEdit}
-					className="text-sm text-blue-600 font-medium"
-				>
-					Edit
-				</button>
-			</div>
-
+		<ProductSection title={strings.products.usage_instructions_field} onEdit={onEdit}>
 			{product.usage_instructions.length === 0 ? (
 				<p className="text-zinc-500">
-					No usage instructions.
+					{strings.products.no_usage_instructions}
 				</p>
 			) : (
 				<div className="space-y-4">
@@ -34,7 +23,7 @@ export default function ProductUsageInstructionsSection({
 						instruction => (
 							<div
 								key={instruction.id}
-								className="border rounded-lg p-4"
+								className="p-4 rounded-xl border border-zinc-200"
 							>
 								<div className="text-sm font-medium text-zinc-500 mb-2">
 									{instruction.language.name}
@@ -48,6 +37,6 @@ export default function ProductUsageInstructionsSection({
 					)}
 				</div>
 			)}
-		</section>
+		</ProductSection>
 	);
 }

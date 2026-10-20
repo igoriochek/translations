@@ -2,6 +2,7 @@
 
 namespace App\Models\Product;
 
+use App\Models\Localization\Description;
 use App\Models\Localization\ProductName;
 use App\Models\User\Manufacturer;
 use App\Models\User\SellerProduct;
@@ -12,6 +13,7 @@ class Product extends Model {
     protected $with = [
         'manufacturer',
         'names',
+        'descriptions',
         'categories',
         'images'
     ];
@@ -39,6 +41,10 @@ class Product extends Model {
 
     public function names() {
         return $this->hasMany(ProductName::class);
+    }
+
+    public function descriptions() {
+        return $this->hasMany(Description::class);
     }
 
     public function nutritionalMeasurements() {
