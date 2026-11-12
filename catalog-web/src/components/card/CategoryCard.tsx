@@ -1,6 +1,7 @@
 import type {Category} from "../../api/types.ts";
 import {Pencil, Trash2} from "lucide-react";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface CategoryCardProps {
 	category: Category;
@@ -9,8 +10,13 @@ interface CategoryCardProps {
 }
 
 export default function CategoryCard({category, onEdit, onDelete}: CategoryCardProps) {
+	const {language} = useLanguage();
+
+
 	const primaryName =
-		category.names.find((x) => x.language.code === 'en') ?? category.names[0];
+		getLocalizedField(language, category.names.map(x => { return {
+			language: x.language, field: x.name
+		}}));
 
 	return (
 		<div
@@ -29,7 +35,7 @@ export default function CategoryCard({category, onEdit, onDelete}: CategoryCardP
 				<div>
 
 					<h2 className="font-semibold">
-						{primaryName?.name ??
+						{primaryName?.field ??
 							strings.missing_field}
 					</h2>
 

@@ -1,6 +1,7 @@
 import type {NutritionalType} from "../../api/types.ts";
 import {Pencil, Trash2} from "lucide-react";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface NutritionalTypeCardProps {
 	nutritionalType: NutritionalType;
@@ -9,9 +10,13 @@ interface NutritionalTypeCardProps {
 }
 
 export default function NutritionalTypeCard({nutritionalType, onEdit, onDelete}: NutritionalTypeCardProps) {
+	const {language} = useLanguage();
+
 
 	const primaryName =
-		nutritionalType.labels.find((x) => x.language.code === 'en') ?? nutritionalType.labels[0];
+		getLocalizedField(language, nutritionalType.labels.map(x => { return {
+			language: x.language, field: x.label
+		}}));
 
 	return (
 		<div
@@ -30,7 +35,7 @@ export default function NutritionalTypeCard({nutritionalType, onEdit, onDelete}:
 				<div>
 
 					<h2 className="font-semibold">
-						{primaryName?.label ?? strings.missing_field}
+						{primaryName?.field ?? strings.missing_field}
 					</h2>
 
 					<p

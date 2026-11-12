@@ -1,6 +1,7 @@
 import type {SellerProduct} from "../api/types.ts";
 import {ChevronRight, Trash2} from "lucide-react";
-import {strings} from "../utils/localization.ts";
+import {getLocalizedField, strings} from "../utils/localization.ts";
+import {useLanguage} from "../utils/LanguageContext.tsx";
 
 interface SellerProductRowProps {
 	product: SellerProduct;
@@ -17,7 +18,14 @@ export default function SellerProductRow({
 											 onSelect,
 											 onDelete
 										 }: SellerProductRowProps) {
-	const name = product.product.names[0]?.name ?? "Unnamed Product";
+	const { language } = useLanguage();
+
+	const primaryName =
+		getLocalizedField(language, product.product.names.map(y => { return {
+			language: y.language, field: y.name
+		}}));
+
+	const name = primaryName?.field ?? strings.missing_field;
 
 	return (
 		<div

@@ -37,9 +37,7 @@ export default function AddRecipeModal({
 	async function handleSubmit(
 		request: RecipeRequest
 	) {
-
 		try {
-
 			setLoading(true);
 
 			const recipe =
@@ -48,24 +46,17 @@ export default function AddRecipeModal({
 				);
 
 			onCreated(recipe);
-
 			onClose();
-
 		} catch (err) {
-
 			console.error(err);
-
 		} finally {
-
 			setLoading(false);
 		}
 	}
 
 	return (
 		<div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-
-			<div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-4xl">
-
+			<div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-4xl flex flex-col max-h-[90vh]">
 				<h2 className="text-xl font-bold mb-6">
 					{strings.recipes.add_label}
 				</h2>
@@ -76,7 +67,6 @@ export default function AddRecipeModal({
 					onSubmit={handleSubmit}
 					onCancel={onClose}
 				/>
-
 			</div>
 
 		</div>

@@ -1,6 +1,7 @@
 import type {Recipe} from "../../api/types.ts";
 import {Pencil, Trash2} from "lucide-react";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface RecipeCardProps {
 	recipe: Recipe;
@@ -11,8 +12,13 @@ interface RecipeCardProps {
 
 export default function RecipeCard({recipe, onEdit, onDelete}: RecipeCardProps) {
 
+	const {language} = useLanguage();
+
+
 	const primaryName =
-		recipe.names.find((x) => x.language.code === 'en') ?? recipe.names[0];
+		getLocalizedField(language, recipe.names.map(x => { return {
+			language: x.language, field: x.name
+		}}));
 
 	return (
 		<div className="bg-white rounded-xl border border-zinc-100 shadow-sm px-5 py-4">
@@ -21,7 +27,7 @@ export default function RecipeCard({recipe, onEdit, onDelete}: RecipeCardProps) 
 
 				<div>
 					<h2 className="font-semibold">
-						{primaryName?.name ?? strings.missing_field}
+						{primaryName?.field ?? strings.missing_field}
 					</h2>
 
 					<p className="text-sm text-zinc-500 mt-1">

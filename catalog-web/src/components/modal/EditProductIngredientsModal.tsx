@@ -6,7 +6,8 @@ import {updateProduct} from "../../api/products.ts";
 import EntitySelector from "../product/EntitySelector.tsx";
 import MeasurementTable, {type MeasurementTableRow} from "../product/MeasurementTable.tsx";
 import {formatUnit, normalizeMeasurement} from "../../utils/units.ts";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface Props {
 	open: boolean;
@@ -25,6 +26,8 @@ export default function EditProductIngredientsModal({
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
 	const [rows, setRows] = useState<MeasurementTableRow[]>([]);
 
+	const { language } = useLanguage();
+
 	useEffect(() => {
 		async function load() {
 			const data =
@@ -34,12 +37,19 @@ export default function EditProductIngredientsModal({
 			setSelectedIds(product!.ingredients.map((x) => x.ingredient.id));
 			setRows(
 				product!.ingredients.map(
-					(x) => ({
-						id: x.ingredient.id,
-						label: x.ingredient.names[0]?.name ?? '',
-						amount: x.amount,
-						unit: formatUnit(x.unit_type.type)
-					})
+					(x) => {
+						const primaryName =
+							getLocalizedField(language, x.ingredient.names.map(y => { return {
+								language: y.language, field: y.name
+							}}));
+
+						return {
+							id: x.ingredient.id,
+							label: primaryName?.field ?? strings.missing_field,
+							amount: x.amount,
+							unit: formatUnit(x.unit_type.type)
+						}
+					}
 				)
 			);
 		}
@@ -63,10 +73,14 @@ export default function EditProductIngredientsModal({
 				...prev,
 				...missing.map((id) => {
 					const ingredient = ingredients.find((x) => x.id === id);
+					const primaryName =
+						getLocalizedField(language, ingredient!.names.map(y => { return {
+							language: y.language, field: y.name
+						}}));
 
 					return {
 						id,
-						label: ingredient?.names[0]?.name ?? '',
+						label: primaryName?.field ?? strings.missing_field,
 						amount: 0,
 						unit: 'g'
 					};
@@ -143,10 +157,17 @@ export default function EditProductIngredientsModal({
 			<div className="space-y-6">
 				<EntitySelector
 					label={strings.ingredients_title}
-					items={ingredients.map((x) => ({
-						id: x.id,
-						label: x.names[0]?.name ?? ''
-					}))}
+					items={ingredients.map((x) => {
+						const primaryName =
+							getLocalizedField(language, x.names.map(y => { return {
+								language: y.language, field: y.name
+							}}));
+
+						return {
+							id: x.id,
+							label: primaryName?.field ?? strings.missing_field
+						}
+					})}
 					selectedIds={selectedIds}
 					onChange={setSelectedIds}
 				/>

@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller {
     public function get(Request $request) {
-        return response()->json(User::whereNot('id', $request->user()->id)->get());
+        return response()->json(User::whereNot('id', $request->user()->id)->where('role', '=', 'admin')->get());
     }
 
 	public function create(Request $request) {

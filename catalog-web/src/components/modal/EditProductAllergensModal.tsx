@@ -4,7 +4,8 @@ import type {Allergen, Product} from "../../api/types.ts";
 import {getAllergens} from "../../api/allergens.ts";
 import {updateProduct} from "../../api/products.ts";
 import EntitySelector, {type EntitySelectorItem} from "../product/EntitySelector.tsx";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface EditProductAllergensModalProps {
 	open: boolean;
@@ -22,6 +23,8 @@ export default function EditProductAllergensModal({
 	const [allergens, setAllergens] = useState<Allergen[]>([]);
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
 	const [loading, setLoading] = useState(false);
+
+	const { language } = useLanguage();
 
 	useEffect(() => {
 		if (!open || !product)
@@ -53,10 +56,17 @@ export default function EditProductAllergensModal({
 		}
 	}
 
-	const items: EntitySelectorItem[] = allergens.map((allergen) => ({
-		id: allergen.id,
-		label: allergen.names[0]?.name ?? `${strings.missing_field} #${allergen.id}`
-	}));
+	const items: EntitySelectorItem[] = allergens.map((allergen) => {
+		const primaryName =
+			getLocalizedField(language, allergen.names.map(y => { return {
+				language: y.language, field: y.name
+			}}));
+
+		return {
+			id: allergen.id,
+			label: primaryName?.field ?? `${strings.missing_field} #${allergen.id}`
+		}
+	});
 
 	return (
 		<Modal open={open} title={strings.products.edit_allergens_button} onClose={onClose}>

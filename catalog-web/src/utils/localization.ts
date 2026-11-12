@@ -1,4 +1,5 @@
 import LocalizedStrings from 'react-localization';
+import type { Language } from '../api/types';
 
 export const supportedLanguages = [
 	{ code: "en", name: "English", flag: '🇺🇸' },
@@ -7,6 +8,18 @@ export const supportedLanguages = [
 ];
 
 export const LANGUAGE_STORAGE_KEY = 'catalog_language';
+
+export function getLocalizedField(language: string, fields: {language: Language, field: string}[]) {
+	if(fields.length == 0)
+		return null;
+
+	const filtered = fields.filter(x => x.language.code === language);
+
+	if(filtered.length == 0)
+		return fields[0];
+
+	return filtered[0];
+}
 
 export function getSavedLanguage(): string {
 	const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
@@ -73,6 +86,7 @@ export const strings = new LocalizedStrings({
 			delete_confirm: "Are you sure you want to delete this product?",
 			edit_images_button: "Edit Images",
 			edit_names_button: "Edit Names",
+			edit_categories_button: "Edit Categories",
 			edit_nutrition_button: "Edit Nutrition",
 			edit_allergens_button: "Edit Allergens",
 			edit_related_products_button: "Edit Related Products",
@@ -272,6 +286,7 @@ export const strings = new LocalizedStrings({
 			delete_confirm: "Ar tikrai norite ištrinti šį produktą?",
 			edit_images_button: "Redaguoti paveikslėlius",
 			edit_names_button: "Redaguoti pavadinimus",
+			edit_categories_button: "Redaguoti kategorijas",
 			edit_nutrition_button: "Redaguoti maistinę informaciją",
 			edit_allergens_button: "Redaguoti alergenus",
 			edit_related_products_button: "Redaguoti susijusius produktus",
@@ -471,6 +486,7 @@ export const strings = new LocalizedStrings({
 			delete_confirm: "Вы уверены, что хотите удалить этот товар?",
 			edit_images_button: "Редактировать изображения",
 			edit_names_button: "Редактировать названия",
+			edit_categories_button: "Редактировать категории",
 			edit_nutrition_button: "Редактировать пищевую ценность",
 			edit_allergens_button: "Редактировать аллергены",
 			edit_related_products_button: "Редактировать связанные товары",

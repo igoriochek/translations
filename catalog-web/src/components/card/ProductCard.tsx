@@ -1,7 +1,8 @@
 import type {ProductListItem} from "../../api/types.ts";
 
 import {useNavigate} from "react-router-dom";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface ProductCardProps {
 	product: ProductListItem;
@@ -10,8 +11,13 @@ interface ProductCardProps {
 export default function ProductCard({product}: ProductCardProps) {
 
 	const navigate = useNavigate();
+	const {language} = useLanguage();
 
-	const primaryName = product.names[0];
+
+	const primaryName =
+		getLocalizedField(language, product.names.map(x => { return {
+			language: x.language, field: x.name
+		}}));
 	const primaryImage = product.images[0];
 
 	return (
@@ -43,7 +49,7 @@ export default function ProductCard({product}: ProductCardProps) {
 				{primaryImage ? (
 					<img
 						src={primaryImage.image_url}
-						alt={primaryName?.name}
+						alt={primaryName?.field}
 						loading="lazy"
 						className="
                             w-full
@@ -62,7 +68,7 @@ export default function ProductCard({product}: ProductCardProps) {
 			<div className="p-5 space-y-4">
 				<div>
 					<h2 className="font-semibold text-lg line-clamp-2">
-						{primaryName?.name ?? strings.missing_field}
+						{primaryName?.field ?? strings.missing_field}
 					</h2>
 
 					<p className="text-sm text-zinc-500 mt-1">
@@ -81,7 +87,10 @@ export default function ProductCard({product}: ProductCardProps) {
 					{product.categories
 						.slice(0, 3)
 						.map((category) => {
-							const categoryName = category.names[0];
+							const categoryName =
+								getLocalizedField(language, category.names.map(x => {
+									return {language: x.language, field: x.name}
+								}))
 							return (
 								<div
 									key={category.id}
@@ -95,7 +104,7 @@ export default function ProductCard({product}: ProductCardProps) {
 										font-medium
 									"
 								>
-									{categoryName?.name ?? strings.missing_field}
+									{categoryName?.field ?? strings.missing_field}
 								</div>
 							);
 						})}

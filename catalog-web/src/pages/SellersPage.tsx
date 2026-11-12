@@ -18,8 +18,8 @@ import ConfirmModal from "../components/modal/ConfirmModal.tsx";
 import SellerProductRow from "../components/SellerProductRow.tsx";
 import AddSellerProductModal from "../components/modal/AddSellerProductModal.tsx";
 import AddRecommendationModal from "../components/modal/AddRecommendationModal.tsx";
-import {strings} from "../utils/localization.ts";
 import {useLanguage} from "../utils/LanguageContext.tsx";
+import {getLocalizedField, strings} from "../utils/localization.ts";
 
 export default function SellersPage() {
 
@@ -47,7 +47,7 @@ export default function SellersPage() {
 	const [storesFilter, setStoresFilter] = useState("");
 	const [productsFilter, setProductsFilter] = useState("");
 
-	useLanguage();
+	const { language } = useLanguage();
 
 	useEffect(() => {
 		async function loadSellers() {
@@ -355,18 +355,20 @@ export default function SellersPage() {
 													<div className="flex flex-col space-y-2">
 														{filterProducts(
 															selectedSeller.products
-														).map((product) => (
-															<SellerProductRow
-																key={product.id}
-																product={product}
-																selected={selectedProduct?.id === product.id}
-																onSelect={() => setSelectedProduct(product)}
-																onDelete={() => {
-																	setSelectedProduct(product);
-																	setShowDeleteProductModal(true);
-																}}
-															/>
-														))}
+														).map((product) => {
+															return (
+																<SellerProductRow
+																	key={product.id}
+																	product={product}
+																	selected={selectedProduct?.id === product.id}
+																	onSelect={() => setSelectedProduct(product)}
+																	onDelete={() => {
+																		setSelectedProduct(product);
+																		setShowDeleteProductModal(true);
+																	}}
+																/>
+															)
+														})}
 													</div>
 												)}
 											</div>
@@ -404,7 +406,11 @@ export default function SellersPage() {
 																className="flex items-center"
 															>
 																<p className="flex-1 text-zinc-500">
-																	{recommendation.names[0]?.name}
+																	{getLocalizedField(language, recommendation.names.map(y => {
+																		return {
+																			language: y.language, field: y.name
+																		}
+																	}))?.field ?? strings.missing_field}
 																</p>
 
 																<button

@@ -4,13 +4,15 @@ import type {
 	Recipe
 } from "../../api/types.ts";
 import {getRecipesByIngredient} from "../../api/recipes.ts";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface ProductRecipesSectionProps {
 	product: Product;
 }
 
 export default function ProductRecipesSection({product}: ProductRecipesSectionProps) {
+	const {language} = useLanguage();
 
 	const [recipes, setRecipes] =
 		useState<Recipe[]>([]);
@@ -53,17 +55,24 @@ export default function ProductRecipesSection({product}: ProductRecipesSectionPr
 				</p>
 			) : (
 				<div className="space-y-2">
-					{recipes.map(recipe => (
-						<div
-							key={recipe.id}
-							className="flex p-3 rounded-xl border border-zinc-200"
-						>
-							{
-								recipe.names[0]?.name ??
-								strings.missing_field
-							}
-						</div>
-					))}
+					{recipes.map(recipe => {
+						const primaryName =
+							getLocalizedField(language, recipe.names.map(x => { return {
+								language: x.language, field: x.name
+							}}));
+
+						return (
+							<div
+								key={recipe.id}
+								className="flex p-3 rounded-xl border border-zinc-200"
+							>
+								{
+									primaryName?.field ??
+									strings.missing_field
+								}
+							</div>
+						)
+					})}
 				</div>
 			)}
 		</section>

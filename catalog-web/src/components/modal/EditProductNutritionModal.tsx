@@ -6,7 +6,8 @@ import {updateProduct} from "../../api/products.ts";
 import EntitySelector from "../product/EntitySelector.tsx";
 import MeasurementTable, {type MeasurementTableRow} from "../product/MeasurementTable.tsx";
 import {formatUnit, normalizeMeasurement} from "../../utils/units.ts";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface Props {
 	open: boolean;
@@ -25,6 +26,8 @@ export default function EditProductNutritionModal({
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
 	const [rows, setRows] = useState<MeasurementTableRow[]>([]);
 
+	const { language } = useLanguage();
+
 	useEffect(() => {
 		async function load() {
 			const data = await getNutritionalTypes();
@@ -32,12 +35,19 @@ export default function EditProductNutritionModal({
 			setSelectedIds(product!.nutritional_measurements.map((x) => x.type.id));
 			setRows(
 				product!.nutritional_measurements.map(
-					(x) => ({
-						id: x.type.id,
-						label: x.type.labels[0]?.label ?? '',
-						amount: x.amount,
-						unit: formatUnit(x.unit_type.type)
-					})
+					(x) => {
+						const primaryName =
+							getLocalizedField(language, x.type.labels.map(y => { return {
+								language: y.language, field: y.label
+							}}));
+
+						return {
+							id: x.type.id,
+							label: primaryName?.field ?? strings.missing_field,
+							amount: x.amount,
+							unit: formatUnit(x.unit_type.type)
+						}
+					}
 				)
 			);
 		}
@@ -59,9 +69,14 @@ export default function EditProductNutritionModal({
 				...prev,
 				...missing.map((id) => {
 					const type = types.find((x) => x.id === id);
+					const primaryName =
+						getLocalizedField(language, type!.labels.map(y => { return {
+							language: y.language, field: y.label
+						}}));
+
 					return {
 						id,
-						label: type?.labels[0]?.label ?? '',
+						label: primaryName?.field ?? strings.missing_field,
 						amount: 0,
 						unit: 'g'
 					};
@@ -109,10 +124,17 @@ export default function EditProductNutritionModal({
 			<div className="space-y-6">
 				<EntitySelector
 					label={strings.products.nutritional_types}
-					items={types.map((x) => ({
-						id: x.id,
-						label: x.labels[0]?.label ?? ''
-					}))}
+					items={types.map((x) => {
+						const primaryName =
+							getLocalizedField(language, x.labels.map(y => { return {
+								language: y.language, field: y.label
+							}}));
+
+						return {
+							id: x.id,
+							label: primaryName?.field ?? strings.missing_field,
+						}
+					})}
 					selectedIds={selectedIds}
 					onChange={setSelectedIds}
 				/>

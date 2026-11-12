@@ -1,6 +1,7 @@
 import type { Allergen } from "../../api/types.ts";
 import { Pencil, Trash2 } from "lucide-react";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface AllergenCardProps {
 	allergen: Allergen;
@@ -9,9 +10,13 @@ interface AllergenCardProps {
 }
 
 export default function AllergenCard({ allergen, onEdit, onDelete }: AllergenCardProps) {
+	const {language} = useLanguage();
+
 
 	const primaryName =
-		allergen.names.find((x) => x.language.code === 'en') ?? allergen.names[0];
+		getLocalizedField(language, allergen.names.map(x => { return {
+			language: x.language, field: x.name
+		}}));
 
 	return (
 		<div
@@ -30,7 +35,7 @@ export default function AllergenCard({ allergen, onEdit, onDelete }: AllergenCar
 				<div>
 
 					<h2 className="font-semibold">
-						{primaryName?.name ??
+						{primaryName?.field ??
 							strings.missing_field}
 					</h2>
 

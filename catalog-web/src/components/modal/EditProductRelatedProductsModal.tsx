@@ -3,7 +3,8 @@ import Modal from "./Modal.tsx";
 import type {Product, ProductListItem} from "../../api/types.ts";
 import {getAllProducts, updateProduct} from "../../api/products.ts";
 import EntitySelector, {type EntitySelectorItem} from "../product/EntitySelector.tsx";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface EditProductRelatedProductsModalProps {
 	open: boolean;
@@ -21,6 +22,8 @@ export default function EditProductRelatedProductsModal({
 	const [products, setProducts] = useState<ProductListItem[]>([]);
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
 	const [loading, setLoading] = useState(false);
+
+	const { language } = useLanguage();
 
 	useEffect(() => {
 		if (!open || !product)
@@ -55,10 +58,17 @@ export default function EditProductRelatedProductsModal({
 
 	const items: EntitySelectorItem[] =
 		products.filter((x) => x.id !== product?.id)
-			.map((product) => ({
-				id: product.id,
-				label: product.names[0]?.name ?? `${strings.missing_field} #${product.id}`
-			}));
+			.map((product) => {
+				const primaryName =
+					getLocalizedField(language, product.names.map(y => { return {
+						language: y.language, field: y.name
+					}}));
+
+				return{
+					id: product.id,
+					label: primaryName?.field ?? `${strings.missing_field} #${product.id}`
+				}
+			});
 
 	return (
 		<Modal open={open} title={strings.products.edit_related_products_button} onClose={onClose}>

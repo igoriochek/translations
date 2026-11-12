@@ -188,37 +188,39 @@ export default function RecipeForm({
 	}
 
 	return (
-		<div className="space-y-6">
-			<TranslationInputs
-				languages={languages}
-				translations={names}
-				onChange={setNames}
-				label={strings.recipes.name_translations_label}
-				placeholder={strings.recipes.name_translations_placeholder}
-			/>
+		<div className="space-y-6 h-full flex flex-col flex-1 min-h-0">
+			<div className="flex-1 min-h-0 overflow-y-auto hide-scrollbar">
+				<TranslationInputs
+					languages={languages}
+					translations={names}
+					onChange={setNames}
+					label={strings.recipes.name_translations_label}
+					placeholder={strings.recipes.name_translations_placeholder}
+				/>
 
-			<TranslationInputs
-				languages={languages}
-				translations={contents}
-				onChange={setContents}
-				label={strings.recipes.contents_translations_label}
-				placeholder={strings.recipes.contents_translations_placeholder}
-				multiline
-			/>
+				<TranslationInputs
+					languages={languages}
+					translations={contents}
+					onChange={setContents}
+					label={strings.recipes.contents_translations_label}
+					placeholder={strings.recipes.contents_translations_placeholder}
+					multiline
+				/>
 
-			<RecipeIngredientSelector
-				products={products}
-				search={search}
-				onSearchChange={setSearch}
-				selectedIngredients={
-					selectedIngredients
-				}
-				onIngredientsChange={
-					setSelectedIngredients
-				}
-			/>
+				<RecipeIngredientSelector
+					products={products}
+					search={search}
+					onSearchChange={setSearch}
+					selectedIngredients={
+						selectedIngredients
+					}
+					onIngredientsChange={
+						setSelectedIngredients
+					}
+				/>
+			</div>
 
-			<div className="flex justify-end gap-2">
+			<div className="flex justify-end gap-2 shrink-0">
 				{onCancel && (
 					<button
 						type="button"

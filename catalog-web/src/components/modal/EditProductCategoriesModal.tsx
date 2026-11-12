@@ -4,7 +4,8 @@ import type {Category, Product} from "../../api/types.ts";
 import {getCategories} from "../../api/categories.ts";
 import {updateProduct} from "../../api/products.ts";
 import EntitySelector, {type EntitySelectorItem} from "../product/EntitySelector.tsx";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface EditProductCategoriesModalProps {
 	open: boolean;
@@ -22,6 +23,8 @@ export default function EditProductCategoriesModal({
 	const [categories, setCategories] = useState<Category[]>([]);
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
 	const [loading, setLoading] = useState(false);
+
+	const {language} = useLanguage();
 
 	useEffect(() => {
 		if (!open || !product)
@@ -53,13 +56,20 @@ export default function EditProductCategoriesModal({
 		}
 	}
 
-	const items: EntitySelectorItem[] = categories.map((category) => ({
-		id: category.id,
-		label: category.names[0]?.name ?? `${strings.missing_field} #${category.id}`
-	}));
+	const items: EntitySelectorItem[] = categories.map((category) => {
+		const primaryName =
+			getLocalizedField(language, category.names.map(x => { return {
+				language: x.language, field: x.name
+			}}));
+
+		return {
+			id: category.id,
+			label: primaryName?.field ?? `${strings.missing_field} #${category.id}`
+		}
+	});
 
 	return (
-		<Modal open={open} title="Edit Categories" onClose={onClose}>
+		<Modal open={open} title={strings.products.edit_categories_button} onClose={onClose}>
 			<div className="space-y-6">
 				<EntitySelector
 					label={strings.categories_title}

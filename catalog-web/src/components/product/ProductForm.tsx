@@ -26,13 +26,16 @@ import EntitySelector from "./EntitySelector.tsx";
 import MeasurementTable, {type MeasurementTableRow} from "./MeasurementTable.tsx";
 import ProductImageUploader from "./ProductImageUploader.tsx";
 import {normalizeMeasurement} from "../../utils/units.ts";
-import {strings} from "../../utils/localization.ts";
+import {getLocalizedField, strings} from "../../utils/localization.ts";
+import {useLanguage} from "../../utils/LanguageContext.tsx";
 
 interface ProductFormProps {
 	onCreated: (product: Product) => void;
 }
 
 export default function ProductForm({onCreated}: ProductFormProps) {
+	const {language} = useLanguage();
+
 	const [languages, setLanguages] = useState<Language[]>([]);
 	const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
@@ -60,9 +63,13 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 			const additions =
 				missing.map((id) => {
 					const ingredient = ingredients.find((x) => x.id === id);
+					const ingredientName =
+						getLocalizedField(language, ingredient!.names.map(x => {
+							return {language: x.language, field: x.name}
+						}));
 					return {
 						id,
-						label: ingredient?.names[0]?.name ?? '',
+						label: ingredientName?.field ?? strings.missing_field,
 						amount: 0,
 						unit: 'g'
 					};
@@ -81,9 +88,14 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 			const additions = missing.map((id) => {
 				const type = nutritionTypes.find((x) => x.id === id);
 
+				const nutritionName =
+					getLocalizedField(language, type!.labels.map(x => {
+						return {language: x.language, field: x.label}
+					}));
+
 				return {
 					id,
-					label: type?.labels[0]?.label ?? '',
+					label: nutritionName?.field ?? strings.missing_field,
 					amount: 0,
 					unit: 'g'
 				};
@@ -279,30 +291,51 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 
 			<EntitySelector
 				label={strings.categories_title}
-				items={categories.map((x) => ({
-					id: x.id,
-					label: x.names[0]?.name ?? ''
-				}))}
+				items={categories.map((x) => {
+					const name =
+						getLocalizedField(language, x!.names.map(y => {
+							return {language: y.language, field: y.name}
+						}));
+
+					return {
+                        id: x.id,
+                        label: name?.field ?? strings.missing_field
+                    }
+				})}
 				selectedIds={categoryIds}
 				onChange={setCategoryIds}
 			/>
 
 			<EntitySelector
 				label={strings.allergens_title}
-				items={allergens.map((x) => ({
-					id: x.id,
-					label: x.names[0]?.name ?? ''
-				}))}
+				items={allergens.map((x) => {
+					const name =
+						getLocalizedField(language, x!.names.map(y => {
+							return {language: y.language, field: y.name}
+						}));
+
+					return {
+						id: x.id,
+						label: name?.field ?? strings.missing_field
+					}
+				})}
 				selectedIds={allergenIds}
 				onChange={setAllergenIds}
 			/>
 
 			<EntitySelector
 				label={strings.ingredients_title}
-				items={ingredients.map((x) => ({
-					id: x.id,
-					label: x.names[0]?.name ?? ''
-				}))}
+				items={ingredients.map((x) => {
+					const name =
+						getLocalizedField(language, x!.names.map(y => {
+							return {language: y.language, field: y.name}
+						}));
+
+					return {
+						id: x.id,
+						label: name?.field ?? strings.missing_field
+					}
+				})}
 				selectedIds={ingredientRows.map((x) => x.id)}
 				onChange={syncIngredientRows}
 			/>
@@ -316,10 +349,17 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 
 			<EntitySelector
 				label={strings.nutritional_types_title}
-				items={nutritionTypes.map((x) => ({
-					id: x.id,
-					label: x.labels[0]?.label ?? ''
-				}))}
+				items={nutritionTypes.map((x) => {
+					const name =
+						getLocalizedField(language, x!.labels.map(y => {
+							return {language: y.language, field: y.label}
+						}));
+
+					return {
+						id: x.id,
+						label: name?.field ?? strings.missing_field
+					}
+				})}
 				selectedIds={
 					nutritionRows.map((x) => x.id)
 				}
@@ -337,10 +377,17 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 
 			<EntitySelector
 				label={strings.products.related_products}
-				items={products.map((x) => ({
-					id: x.id,
-					label: x.names[0]?.name ?? ''
-				}))}
+				items={products.map((x) => {
+					const name =
+						getLocalizedField(language, x!.names.map(y => {
+							return {language: y.language, field: y.name}
+						}));
+
+					return {
+						id: x.id,
+						label: name?.field ?? strings.missing_field
+					}
+				})}
 				selectedIds={relatedProductIds}
 				onChange={setRelatedProductIds}
 			/>
