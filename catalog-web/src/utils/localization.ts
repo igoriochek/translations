@@ -15,10 +15,15 @@ export function getLocalizedField(language: string, fields: {language: Language,
 
 	const filtered = fields.filter(x => x.language.code === language);
 
-	if(filtered.length == 0)
-		return fields[0];
+	if(filtered.length != 0)
+		return filtered[0];
 
-	return filtered[0];
+	const fallback = fields.filter(x => x.language.code === 'en');
+
+	if(fallback.length != 0)
+		return fallback[0];
+
+	return fields[0];
 }
 
 export function getSavedLanguage(): string {
