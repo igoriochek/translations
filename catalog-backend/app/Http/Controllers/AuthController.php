@@ -12,6 +12,12 @@ class AuthController extends Controller
         return response()->json($request->user());
     }
 
+    public function isAdmin(Request $request) {
+        return response()->json([
+            'response' => $request->user()->role == 'admin'
+        ]);
+    }
+
     public function register(Request $request)
     {
         $request->validate([

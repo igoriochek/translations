@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/certifications', [CertificationController::class, 'index']);
 
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/user/is-admin', [AuthController::class, 'isAdmin']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/sellers/{id}/reviews', [UserController::class, 'getSellerReviews']);

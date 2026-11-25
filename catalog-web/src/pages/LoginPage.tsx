@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {login} from '../api/auth';
+import {isAdmin, login} from '../api/auth';
 import {strings, supportedLanguages} from "../utils/localization.ts";
 import {useLanguage} from "../utils/LanguageContext.tsx";
 
@@ -17,6 +17,13 @@ export default function LoginPage() {
 		try {
 
 			const data = await login(email, password);
+
+			const adminCheck = await isAdmin(data.token);
+
+			if (!adminCheck) {
+				alert('You do not have administrator permissions.');
+				return;
+			}
 
 			localStorage.setItem('token', data.token);
 
