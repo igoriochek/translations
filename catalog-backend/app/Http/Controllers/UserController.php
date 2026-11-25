@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product\Product;
+use App\Models\Product\ProductReview;
 use App\Models\User\Manufacturer;
 use App\Models\User\ManufacturerReview;
 use App\Models\User\ScanHistory;
@@ -19,7 +20,7 @@ class UserController extends Controller {
 
 	public function create(Request $request) {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:60',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6'
         ]);
@@ -61,8 +62,8 @@ class UserController extends Controller {
 
     public function createSellerReview($id, Request $request) {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string|max:1000'
+            'title' => 'required|string|max:60',
+            'content' => 'required|string|max:250'
         ]);
 
         if(!Seller::find($id)->exists())
@@ -87,8 +88,8 @@ class UserController extends Controller {
         $request->merge(['id' => $id]);
         $validated = $request->validate([
             'id' => 'exists:seller_reviews,id',
-            'title' => 'required|string|max:255',
-            'content' => 'required|string|max:1000'
+            'title' => 'required|string|max:60',
+            'content' => 'required|string|max:250'
         ]);
 
         $sellerReview = SellerReview::find($validated['id']);
@@ -128,8 +129,8 @@ class UserController extends Controller {
 
     public function createManufacturerReview($id, Request $request) {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string|max:1000'
+            'title' => 'required|string|max:60',
+            'content' => 'required|string|max:250'
         ]);
 
         if(Manufacturer::find($id) == null)
@@ -154,8 +155,8 @@ class UserController extends Controller {
         $request->merge(['id' => $id]);
         $validated = $request->validate([
             'id' => 'exists:manufacturer_reviews,id',
-            'title' => 'required|string|max:255',
-            'content' => 'required|string|max:1000'
+            'title' => 'required|string|max:60',
+            'content' => 'required|string|max:250'
         ]);
 
         $manufacturerReview = ManufacturerReview::find($validated['id']);
@@ -181,6 +182,84 @@ class UserController extends Controller {
             return response()->json(['message' => 'Unauthorized'], 401);
 
         $manufacturerReview->delete();
+        return response()->json(['message' => 'Deleted']);
+    }
+
+    public function getProductReviews($id, Request $request) {
+        $request->merge(['id' => $id]);
+        $validated = $request->validate([
+            'id' => 'required|exists:products,id'
+        ]);
+
+        response()->json(ProductReview::where(['product_id' => $id])->get());
+    }
+
+    public function addProductReview($id, Request $request) {
+        $request->merge(['id' => $id]);
+        $validated = $request->validate([
+            'id' => 'required|exists:products,id',
+            'purchased' => 'required|boolean',
+            'recommended' => 'required|boolean',
+            'title' => 'required|string|max:60',
+            'content' => 'required|string|max:250',
+            'rating' => 'required|integer|min:1|max:5'
+        ]);
+
+        if(!$request->user())
+            return response()->json(['message' => 'Unauthorized'], 401);
+
+        $user = $request->user();
+
+        $review = ProductReview::create([
+            'user_id' => $user->id,
+            'product_id' => $validated['id'],
+            'purchased' => $validated['purchased'],
+            'recommended' => $validated['recommended'],
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'rating' => $validated['rating']
+        ]);
+
+        return response()->json($review, 201);
+    }
+
+    public function updateProductReview($id, Request $request) {
+        $request->merge(['id' => $id]);
+        $validated = $request->validate([
+            'id' => 'required|exists:product_reviews,id',
+            'title' => 'required|string|max:60',
+            'content' => 'required|string|max:250',
+            'purchased' => 'required|boolean',
+            'recommended' => 'required|boolean',
+            'rating' => 'required|integer|min:1|max:5'
+        ]);
+
+        $review = ProductReview::findOrFail($validated['id']);
+
+        if(!$request->user() || $request->user()->id != $review->user_id)
+            return response()->json(['message' => 'Unauthorized'], 401);
+
+        $review->title = $validated['title'];
+        $review->content = $validated['content'];
+        $review->purchased = $validated['purchased'];
+        $review->recommended = $validated['recommended'];
+        $review->rating = $validated['rating'];
+        $review->save();
+
+        return response()->json($review);
+    }
+
+    public function deleteProductReview($id, Request $request) {
+        $request->merge(['id' => $id]);
+        $validated = $request->validate([
+            'id' => 'required|exists:product_reviews,id'
+        ]);
+
+        $review = ProductReview::findOrFail($validated['id']);
+        if($review->user_id != $request->user()->id)
+            return response()->json(['message' => 'Unauthorized'], 401);
+
+        $review->delete();
         return response()->json(['message' => 'Deleted']);
     }
 

@@ -49,6 +49,18 @@ export interface Product {
     images: Image[];
     sellers: SellerProduct[];
     usage_instructions: UsageInstruction[];
+    certifications: Certification[];
+    reviews: ProductReview[];
+}
+
+export interface ProductReview {
+    id: number;
+    user: User;
+    purchased: boolean;
+    recommended: boolean;
+    title: string;
+    content: string;
+    rating: number;
 }
 
 export interface UsageInstruction {
@@ -107,6 +119,12 @@ export interface AllergenName {
     id: number;
     name: string;
     language: Language;
+}
+
+export interface Certification {
+    id: number;
+    label: string;
+    badge_url: string;
 }
 
 export interface ProductName {

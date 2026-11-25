@@ -9,18 +9,20 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.time.Instant
 
 object ApiClient {
-    private const val API_URL = BuildConfig.API_URL;
-
-    private val logging = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
+    private const val API_URL = BuildConfig.API_URL
 
     val gson = GsonBuilder()
         .registerTypeAdapter(Instant::class.java, InstantTypeAdapter())
         .create()
 
     private val client = OkHttpClient.Builder()
-        .addInterceptor(logging)
+        .addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .header("Accept", "application/json")
+                .build()
+
+            chain.proceed(request)
+        }
         .build()
 
     val retrofit: ApiService = Retrofit.Builder()

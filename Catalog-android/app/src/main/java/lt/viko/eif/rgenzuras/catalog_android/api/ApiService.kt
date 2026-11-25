@@ -5,12 +5,14 @@ import lt.viko.eif.rgenzuras.catalog_android.schema.Category
 import lt.viko.eif.rgenzuras.catalog_android.schema.Language
 import lt.viko.eif.rgenzuras.catalog_android.schema.ManufacturerReview
 import lt.viko.eif.rgenzuras.catalog_android.schema.Product
+import lt.viko.eif.rgenzuras.catalog_android.schema.ProductReview
 import lt.viko.eif.rgenzuras.catalog_android.schema.Recipe
 import lt.viko.eif.rgenzuras.catalog_android.schema.RelatedProduct
 import lt.viko.eif.rgenzuras.catalog_android.schema.ScanHistory
 import lt.viko.eif.rgenzuras.catalog_android.schema.Seller
 import lt.viko.eif.rgenzuras.catalog_android.schema.SellerReview
 import lt.viko.eif.rgenzuras.catalog_android.schema.User
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -22,10 +24,10 @@ import retrofit2.http.Query
 
 interface ApiService {
     @POST("/api/register")
-    suspend fun register(@Body request: RegisterRequest): LoginResponse
+    suspend fun register(@Body request: RegisterRequest): Response<LoginResponse>
 
     @POST("/api/login")
-    suspend fun login(@Body request: LoginRequest): LoginResponse
+    suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
     @POST("/api/logout")
     suspend fun logout(@Header("Authorization") token: String)
@@ -112,4 +114,19 @@ interface ApiService {
 
     @POST("api/scans/{productId}")
     suspend fun addScanResult(@Header("Authorization") token: String, @Path("productId") productId: Int): ScanHistory
+
+    @POST("api/products/{productId}/reviews")
+    suspend fun createProductReview(
+        @Header("Authorization") token: String, @Path("productId") productId: Int, @Body review: ProductReviewRequest
+    ) : ProductReview
+
+    @PUT("api/product-reviews/{reviewId}")
+    suspend fun updateProductReview(
+        @Header("Authorization") token: String, @Path("reviewId") reviewId: Int, @Body review: ProductReviewRequest
+    ) : ProductReview
+
+    @DELETE("api/product-reviews/{reviewId}")
+    suspend fun deleteProductReview(
+        @Header("Authorization") token: String, @Path("reviewId") reviewId: Int
+    )
 }

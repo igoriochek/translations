@@ -12,14 +12,8 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationRail
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -43,11 +37,13 @@ import kotlinx.coroutines.launch
 import lt.viko.eif.rgenzuras.catalog_android.api.ApiClient
 import lt.viko.eif.rgenzuras.catalog_android.api.getPrefs
 import lt.viko.eif.rgenzuras.catalog_android.api.getToken
+import lt.viko.eif.rgenzuras.catalog_android.modals.EditReviewModal
+import lt.viko.eif.rgenzuras.catalog_android.modals.EditReviewModalProps
 import lt.viko.eif.rgenzuras.catalog_android.modals.ManufacturerModal
 import lt.viko.eif.rgenzuras.catalog_android.modals.ManufacturerModalProps
 import lt.viko.eif.rgenzuras.catalog_android.modals.Modal
-import lt.viko.eif.rgenzuras.catalog_android.modals.ProductFiltersModal
-import lt.viko.eif.rgenzuras.catalog_android.modals.ProductFiltersModalProps
+import lt.viko.eif.rgenzuras.catalog_android.modals.ProductReviewsModal
+import lt.viko.eif.rgenzuras.catalog_android.modals.ProductReviewsModalProps
 import lt.viko.eif.rgenzuras.catalog_android.modals.RecipeModal
 import lt.viko.eif.rgenzuras.catalog_android.modals.RecipeModalProps
 import lt.viko.eif.rgenzuras.catalog_android.modals.ScanHistoryModal
@@ -77,12 +73,11 @@ import lt.viko.eif.rgenzuras.catalog_android.views.PrefsMenu
 import lt.viko.eif.rgenzuras.catalog_android.views.PrefsScreen
 import lt.viko.eif.rgenzuras.catalog_android.views.ProductMenu
 import lt.viko.eif.rgenzuras.catalog_android.views.ProductScreen
-import lt.viko.eif.rgenzuras.catalog_android.views.ProductsMenu
-import lt.viko.eif.rgenzuras.catalog_android.views.ProductsScreen
 import lt.viko.eif.rgenzuras.catalog_android.views.RegisterMenu
 import lt.viko.eif.rgenzuras.catalog_android.views.RegisterScreen
 import lt.viko.eif.rgenzuras.catalog_android.views.SettingsMenu
 import lt.viko.eif.rgenzuras.catalog_android.views.SettingsScreen
+import java.text.DecimalFormat
 
 lateinit var backStack: NavBackStack<NavKey>
 lateinit var scope: CoroutineScope
@@ -145,11 +140,6 @@ fun Navigation() {
                 if (authenticated) {
                     val token = getToken(context)!!
                     productsViewModel = ProductsViewModel(api, token)
-                    productsViewModel.applyFilters(
-                        query = "",
-                        categories = api.getCategories("Bearer $token").map { it.id },
-                        allergens = api.getAllergens("Bearer $token").map { it.id }
-                    )
                 }
                 val prefs = getPrefs(context)
                 backStack.clear()
@@ -186,8 +176,6 @@ fun Navigation() {
         sellerViewModel = SellerViewModel(api, token)
         recipeViewModel = RecipeViewModel(api, token)
     }
-
-    val screenWidth = LocalConfiguration.current.screenWidthDp
 
     Box(modifier = Modifier.fillMaxSize()) {
         when {
@@ -242,10 +230,6 @@ fun NavigationContent() {
                 PrefsMenu()
             }
 
-            entry<ProductsScreen> {
-                ProductsMenu()
-            }
-
             entry<BarcodeScannerScreen> {
                 BarcodeScannerMenu()
             }
@@ -272,10 +256,6 @@ fun ModalManager() {
         }
 
     when (activeModal.value) {
-        ProductFiltersModalProps -> {
-            ProductFiltersModal()
-        }
-
         is ManufacturerModalProps -> {
             val props = activeModal.value as ManufacturerModalProps
 
@@ -298,6 +278,24 @@ fun ModalManager() {
             ScanHistoryModal()
         }
 
+        is ProductReviewsModalProps -> {
+            val props = activeModal.value as ProductReviewsModalProps
+
+            ProductReviewsModal(props.product)
+        }
+
+        is EditReviewModalProps -> {
+            val props = activeModal.value as EditReviewModalProps
+
+            EditReviewModal(props.product)
+        }
+
         else -> {}
     }
+}
+
+fun Float.format(fracDigits: Int): String {
+    val df = DecimalFormat()
+    df.maximumFractionDigits = fracDigits
+    return df.format(this)
 }

@@ -19,13 +19,13 @@ if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
 android {
     namespace = "lt.viko.eif.rgenzuras.catalog"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     defaultConfig {
         applicationId = "lt.viko.eif.rgenzuras.catalog_android"
         minSdk = 28
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -60,6 +60,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

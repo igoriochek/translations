@@ -55,6 +55,7 @@ export async function updateProduct(
 		categories: number[];
 		allergens: number[];
 		related_products: number[];
+		certifications: number[];
 	}> | { ingredients: ProductIngredientRequest[] } | { nutritional_measurements: ProductNutritionRequest[] }
 ) {
 	const response = await api.put<Product>(`/admin/products/${id}`, data);

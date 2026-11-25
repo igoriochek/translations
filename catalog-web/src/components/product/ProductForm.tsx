@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 
 import type {
 	Allergen,
-	Category,
+	Category, Certification,
 	Ingredient,
 	Language,
 	Manufacturer,
@@ -28,6 +28,7 @@ import ProductImageUploader from "./ProductImageUploader.tsx";
 import {normalizeMeasurement} from "../../utils/units.ts";
 import {getLocalizedField, strings} from "../../utils/localization.ts";
 import {useLanguage} from "../../utils/LanguageContext.tsx";
+import {getCertifications} from "../../api/certifications.ts";
 
 interface ProductFormProps {
 	onCreated: (product: Product) => void;
@@ -39,6 +40,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 	const [languages, setLanguages] = useState<Language[]>([]);
 	const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
+	const [certifications, setCertifications] = useState<Certification[]>([]);
 	const [allergens, setAllergens] = useState<Allergen[]>([]);
 	const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 	const [nutritionTypes, setNutritionTypes] = useState<NutritionalType[]>([]);
@@ -48,6 +50,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 	const [manufacturerId, setManufacturerId] = useState<number>(0);
 	const [names, setNames] = useState<TranslationInput[]>([]);
 	const [categoryIds, setCategoryIds] = useState<number[]>([]);
+	const [certificationIds, setCertificationIds] = useState<number[]>([]);
 	const [allergenIds, setAllergenIds] = useState<number[]>([]);
 	const [relatedProductIds, setRelatedProductIds] = useState<number[]>([]);
 	const [ingredientRows, setIngredientRows] = useState<MeasurementTableRow[]>([]);
@@ -170,7 +173,8 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 				allergensData,
 				ingredientsData,
 				nutritionData,
-				productsData
+				productsData,
+				certificationsData
 			] = await Promise.all([
 				getLanguages(),
 				getManufacturers(),
@@ -178,12 +182,14 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 				getAllergens(),
 				getIngredients(),
 				getNutritionalTypes(),
-				getAllProducts()
+				getAllProducts(),
+				getCertifications()
 			]);
 
 			setLanguages(languagesData);
 			setManufacturers(manufacturersData);
 			setCategories(categoriesData);
+			setCertifications(certificationsData)
 			setAllergens(allergensData);
 			setIngredients(ingredientsData);
 			setNutritionTypes(nutritionData);
@@ -232,6 +238,7 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 			)
 		);
 		formData.append('categories', JSON.stringify(categoryIds));
+		formData.append('certifications', JSON.stringify(certificationIds));
 		formData.append('allergens', JSON.stringify(allergenIds));
 		formData.append('related_products', JSON.stringify(relatedProductIds));
 		formData.append('ingredients', JSON.stringify(ingredientPayload));
@@ -304,6 +311,16 @@ export default function ProductForm({onCreated}: ProductFormProps) {
 				})}
 				selectedIds={categoryIds}
 				onChange={setCategoryIds}
+			/>
+
+			<EntitySelector
+				label={strings.certifications_title}
+				items={certifications.map((certification) => ({
+					id: certification.id,
+					label: certification.label
+				}))}
+				selectedIds={certificationIds}
+				onChange={setCertificationIds}
 			/>
 
 			<EntitySelector

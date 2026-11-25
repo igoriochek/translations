@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SellerReview extends Model {
 	protected $fillable = [
-		'user_id',
-		'seller_id',
-		'title',
-		'content',
-	];
+        'user_id',
+        'seller_id',
+        'title',
+        'content',
+        'product_id',
+        'purchased',
+        'recommended',
+        'rating',
+    ];
 
     protected $with = [
         'user'

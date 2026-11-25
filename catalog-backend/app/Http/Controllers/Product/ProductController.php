@@ -16,6 +16,8 @@ const relations = [
     'ingredients',
     'nutritionalMeasurements',
     'categories',
+    'certifications',
+    'reviews',
     'allergens',
     'images',
     'relatedProducts',
@@ -106,6 +108,9 @@ class ProductController extends Controller {
             'images' => 'sometimes|array',
             'images.*' => 'file|image|max:65536',
 
+            'certifications' => 'sometimes|array',
+            'certifications.*' => 'exists:certifications,id',
+
             'related_products' => 'sometimes|array',
             'related_products.*' => 'exists:products,id',
 
@@ -127,6 +132,10 @@ class ProductController extends Controller {
                 foreach ($validated['names'] as $name) {
                     $product->names()->create($name);
                 }
+            }
+
+            if (!empty($validated['certifications'])) {
+                $product->certifications()->sync($validated['certifications']);
             }
 
             if (!empty($validated['descriptions'])) {
@@ -201,6 +210,9 @@ class ProductController extends Controller {
             'related_products' => 'sometimes|array',
             'related_products.*' => 'exists:products,id',
 
+            'certifications' => 'sometimes|array',
+            'certifications.*' => 'exists:certifications,id',
+
             'ingredients' => 'sometimes|array',
             'ingredients.*.ingredient_id' => 'required|exists:ingredients,id',
             'ingredients.*.amount' => 'required|numeric',
@@ -216,6 +228,9 @@ class ProductController extends Controller {
             $product->names()->delete();
             $product->names()->createMany($validated['names']);
         }
+
+        if (isset($validated['certifications']))
+            $product->certifications()->sync($validated['certifications']);
 
         if(isset($validated['descriptions'])) {
             $product->categories()->delete();

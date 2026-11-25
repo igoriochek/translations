@@ -73,7 +73,14 @@ class Product extends Model {
     }
 
     public function usageInstructions() {
-        return $this->hasMany(UsageInstruction::class
-        );
+        return $this->hasMany(UsageInstruction::class);
+    }
+
+    public function reviews() {
+        return $this->hasMany(ProductReview::class);
+    }
+
+    public function certifications() {
+        return $this->belongsToMany(Certification::class, 'product_certifications');
     }
 }

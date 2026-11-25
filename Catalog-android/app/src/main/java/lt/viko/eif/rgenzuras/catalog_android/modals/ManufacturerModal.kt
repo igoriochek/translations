@@ -21,13 +21,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import lt.viko.eif.rgenzuras.catalog.R
 import lt.viko.eif.rgenzuras.catalog_android.activeModal
 import lt.viko.eif.rgenzuras.catalog_android.components.KeyValueDisplay
 import lt.viko.eif.rgenzuras.catalog_android.components.StyledMultiLineInput
 import lt.viko.eif.rgenzuras.catalog_android.components.StyledSingleLineInput
 import lt.viko.eif.rgenzuras.catalog_android.manufacturerReviewViewModel
 import lt.viko.eif.rgenzuras.catalog_android.schema.Manufacturer
+import lt.viko.eif.rgenzuras.catalog_android.ui.localization.localizedString
 import lt.viko.eif.rgenzuras.catalog_android.userViewModel
 
 @Composable
@@ -67,7 +70,7 @@ fun ManufacturerModal(
     ) {
         manufacturer.country?.let {
             KeyValueDisplay(
-                "Country",
+                localizedString(R.string.country),
                 it
             )
         }
@@ -75,7 +78,7 @@ fun ManufacturerModal(
         HorizontalDivider()
 
         Text(
-            "Your Review",
+            localizedString(R.string.your_review),
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -84,8 +87,8 @@ fun ManufacturerModal(
             onValueChange = {
                 title = it
             },
-            labelText = "Title",
-            placeholderText = "Review title"
+            labelText = localizedString(R.string.title),
+            placeholderText = localizedString(R.string.review_title)
         )
 
         StyledMultiLineInput(
@@ -93,8 +96,8 @@ fun ManufacturerModal(
             onValueChange = {
                 content = it
             },
-            labelText = "Content",
-            placeholderText = "Write your review"
+            labelText = localizedString(R.string.content),
+            placeholderText = localizedString(R.string.write_your_review)
         )
 
         Row(
@@ -125,9 +128,9 @@ fun ManufacturerModal(
             ) {
                 Text(
                     if(myReview == null)
-                        "Submit"
+                        localizedString(R.string.create_review)
                     else
-                        "Save"
+                        localizedString(R.string.save_changes)
                 )
             }
 
@@ -141,7 +144,7 @@ fun ManufacturerModal(
                             )
                     }
                 ) {
-                    Text("Delete")
+                    Text(localizedString(R.string.delete_review))
                 }
             }
         }
@@ -149,7 +152,7 @@ fun ManufacturerModal(
         HorizontalDivider()
 
         Text(
-            "Reviews",
+            localizedString(R.string.reviews),
             style = MaterialTheme.typography.titleMedium
         )
 

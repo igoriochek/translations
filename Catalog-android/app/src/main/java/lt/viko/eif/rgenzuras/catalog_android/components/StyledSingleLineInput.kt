@@ -33,12 +33,13 @@ fun StyledSingleLineInput(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     error: Boolean = false,
     supportingText: String? = null,
-    onFocusChange: (FocusState) -> Unit = {}
+    onFocusChange: (FocusState) -> Unit = {},
+    maxCharacters: Int? = null
 ) {
     Column {
         OutlinedTextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = { onValueChange(if(maxCharacters != null) it.take(maxCharacters) else it) },
             label = { Text(labelText) },
             placeholder = { Text(placeholderText) },
             singleLine = true,
@@ -61,7 +62,14 @@ fun StyledSingleLineInput(
             ),
             isError = error,
             visualTransformation = visualTransformation,
-            keyboardOptions = keyboardOptions
+            keyboardOptions = keyboardOptions,
+            trailingIcon = if (maxCharacters != null && value.isNotEmpty()) {
+                {Text(
+                    "${maxCharacters - value.length}",
+                    modifier = Modifier.padding(end = 5.dp),
+                    style = MaterialTheme.typography.labelMedium
+                )}
+            } else null
         )
 
         if (supportingText != null) {
@@ -93,6 +101,7 @@ fun StyledSingleLineInputPreview() {
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 StyledSingleLineInput("", {}, "Label display", "Placeholder")
+                StyledSingleLineInput("Text", {}, "Character limit", "Placeholder", maxCharacters = 50)
                 StyledSingleLineInput("Text", {}, "Input display", "Placeholder")
                 StyledSingleLineInput(
                     "Password", {}, "Password display", "Placeholder",

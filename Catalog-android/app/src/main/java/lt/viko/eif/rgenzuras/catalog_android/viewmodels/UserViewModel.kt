@@ -1,6 +1,7 @@
 package lt.viko.eif.rgenzuras.catalog_android.viewmodels
 
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +14,7 @@ import lt.viko.eif.rgenzuras.catalog_android.api.RegisterRequest
 import lt.viko.eif.rgenzuras.catalog_android.api.clearToken
 import lt.viko.eif.rgenzuras.catalog_android.api.getPrefs
 import lt.viko.eif.rgenzuras.catalog_android.api.getToken
+import lt.viko.eif.rgenzuras.catalog_android.api.retrofitErrorHandler
 import lt.viko.eif.rgenzuras.catalog_android.api.saveToken
 import lt.viko.eif.rgenzuras.catalog_android.backStack
 import lt.viko.eif.rgenzuras.catalog_android.loadProductsViewModel
@@ -21,7 +23,6 @@ import lt.viko.eif.rgenzuras.catalog_android.schema.User
 import lt.viko.eif.rgenzuras.catalog_android.views.BarcodeScannerScreen
 import lt.viko.eif.rgenzuras.catalog_android.views.LandingScreen
 import lt.viko.eif.rgenzuras.catalog_android.views.PrefsScreen
-import lt.viko.eif.rgenzuras.catalog_android.views.ProductsScreen
 
 class UserViewModel(
     private val api: ApiService
@@ -41,7 +42,7 @@ class UserViewModel(
     private val _loadingHistory = MutableStateFlow(false)
     val loadingHistory: StateFlow<Boolean> = _loadingHistory
 
-    suspend fun authenticate(context: Context) : Boolean {
+    suspend fun authenticate(context: Context): Boolean {
         _loading.value = true
         val token = getToken(context)
 
@@ -69,12 +70,23 @@ class UserViewModel(
         viewModelScope.launch {
             _loading.value = true
 
-            val token = api.register(request).token
-            saveToken(context, token)
-            loadProductsViewModel(context)
+            try {
+                val token = retrofitErrorHandler( api.register(request)).token
 
-            authenticate(context)
-            loadMenu(context)
+                saveToken(context, token)
+                loadProductsViewModel(context)
+
+                authenticate(context)
+                loadMenu(context)
+            } catch(e: Exception) {
+                Toast.makeText(
+                    context,
+                    e.message,
+                    Toast.LENGTH_LONG
+                ).show()
+
+                _loading.value = false
+            }
         }
     }
 
@@ -82,12 +94,22 @@ class UserViewModel(
         viewModelScope.launch {
             _loading.value = true
 
-            val token = api.login(request).token
-            saveToken(context, token)
-            loadProductsViewModel(context)
+            try {
+                val token = retrofitErrorHandler(api.login(request)).token
+                saveToken(context, token)
+                loadProductsViewModel(context)
 
-            authenticate(context)
-            loadMenu(context)
+                authenticate(context)
+                loadMenu(context)
+            } catch (e: Exception) {
+                Toast.makeText(
+                    context,
+                    e.message,
+                    Toast.LENGTH_LONG
+                ).show()
+
+                _loading.value = false
+            }
         }
     }
 
@@ -109,6 +131,6 @@ class UserViewModel(
     private suspend fun loadMenu(context: Context) {
         val prefs = getPrefs(context)
         backStack.clear()
-        backStack.add(if(prefs != null) BarcodeScannerScreen else PrefsScreen)
+        backStack.add(if (prefs != null) BarcodeScannerScreen else PrefsScreen)
     }
 }

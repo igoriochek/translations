@@ -32,6 +32,9 @@ import ProductDescriptionsSection from "../components/product/ProductDescription
 import Barcode from "react-barcode";
 import {strings} from "../utils/localization.ts";
 import {useLanguage} from "../utils/LanguageContext.tsx";
+import ProductCertificationsSection from "../components/product/ProductCertificationsSection.tsx";
+import EditProductCertificationsModal from "../components/modal/EditProductCertificationsModal.tsx";
+import ProductReviewsSection from "../components/product/ProductReviewsSection.tsx";
 
 export default function ProductPage() {
 
@@ -46,6 +49,7 @@ export default function ProductPage() {
 	const [showEditNamesModal, setShowEditNamesModal] = useState(false);
 	const [showEditDescriptionsModal, setShowEditDescriptionsModal] = useState(false);
 	const [showEditCategoriesModal, setShowEditCategoriesModal] = useState(false);
+	const [showEditCertificationsModal, setShowEditCertificationsModal] = useState(false);
 	const [showEditAllergensModal, setShowEditAllergensModal] = useState(false);
 	const [showEditRelatedProductsModal, setShowEditRelatedProductsModal] = useState(false);
 	const [showEditIngredientsModal, setShowEditIngredientsModal] = useState(false);
@@ -118,8 +122,10 @@ export default function ProductPage() {
 
 				<ProductImagesSection product={product} onEdit={() => setShowEditImagesModal(true)}/>
 				<ProductNamesSection product={product} onEdit={() => setShowEditNamesModal(true)}/>
+				<ProductReviewsSection product={product}/>
 				<ProductDescriptionsSection product={product} onEdit={() => setShowEditDescriptionsModal(true)}/>
 				<ProductCategoriesSection product={product} onEdit={() => setShowEditCategoriesModal(true)}/>
+				<ProductCertificationsSection product={product} onEdit={() => setShowEditCertificationsModal(true)}/>
 				<ProductRecipesSection product={product}/>
 				<ProductIngredientsSection product={product} onEdit={() => setShowEditIngredientsModal(true)}/>
 				<ProductNutritionSection product={product} onEdit={() => setShowEditNutritionModal(true)}/>
@@ -157,6 +163,13 @@ export default function ProductPage() {
 				open={showEditCategoriesModal}
 				product={product}
 				onClose={() => setShowEditCategoriesModal(false)}
+				onUpdated={setProduct}
+			/>
+
+			<EditProductCertificationsModal
+				open={showEditCertificationsModal}
+				product={product}
+				onClose={() => setShowEditCertificationsModal(false)}
 				onUpdated={setProduct}
 			/>
 

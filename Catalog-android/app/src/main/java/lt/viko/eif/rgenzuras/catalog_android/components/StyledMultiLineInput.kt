@@ -29,6 +29,7 @@ fun StyledMultiLineInput(
     labelText: String,
     placeholderText: String,
     modifier: Modifier = Modifier,
+    maxCharacters: Int? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     error: Boolean = false,
@@ -38,7 +39,9 @@ fun StyledMultiLineInput(
     Column {
         OutlinedTextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = {
+                onValueChange(if(maxCharacters != null) it.take(maxCharacters) else it)
+            },
             label = { Text(labelText) },
             placeholder = { Text(placeholderText) },
             modifier = modifier
@@ -60,7 +63,16 @@ fun StyledMultiLineInput(
             ),
             isError = error,
             visualTransformation = visualTransformation,
-            keyboardOptions = keyboardOptions
+            keyboardOptions = keyboardOptions,
+            trailingIcon = if (maxCharacters != null && value.isNotEmpty()) {
+                {
+                    Text(
+                        "${maxCharacters - value.length}",
+                        modifier = Modifier.padding(end = 5.dp),
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
+            } else null
         )
 
         if (supportingText != null) {

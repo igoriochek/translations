@@ -13,6 +13,7 @@ import NutritionalTypesPage from "../pages/NutritionalTypesPage.tsx";
 import IngredientsPage from "../pages/IngredientsPage.tsx";
 import RecipesPage from "../pages/RecipesPage.tsx";
 import ProductPage from "../pages/ProductPage.tsx";
+import CertificationsPage from "../pages/CertificationsPage.tsx";
 
 function ProtectedRoute({children}: any) {
 
@@ -127,6 +128,15 @@ export default function AppRouter() {
 					element={
 						<ProtectedRoute>
 							<IngredientsPage/>
+						</ProtectedRoute>
+					}
+				/>
+
+				<Route
+					path="/certifications"
+					element={
+						<ProtectedRoute>
+							<CertificationsPage/>
 						</ProtectedRoute>
 					}
 				/>

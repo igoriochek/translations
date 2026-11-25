@@ -138,6 +138,23 @@ export default function MetadataDropdown() {
 						>
 							{strings.ingredients_title}
 						</Link>
+
+						<Link
+							to="/certifications"
+							className="
+                                block
+                                px-4
+                                py-2
+                                text-sm
+                                text-zinc-700
+                                hover:bg-zinc-50
+                            "
+							onClick={() =>
+								setOpen(false)
+							}
+						>
+							{strings.certifications_title}
+						</Link>
 					</div>
 
 				</div>

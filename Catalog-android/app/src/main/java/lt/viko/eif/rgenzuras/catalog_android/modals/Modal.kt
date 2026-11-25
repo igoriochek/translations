@@ -1,6 +1,7 @@
 package lt.viko.eif.rgenzuras.catalog_android.modals
 
 import lt.viko.eif.rgenzuras.catalog_android.schema.Manufacturer
+import lt.viko.eif.rgenzuras.catalog_android.schema.Product
 import lt.viko.eif.rgenzuras.catalog_android.schema.Recipe
 import lt.viko.eif.rgenzuras.catalog_android.viewmodels.LanguageViewModel
 
@@ -21,4 +22,12 @@ data class RecipeModalProps(
     val recipe: Recipe,
     val uiLanguage: LanguageViewModel.AppLanguage,
     val contentLanguage: String
+) : Modal
+
+data class ProductReviewsModalProps(
+    val product: Product
+) : Modal
+
+data class EditReviewModalProps(
+    val product: Product
 ) : Modal

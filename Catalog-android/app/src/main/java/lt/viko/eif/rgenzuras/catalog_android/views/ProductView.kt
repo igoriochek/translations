@@ -2,6 +2,7 @@ package lt.viko.eif.rgenzuras.catalog_android.views
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +23,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,14 +43,22 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import androidx.navigation3.runtime.NavKey
+import coil.compose.AsyncImage
 import kotlinx.serialization.Serializable
 import lt.viko.eif.rgenzuras.catalog.R
 import lt.viko.eif.rgenzuras.catalog_android.activeModal
@@ -53,9 +66,14 @@ import lt.viko.eif.rgenzuras.catalog_android.backStack
 import lt.viko.eif.rgenzuras.catalog_android.components.ImageCarousel
 import lt.viko.eif.rgenzuras.catalog_android.components.KeyValueDisplay
 import lt.viko.eif.rgenzuras.catalog_android.components.LabeledSection
+import lt.viko.eif.rgenzuras.catalog_android.components.ProductReviewCard
+import lt.viko.eif.rgenzuras.catalog_android.components.ProductReviewCarousel
+import lt.viko.eif.rgenzuras.catalog_android.components.RatingStars
 import lt.viko.eif.rgenzuras.catalog_android.components.RelatedProductCard
+import lt.viko.eif.rgenzuras.catalog_android.format
 import lt.viko.eif.rgenzuras.catalog_android.languageViewModel
 import lt.viko.eif.rgenzuras.catalog_android.modals.ManufacturerModalProps
+import lt.viko.eif.rgenzuras.catalog_android.modals.ProductReviewsModalProps
 import lt.viko.eif.rgenzuras.catalog_android.modals.RecipeModalProps
 import lt.viko.eif.rgenzuras.catalog_android.modals.SellerModalProps
 import lt.viko.eif.rgenzuras.catalog_android.productViewModel
@@ -77,17 +95,20 @@ import lt.viko.eif.rgenzuras.catalog_android.schema.ProductDescription
 import lt.viko.eif.rgenzuras.catalog_android.schema.ProductImage
 import lt.viko.eif.rgenzuras.catalog_android.schema.ProductIngredient
 import lt.viko.eif.rgenzuras.catalog_android.schema.ProductName
+import lt.viko.eif.rgenzuras.catalog_android.schema.ProductReview
 import lt.viko.eif.rgenzuras.catalog_android.schema.Recipe
 import lt.viko.eif.rgenzuras.catalog_android.schema.RelatedProduct
 import lt.viko.eif.rgenzuras.catalog_android.schema.Seller
 import lt.viko.eif.rgenzuras.catalog_android.schema.SellerProduct
 import lt.viko.eif.rgenzuras.catalog_android.schema.UsageInstruction
+import lt.viko.eif.rgenzuras.catalog_android.schema.User
 import lt.viko.eif.rgenzuras.catalog_android.ui.localization.MeasurementFormatter
 import lt.viko.eif.rgenzuras.catalog_android.ui.localization.localizedString
 import lt.viko.eif.rgenzuras.catalog_android.ui.theme.CatalogAppTheme
 import lt.viko.eif.rgenzuras.catalog_android.userViewModel
 import lt.viko.eif.rgenzuras.catalog_android.viewmodels.LanguageViewModel
 import java.util.Locale
+import kotlin.math.roundToInt
 
 @Serializable
 data class ProductScreen(val productId: Int) : NavKey
@@ -131,6 +152,7 @@ private fun Content(
     val nutritionalMeasurements = product.nutritionalMeasurements
     val relatedProducts = product.relatedProducts
     val recommendations = product.sellers.flatMap { it.recommendations }
+    val reviews = product.reviews.sortedByDescending { it.createdAt }
 
     val defaultLanguage = uiLanguage == LanguageViewModel.AppLanguage.SYSTEM
 
@@ -146,12 +168,36 @@ private fun Content(
         ?: descriptions.firstOrNull { it.language.code == contentLanguage }
         ?: descriptions.first()).description
 
+    val avgRating by remember(product.reviews) {
+        derivedStateOf {
+            product.reviews.sumOf { it.rating }.toFloat() / product.reviews.count()
+        }
+    }
+
+    val recommendedReviews by remember(product.reviews) {
+        derivedStateOf {
+            ((product.reviews.filter { it.recommended }.count().toDouble() /
+                    product.reviews.count()) * 100).roundToInt()
+        }
+    }
+
+    val recommendedPurchaseReviews by remember(product.reviews) {
+        derivedStateOf {
+            ((product.reviews.filter { it.recommended && it.purchased }.count().toDouble() /
+                    product.reviews.filter { it.purchased }.count()) * 100).roundToInt()
+        }
+    }
+
     val padding = Modifier.padding(horizontal = 15.dp)
 
     var columnModifier = Modifier
         .fillMaxSize()
         .navigationBarsPadding()
     if (product.images.isEmpty()) columnModifier = columnModifier.statusBarsPadding()
+
+    var selectedCertificationId by remember {
+        mutableStateOf<Int?>(null)
+    }
 
     Box(Modifier.fillMaxSize()) {
         PullToRefreshBox(
@@ -168,6 +214,156 @@ private fun Content(
                 }
                 else item {
                     Spacer(Modifier.height(40.dp))
+                }
+
+                if (allergens.isNotEmpty()) item {
+                    LabeledSection(
+                        localizedString(R.string.allergens),
+                        padding,
+                        {
+                            Icon(
+                                Icons.Default.Warning,
+                                localizedString(R.string.allergens),
+                                tint = MaterialTheme.colorScheme.tertiary
+                            )
+                        }) {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            items(allergens) { allergen ->
+                                val allergenName = ((
+                                        if (!defaultLanguage) allergen.names.firstOrNull { it.language.code == uiLanguage.code }
+                                        else allergen.names.firstOrNull { Locale.getDefault().language == it.language.code })
+                                    ?: allergen.names.firstOrNull { it.language.code == contentLanguage }
+                                    ?: allergen.names.first()).name
+
+                                OutlinedCard(shape = RoundedCornerShape(5.dp)) {
+                                    Text(
+                                        allergenName,
+                                        Modifier.padding(10.dp, 5.dp),
+                                        style = MaterialTheme.typography.labelLarge
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (product.certifications.isNotEmpty()) {
+                    item {
+                        LabeledSection(localizedString(R.string.quality_labels), padding) {
+                            LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                items(product.certifications) { cert ->
+                                    Box {
+                                        AsyncImage(
+                                            model = cert.badgeUrl,
+                                            contentDescription = cert.label,
+                                            modifier = Modifier
+                                                .size(60.dp)
+                                                .clickable {
+                                                    selectedCertificationId =
+                                                        if (selectedCertificationId == cert.id) {
+                                                            null
+                                                        } else {
+                                                            cert.id
+                                                        }
+                                                }
+                                        )
+
+                                        if (selectedCertificationId == cert.id) {
+                                            Popup(
+                                                alignment = Alignment.TopCenter,
+                                                offset = IntOffset(0, -8),
+                                                onDismissRequest = {
+                                                    selectedCertificationId = null
+                                                },
+                                                properties = PopupProperties(
+                                                    focusable = true,
+                                                    dismissOnClickOutside = true
+                                                )
+                                            ) {
+                                                Text(
+                                                    text = cert.label,
+                                                    fontSize = 14.sp,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    modifier = Modifier
+                                                        .background(
+                                                            MaterialTheme.colorScheme.surfaceVariant,
+                                                            RoundedCornerShape(6.dp)
+                                                        )
+                                                        .padding(
+                                                            horizontal = 12.dp,
+                                                            vertical = 6.dp
+                                                        )
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    LabeledSection(localizedString(R.string.customer_reviews), padding.clickable {
+                        activeModal.value = ProductReviewsModalProps(product)
+                    }) {
+                        if(reviews.isEmpty())
+                            Text(localizedString(R.string.no_reviews_for_this_product_available))
+                        else {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Text(
+                                        avgRating.format(1),
+                                        style = MaterialTheme.typography.titleLarge
+                                    )
+
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                                    ) {
+                                        RatingStars(avgRating)
+
+                                        Text(
+                                            localizedString(R.string.average_rating),
+                                            style = MaterialTheme.typography.labelMedium
+                                        )
+                                    }
+                                }
+
+                                Text("${reviews.count()} ${localizedString(R.string.reviews)
+                                    .replaceFirstChar {
+                                        if (it.isLowerCase()) it.titlecase(
+                                            Locale.ROOT
+                                        ) else it.toString()
+                                    }}"
+                                )
+                            }
+
+                            Text(localizedString(R.string.would_people_recommend_it), style = MaterialTheme.typography.titleMedium)
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column {
+                                    Text("$recommendedReviews%", style = MaterialTheme.typography.titleLarge)
+                                    Text(localizedString(R.string.all_reviewers), style = MaterialTheme.typography.labelMedium)
+                                }
+
+                                Column {
+                                    Text("$recommendedPurchaseReviews%", style = MaterialTheme.typography.titleLarge)
+                                    Text(localizedString(R.string.buyers), style = MaterialTheme.typography.labelMedium)
+                                }
+                            }
+
+                            ProductReviewCarousel(reviews)
+                        }
+                    }
                 }
 
                 if (descriptions.isNotEmpty()) item {
@@ -253,28 +449,6 @@ private fun Content(
                                 OutlinedCard(shape = RoundedCornerShape(5.dp)) {
                                     Text(
                                         categoryName,
-                                        Modifier.padding(10.dp, 5.dp),
-                                        style = MaterialTheme.typography.labelLarge
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (allergens.isNotEmpty()) item {
-                    LabeledSection(localizedString(R.string.allergens), padding) {
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            items(allergens) { allergen ->
-                                val allergenName = ((
-                                        if (!defaultLanguage) allergen.names.firstOrNull { it.language.code == uiLanguage.code }
-                                        else allergen.names.firstOrNull { Locale.getDefault().language == it.language.code })
-                                    ?: allergen.names.firstOrNull { it.language.code == contentLanguage }
-                                    ?: allergen.names.first()).name
-
-                                OutlinedCard(shape = RoundedCornerShape(5.dp)) {
-                                    Text(
-                                        allergenName,
                                         Modifier.padding(10.dp, 5.dp),
                                         style = MaterialTheme.typography.labelLarge
                                     )
@@ -553,7 +727,9 @@ private fun ProductPreview() {
             Category(0, listOf(CategoryName(0, "Category 2", language))),
             Category(0, listOf(CategoryName(0, "Category 3", language))),
             Category(0, listOf(CategoryName(0, "Category 4", language)))
-        ), listOf(
+        ),
+        emptyList(),
+        listOf(
             ProductIngredient(0, ingredient1, unitType1, 100f),
             ProductIngredient(0, ingredient2, unitType2, 443.602943f)
         ), listOf(
@@ -569,6 +745,44 @@ private fun ProductPreview() {
         ),
         listOf(
             UsageInstruction(0, "Instruction", language)
+        ),
+        listOf(
+            ProductReview(
+                0,
+                User(0, "Review user", "", ""),
+                purchased = true,
+                recommended = true,
+                "123456789012345678901234567890123456789012345678901234567890",
+                "Reallllllly realllly realllly reallly long review test",
+                rating = 1
+            ),
+            ProductReview(
+                1,
+                User(0, "Review user", "", ""),
+                purchased = false,
+                recommended = true,
+                "Test review",
+                "Review content",
+                rating = 1
+            ),
+            ProductReview(
+                2,
+                User(0, "Review user", "", ""),
+                purchased = true,
+                recommended = false,
+                "Test review",
+                "Review content",
+                rating = 3
+            ),
+            ProductReview(
+                3,
+                User(0, "Review user", "", ""),
+                purchased = true,
+                recommended = false,
+                "Test review",
+                "Review content",
+                rating = 5
+            )
         )
     )
 

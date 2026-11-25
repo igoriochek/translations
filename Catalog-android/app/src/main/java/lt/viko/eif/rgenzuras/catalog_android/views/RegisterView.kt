@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
@@ -126,7 +127,8 @@ fun RegisterMenu() {
                         localizedString(R.string.enter_username),
                         modifier = Modifier.semantics {
                             contentType = ContentType.NewUsername
-                        }
+                        },
+                        maxCharacters = 60
                     )
 
                     StyledSingleLineInput(
@@ -150,6 +152,7 @@ fun RegisterMenu() {
                         localizedString(R.string.password),
                         localizedString(R.string.enter_password),
                         visualTransformation = PasswordVisualTransformation(),
+                        supportingText = if(password.length < 6) localizedString(R.string.password_must_be_at_least_6_characters_long) else null,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password
                         ),
@@ -163,6 +166,7 @@ fun RegisterMenu() {
                         { passwordConfirm = it },
                         localizedString(R.string.repeat_password),
                         localizedString(R.string.enter_password),
+                        supportingText = if(password != passwordConfirm) localizedString(R.string.passwords_do_not_match) else null,
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password
@@ -181,7 +185,7 @@ fun RegisterMenu() {
                             )
                         },
                         loading = loading,
-                        enabled = !(username.isEmpty() || email.isEmpty() || emailHasErrors || password.isEmpty() || passwordConfirm.isEmpty()) && password == passwordConfirm,
+                        enabled = !(username.isEmpty() || email.isEmpty() || emailHasErrors || password.isEmpty() || passwordConfirm.isEmpty() || password.length < 6) && password == passwordConfirm,
                         modifier = Modifier.padding(top = 10.dp)
                     )
                 }

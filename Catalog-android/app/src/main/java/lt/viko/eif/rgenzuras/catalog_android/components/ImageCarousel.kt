@@ -27,6 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun ImageCarousel(
@@ -59,7 +60,7 @@ fun ImageCarousel(
 
     LaunchedEffect(Unit) {
         while (true) {
-            delay(autoAdvanceMillis.toLong())
+            delay(autoAdvanceMillis.toLong().milliseconds)
 
             pagerState.animateScrollToPage(
                 (pagerState.currentPage + 1) % images.size

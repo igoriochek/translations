@@ -106,17 +106,17 @@ fun SellerModal(
             }
         }
 
-        LabeledSection("Your Review") {
+        LabeledSection(localizedString(R.string.your_review)) {
             StyledSingleLineInput(
                 value = title, onValueChange = {
                     title = it
-                }, labelText = "Title", placeholderText = "Review title"
+                }, labelText = localizedString(R.string.title), placeholderText = localizedString(R.string.review_title)
             )
 
             StyledMultiLineInput(
                 value = content, onValueChange = {
                     content = it
-                }, labelText = "Content", placeholderText = "Write your review"
+                }, labelText = localizedString(R.string.content), placeholderText = localizedString(R.string.write_your_review)
             )
 
             Row(
@@ -136,8 +136,8 @@ fun SellerModal(
                     }, enabled = !(title.isBlank() || content.isBlank())) {
 
                     Text(
-                        if (myReview == null) "Submit"
-                        else "Save"
+                        if (myReview == null) localizedString(R.string.create_review)
+                        else localizedString(R.string.save_changes)
                     )
                 }
 
@@ -146,14 +146,14 @@ fun SellerModal(
                         onClick = {
                             sellerViewModel.deleteReview(seller!!.id, myReview.id)
                         }) {
-                        Text("Delete")
+                        Text(localizedString(R.string.delete_review))
                     }
                 }
             }
         }
 
         if (otherReviews.isNotEmpty()) {
-            LabeledSection("Reviews") {
+            LabeledSection(localizedString(R.string.reviews)) {
                 LazyColumn(
                     modifier = Modifier.heightIn(
                         max = 300.dp
